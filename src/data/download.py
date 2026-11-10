@@ -80,7 +80,8 @@ def api_get(base: str, path: str, params: dict, weight_limit: int) -> requests.R
 
 
 def out_path(market: str, name: str) -> Path:
-    p = RAW / market / f"{name}.parquet"
+    base = RAW if SYMBOL == "BTCUSDT" else RAW / SYMBOL  # BTC keeps legacy paths
+    p = base / market / f"{name}.parquet"
     p.parent.mkdir(parents=True, exist_ok=True)
     return p
 
@@ -287,13 +288,16 @@ def main(argv=None) -> None:
     ap.add_argument("what", choices=["all", "klines", "funding", "futdata", "metrics-archive", "bookdepth"])
     ap.add_argument("--market", choices=["perp", "spot", "both"], default="both")
     ap.add_argument("--intervals", nargs="+", help="override kline intervals")
+    ap.add_argument("--symbol", default="BTCUSDT", help="e.g. ETHUSDT (BTCUSDT keeps legacy paths)")
     ap.add_argument("--since", help="archive start date YYYY-MM-DD")
     a = ap.parse_args(argv)
+    global SYMBOL
+    SYMBOL = a.symbol.upper()
 
     if a.what in ("all", "klines"):
         jobs = []
         if a.market in ("perp", "both"):
-            jobs += [("perp", i) for i in (a.intervals or ["15m", "1h", "4h", "1d"])]
+            jobs += [("perp", i) for i in (a.intervals or ["5m", "15m", "1h", "4h", "1d"])]
         if a.market in ("spot", "both"):
             jobs += [("spot", i) for i in (a.intervals or ["1h", "4h", "1d"])]
         for m, i in jobs:

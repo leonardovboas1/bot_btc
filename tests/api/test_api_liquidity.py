@@ -33,11 +33,14 @@ def test_book_out_of_range():
 
 
 def test_liq():
-    r = c.get("/heatmap/liq", params={"tf": "1h", "start": "2024-03-01", "end": "2024-03-20"})
+    r = c.get("/heatmap/liq", params={"range": "1d", "end": "2024-03-20T00:00:00"})
     assert r.status_code == 200, r.text
     r = r.json()
-    assert not r["empty"]
-    _shape_ok(r, ["long", "short"])
+    T, P = r["shape"]
+    assert len(r["times"]) == T and len(r["prices"]) == P and 200 <= P <= 300
+    import base64
+    assert len(base64.b64decode(r["grid"])) == T * P and r["scale"] > 0
+    assert {"active", "events", "candles"} <= set(r)
 
 
 def test_volume_profile():
@@ -49,4 +52,4 @@ def test_volume_profile():
 
 
 def test_bad_tf():
-    assert c.get("/heatmap/liq", params={"tf": "7m"}).status_code == 400
+    assert c.get("/heatmap/liq", params={"range": "7m"}).status_code == 400

@@ -1,6 +1,7 @@
 """FastAPI app. Backtest stats use in-sample data only (bars < holdout cutoff)."""
 from __future__ import annotations
 
+import inspect
 import json
 import math
 from functools import lru_cache
@@ -32,16 +33,37 @@ GREEN, RED, GREY = "#26a69a", "#ef5350", "#9e9e9e"
 
 # ------------------------------------------------------------------ data cache
 @lru_cache(maxsize=32)
-def _full(market: str, tf: str) -> pd.DataFrame:
+def _full(market: str, tf: str, symbol: str = "BTCUSDT") -> pd.DataFrame:
     """All bars incl. holdout (treat as read-only); perp gets a funding column."""
     try:
-        df = loaders.load_ohlcv(market, tf, allow_holdout=True)
+        df = loaders.load_ohlcv(market, tf, allow_holdout=True, symbol=symbol)
         if market == "perp":
             df = df.copy()
-            df["funding"] = loaders.load_funding(tf, allow_holdout=True).values
+            df["funding"] = loaders.load_funding(tf, allow_holdout=True, symbol=symbol).values
     except (FileNotFoundError, ValueError) as e:
         raise HTTPException(400, str(e))
     return df
+
+
+def _sym(symbol: str) -> str:
+    return symbol.upper()
+
+
+def _liq_kw(fn, symbol: str) -> dict:
+    """Pass symbol to a liq_service function only if it accepts it."""
+    return {"symbol": symbol} if "symbol" in inspect.signature(fn).parameters else {}
+
+
+def _liq_ok(fn, symbol: str) -> bool:
+    return symbol == "BTCUSDT" or "symbol" in inspect.signature(fn).parameters
+
+
+def _empty_liq(kind: str) -> dict:
+    if kind == "book":
+        return {"empty": True, "times": [], "prices": [], "bid": [], "ask": []}
+    if kind == "liq":
+        return {"empty": True, "times": [], "prices": [], "long": [], "short": [], "flush_times": []}
+    return {"empty": True, "prices": [], "volume": []}
 
 
 def _cutoff() -> pd.Timestamp:
@@ -89,16 +111,46 @@ def _local(df, ts):
 
 
 # ------------------------------------------------------------------ endpoints
+@app.get("/symbols")
+def symbols():
+    out = []
+    for sym in loaders.list_symbols():
+        base = loaders._base(sym) / "um_futures"
+        tfs = [tf for tf in ("5m", "15m", "1h", "4h", "1d") if (base / f"klines_{tf}.parquet").exists()]
+        if "1d" in tfs:
+            tfs.append("1w")
+        out.append({"symbol": sym, "base": sym[:-4] if sym.endswith("USDT") else sym, "tfs": tfs,
+                    "has_liq": (base / "metrics_archive_5m.parquet").exists()})
+    return out
+
+
 @app.get("/ohlcv")
 def ohlcv(market: str = "perp", tf: str = "4h", start: Optional[str] = None,
-          end: Optional[str] = None):
-    _full(market, tf)
-    df = loaders.load_ohlcv(market, tf, start, end, allow_holdout=True)
+          end: Optional[str] = None, symbol: str = "BTCUSDT", limit: int = 5000):
+    """Bars in [start, end). Without start, the last ``limit`` bars (limit=0: all). Bars after the
+    last on-disk bar come from Binance REST (display only)."""
+    symbol = _sym(symbol)
+    df = _full(market, tf, symbol)[["open", "high", "low", "close", "volume"]]
+    if len(df):
+        last = df.index[-1]
+        if end is None or _local(df, pd.Timestamp(end, tz="UTC")) > last:
+            from btclab.api import live
+            extra = live.tail(market, tf, symbol, last)
+            if len(extra):
+                if df.index.tz is None:
+                    extra = extra.tz_convert("UTC").tz_localize(None)
+                df = pd.concat([df, extra])
+    if start is not None:
+        df = df[df.index >= _local(df, pd.Timestamp(start, tz="UTC"))]
+    if end is not None:
+        df = df[df.index < _local(df, pd.Timestamp(end, tz="UTC"))]
+    if start is None and limit and limit > 0:
+        df = df.iloc[-limit:]
     t = _ts(df.index)
+    cols = [df[c].to_numpy(dtype=float).tolist() for c in ("open", "high", "low", "close", "volume")]
     bars = [{"time": int(a), "open": o, "high": h, "low": l, "close": c, "volume": v}
-            for a, o, h, l, c, v in zip(t, df["open"], df["high"], df["low"],
-                                        df["close"], df["volume"])]
-    return {"market": market, "tf": tf, "holdout_start": int(_cutoff().timestamp()), "bars": bars}
+            for a, o, h, l, c, v in zip(t.tolist(), *cols)]
+    return {"symbol": symbol, "market": market, "tf": tf, "holdout_start": int(_cutoff().timestamp()), "bars": bars}
 
 
 @app.get("/strategies")
@@ -110,8 +162,10 @@ class BacktestReq(BaseModel):
     strategy: Optional[str] = None
     spec: Optional[dict] = None
     market: str = "perp"
+    symbol: str = "BTCUSDT"
     tf: Optional[str] = None
     fee: Optional[str] = None      # cost preset name, e.g. "binance_perp_taker"
+    source: Optional[str] = None   # signal candles: "real" (default) or "ha" (Heikin Ashi); fills always real
 
 
 def _markers(df, trades):
@@ -137,13 +191,48 @@ def _trade_rows(df, trades):
             for t in trades]
 
 
+MAX_CURVE_POINTS = 3000
+
+
+def _daily(index, eq, bh) -> list:
+    """Exact last value of each UTC day (for periodic P&L, Sharpe and benchmarking)."""
+    d = pd.DataFrame({"e": np.asarray(eq, float), "b": np.asarray(bh, float)}, index=pd.DatetimeIndex(index))
+    d = d.groupby(d.index.normalize()).last()
+    return [{"time": int(a), "equity": float(e), "buy_hold": float(b)}
+            for a, e, b in zip(_ts(d.index).tolist(), d["e"], d["b"])]
+
+
+def _curve_idx(v: np.ndarray, max_points: int = MAX_CURVE_POINTS) -> np.ndarray:
+    """Indices that keep the shape of a long curve: first, last, and each bucket's min and max."""
+    n = len(v)
+    if n <= max_points:
+        return np.arange(n)
+    edges = np.linspace(0, n, max_points // 2 + 1).astype(int)
+    keep = {0, n - 1}
+    for a, b in zip(edges[:-1], edges[1:]):
+        if b > a:
+            seg = v[a:b]
+            keep.add(a + int(np.argmin(seg)))
+            keep.add(a + int(np.argmax(seg)))
+    return np.array(sorted(keep))
+
+
 @app.post("/backtest")
 def backtest(req: BacktestReq):
     spec = _resolve_spec(req.strategy, req.spec, req.tf)
     if req.fee:
         spec["costs"] = req.fee
+    if req.source:
+        spec["source"] = req.source
+    key = json.dumps([spec, _sym(req.symbol), req.market], sort_keys=True, default=str)
+    return _backtest_cached(key)
+
+
+@lru_cache(maxsize=64)
+def _backtest_cached(key: str):
+    spec, symbol, market = json.loads(key)
     tf = spec["tf"]
-    full = _full(req.market, tf)
+    full = _full(market, tf, symbol)
     n_is = int(full.index.searchsorted(_local(full, _cutoff())))
     if n_is < 50:
         raise HTTPException(400, "not enough in-sample data")
@@ -153,6 +242,8 @@ def backtest(req: BacktestReq):
     eq = res.equity
     close = ins["close"].to_numpy(dtype=float)
     bh = eq[0] * close / close[0]
+    keep = np.union1d(_curve_idx(np.asarray(eq, float), MAX_CURVE_POINTS // 2),
+                      _curve_idx(np.asarray(bh, float), MAX_CURVE_POINTS // 2))
 
     # Holdout: signals only (run over the full series so state is continuous); no stats.
     hold_markers: list = []
@@ -160,21 +251,25 @@ def backtest(req: BacktestReq):
         fres, _ = _run(spec, full)
         hold_markers = _markers(full, fres.trades[fres.trades["entry_idx"] >= n_is])
     return _num({
-        "strategy": spec["name"], "market": req.market, "tf": tf,
+        "strategy": spec["name"], "symbol": symbol, "market": market, "tf": tf,
         "holdout_start": int(_cutoff().timestamp()),
         "trades": _trade_rows(ins, res.trades),
         "markers": _markers(ins, res.trades),
-        "equity": [{"time": int(a), "value": float(b)} for a, b in zip(t, eq)],
-        "buy_hold": [{"time": int(a), "value": float(b)} for a, b in zip(t, bh)],
+        "equity": [{"time": int(t[i]), "value": float(eq[i])} for i in keep],
+        "buy_hold": [{"time": int(t[i]), "value": float(bh[i])} for i in keep],
+        "equity_daily": _daily(ins.index, eq, bh),
         "metrics": metrics,
         "holdout_markers": hold_markers,
     })
 
 
 @app.get("/signal/current")
-def signal_current(strategy: str = "brayvb_v2", tf: Optional[str] = None, market: str = "perp"):
+def signal_current(strategy: str = "brayvb_v2", tf: Optional[str] = None, market: str = "perp",
+                   symbol: str = "BTCUSDT", source: Optional[str] = None):
     spec = _resolve_spec(strategy, None, tf)
-    df = _full(market, spec["tf"])
+    if source:
+        spec["source"] = source
+    df = _full(market, spec["tf"], _sym(symbol))
     res, _ = _run(spec, df)
     pos = int(res.position[-1])
     return {"strategy": strategy, "tf": spec["tf"],
@@ -184,7 +279,7 @@ def signal_current(strategy: str = "brayvb_v2", tf: Optional[str] = None, market
 
 @app.get("/indicator/{name}")
 def indicator(name: str, params: str = Query("{}", description="JSON object"),
-              tf: str = "4h", market: str = "perp"):
+              tf: str = "4h", market: str = "perp", symbol: str = "BTCUSDT"):
     if name not in REGISTRY:
         raise HTTPException(404, f"unknown indicator {name!r}")
     try:
@@ -193,7 +288,7 @@ def indicator(name: str, params: str = Query("{}", description="JSON object"),
             raise ValueError
     except ValueError:
         raise HTTPException(400, "params must be a JSON object")
-    df = _full(market, tf)
+    df = _full(market, tf, _sym(symbol))
     try:
         out = compute(name, df, **p)
     except TypeError as e:
@@ -265,14 +360,17 @@ def _limit(cols: int, rows: int) -> tuple[int, int]:
 
 @app.get("/heatmap/book")
 def heatmap_book(tf: str = "1h", start: Optional[str] = None, end: Optional[str] = None,
-                 rows: int = MAX_ROWS, cols: int = MAX_COLS):
+                 rows: int = MAX_ROWS, cols: int = MAX_COLS, symbol: str = "BTCUSDT"):
+    symbol = _sym(symbol)
     s, e = _window(tf, start, end)
+    if not _liq_ok(liq_service.depth_heatmap_payload, symbol):
+        return _empty_liq("book")
     lo, hi = _book_range()
     avail = {"available_from": lo, "available_to": hi}
     if int(pd.Timestamp(e, tz="UTC").timestamp()) < lo or int(pd.Timestamp(s, tz="UTC").timestamp()) > hi:
         return {"empty": True, **avail, "times": [], "prices": [], "bid": [], "ask": []}
     try:
-        d = liq_service.depth_heatmap_payload(s, e, tf)
+        d = liq_service.depth_heatmap_payload(s, e, tf, **_liq_kw(liq_service.depth_heatmap_payload, symbol))
     except (FileNotFoundError, ValueError, KeyError) as ex:
         raise HTTPException(400, str(ex))
     if not d["times"]:
@@ -283,27 +381,51 @@ def heatmap_book(tf: str = "1h", start: Optional[str] = None, end: Optional[str]
 
 
 @app.get("/heatmap/liq")
-def heatmap_liq(tf: str = "1h", start: Optional[str] = None, end: Optional[str] = None,
-                rows: int = MAX_ROWS, cols: int = MAX_COLS):
-    s, e = _window(tf, start, end)
+def heatmap_liq(symbol: str = "BTCUSDT", range: str = "1w", end: Optional[str] = None,
+                venues: str = "binance"):
+    """Coinglass-style liquidation map (modelo OI-delta, consumido ao toque). Ver btclab/liquidity/liq_map.py."""
+    from btclab.liquidity import liq_map
+    symbol = _sym(symbol)
+    if range not in liq_map.RANGES:
+        raise HTTPException(400, f"range deve ser um de {list(liq_map.RANGES)}")
+    vs = tuple(v for v in venues.split(",") if v in liq_map.VENUES) or ("binance",)
     try:
-        d = liq_service.liq_payload(s, e, tf)
+        end_ts = pd.Timestamp(end) if end else None
+        res = liq_map.RANGES[range][1]
+        if end_ts is not None:
+            end_ts = (end_ts.tz_localize("UTC") if end_ts.tzinfo is None else end_ts.tz_convert("UTC")).floor("h")
+            bucket = int(end_ts.timestamp())
+        else:
+            bucket = int(pd.Timestamp.now("UTC").floor("5min").timestamp())  # live: refresh every 5 min
+        return _liq_cached(symbol, range, bucket if end_ts is not None else None, bucket, vs, end_ts, res)
     except (FileNotFoundError, ValueError, KeyError) as ex:
         raise HTTPException(400, str(ex))
-    if not d["times"]:
-        return {"empty": True, "times": [], "prices": [], "long": [], "short": [], "flush_times": []}
-    cols, rows = _limit(cols, rows)
-    out = _shrink(d["times"], d["prices"], {"long": d["long"], "short": d["short"]}, cols, rows)
-    out["flush_times"] = [int(pd.Timestamp(x).timestamp()) for x in d.get("flush_times", [])]
-    return {"empty": False, "unit": "USD milhões (estimado)", **out}
+
+
+_LIQ_CACHE: dict = {}
+
+
+def _liq_cached(symbol, range_, end_key, bucket, vs, end_ts, res):
+    key = (symbol, range_, bucket, vs)
+    hit = _LIQ_CACHE.get(key)
+    if hit is None:
+        from btclab.liquidity import liq_map
+        hit = liq_map.compute(symbol, range_, end_ts, vs)
+        for k in [k for k in _LIQ_CACHE if len(_LIQ_CACHE) > 24 and k != key][:8]:
+            _LIQ_CACHE.pop(k, None)
+        _LIQ_CACHE[key] = hit
+    return hit
 
 
 @app.get("/volume_profile")
 def volume_profile(tf: str = "1h", start: Optional[str] = None, end: Optional[str] = None,
-                   rows: int = MAX_ROWS):
+                   rows: int = MAX_ROWS, symbol: str = "BTCUSDT"):
+    symbol = _sym(symbol)
     s, e = _window(tf, start, end)
+    if not _liq_ok(liq_service.volume_profile_payload, symbol):
+        return _empty_liq("vp")
     try:
-        d = liq_service.volume_profile_payload(s, e, tf)
+        d = liq_service.volume_profile_payload(s, e, tf, **_liq_kw(liq_service.volume_profile_payload, symbol))
     except (FileNotFoundError, ValueError, KeyError) as ex:
         raise HTTPException(400, str(ex))
     p = np.asarray(d["prices"], dtype=float)
@@ -316,3 +438,21 @@ def volume_profile(tf: str = "1h", start: Optional[str] = None, end: Optional[st
         if k in d:
             out[k] = d[k]
     return _num(out)
+
+
+@app.get("/liquidations")
+def liquidations(symbol: str = "BTCUSDT", start: Optional[str] = None, end: Optional[str] = None,
+                 venues: str = "binance,bybit,okx,gate"):
+    """Liquidacoes observadas: eventos (recorder binance/bybit/okx) + barras 5m (Gate). Default: ultimas 24h."""
+    from btclab.liquidity import observed
+    symbol = _sym(symbol)
+    if not symbol.isalnum():
+        raise HTTPException(400, "symbol invalido")
+    try:
+        t1 = pd.Timestamp(end) if end else pd.Timestamp.now("UTC")
+        t1 = t1.tz_localize("UTC") if t1.tzinfo is None else t1.tz_convert("UTC")
+        t0 = pd.Timestamp(start) if start else t1 - pd.Timedelta("1D")
+        vs = tuple(v for v in venues.split(",") if v)
+        return observed.observed(symbol, t0, t1, vs)
+    except (ValueError, TypeError) as ex:
+        raise HTTPException(400, str(ex))
