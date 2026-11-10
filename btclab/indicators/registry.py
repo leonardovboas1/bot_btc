@@ -309,3 +309,161 @@ def all_primitives() -> list[str]:
 def warmup(name: str, **params) -> int:
     spec = REGISTRY[name]
     return int(spec.warmup({**spec.defaults, **params}))
+
+
+# ----------------------------------------------------------------------------- catalog 2
+from . import cycle as _cy  # noqa: E402
+from . import structure as _st  # noqa: E402
+from . import trend2 as _t2  # noqa: E402
+from . import volatility as _vo  # noqa: E402
+from . import volume as _vl  # noqa: E402
+
+_HLC = ("high", "low", "close")
+
+register(IndicatorSpec(
+    name="bb", func=lambda close, **p: _vo.bollinger(close, **p), inputs=("close",),
+    defaults=dict(length=20, mult=2.0), space=dict(length=_i(10, 50), mult=_f(1.0, 3.0, 0.1)),
+    primitives=_prims("bb", ["cross_above_upper", "cross_below_lower", "cross_above_basis", "cross_below_basis"]),
+    warmup=lambda p: p["length"], description="Bollinger Bands",
+))
+register(IndicatorSpec(
+    name="kc", func=lambda high, low, close, **p: _vo.keltner(high, low, close, **p), inputs=_HLC,
+    defaults=dict(length=20, mult=1.5, atr_len=10),
+    space=dict(length=_i(10, 50), mult=_f(1.0, 3.0, 0.1), atr_len=_i(5, 30)),
+    primitives=_prims("kc", ["cross_above_upper", "cross_below_lower", "above_upper", "below_lower"]),
+    warmup=lambda p: 5 * max(p["length"], p["atr_len"]), description="Keltner Channel",
+))
+register(IndicatorSpec(
+    name="squeeze", func=lambda high, low, close, **p: _vo.ttm_squeeze(high, low, close, **p), inputs=_HLC,
+    defaults=dict(length=20, bb_mult=2.0, kc_mult=1.5),
+    space=dict(length=_i(10, 40), bb_mult=_f(1.5, 2.5, 0.1), kc_mult=_f(1.0, 2.0, 0.1)),
+    primitives=_prims("squeeze", ["squeeze_on", "fire", "fire_long", "fire_short"]),
+    warmup=lambda p: p["length"] + 1, description="TTM Squeeze (LazyBear)",
+))
+register(IndicatorSpec(
+    name="donchian", func=lambda high, low, close, **p: _vo.donchian(high, low, close, **p), inputs=_HLC,
+    defaults=dict(length=20), space=dict(length=_i(10, 100)),
+    primitives=_prims("donchian", ["breakout_up", "breakout_down", "close_above_mid", "close_below_mid"]),
+    warmup=lambda p: p["length"] + 2, description="Donchian channel breakout (vs prior-bar channel)",
+))
+register(IndicatorSpec(
+    name="chandelier", func=lambda high, low, close, **p: _vo.chandelier(high, low, close, **p), inputs=_HLC,
+    defaults=dict(length=22, mult=3.0), space=dict(length=_i(10, 50), mult=_f(1.5, 5.0, 0.25)),
+    primitives=_prims("chandelier", ["buy", "sell", "long_trend", "short_trend"]),
+    warmup=lambda p: 5 * p["length"], description="Chandelier Exit",
+))
+register(IndicatorSpec(
+    name="ichimoku", func=lambda high, low, close, **p: _t2.ichimoku(high, low, close, **p), inputs=_HLC,
+    defaults=dict(conv=9, base=26, span_b=52, disp=26),
+    space=dict(conv=_i(5, 20), base=_i(20, 40), span_b=_i(40, 80, 2), disp=_i(20, 30)),
+    primitives=_prims("ichimoku", ["tk_cross_up", "tk_cross_down", "above_cloud", "below_cloud"]),
+    warmup=lambda p: p["span_b"] + p["disp"],
+    constraint=lambda p: p["conv"] < p["base"] < p["span_b"],
+    description="Ichimoku (cloud as plotted at the current bar; no forward shift)",
+))
+register(IndicatorSpec(
+    name="hull", func=lambda close, **p: _t2.hull(close, **p), inputs=("close",),
+    defaults=dict(length=55), space=dict(length=_i(9, 150)),
+    primitives=_prims("hull", ["rising", "falling", "close_cross_up", "close_cross_down"]),
+    warmup=lambda p: 2 * p["length"] + 2, description="Hull MA",
+))
+register(IndicatorSpec(
+    name="ssl", func=lambda high, low, close, **p: _t2.ssl_channel(high, low, close, **p), inputs=_HLC,
+    defaults=dict(length=10), space=dict(length=_i(5, 60)),
+    primitives=_prims("ssl", ["bull", "bear", "flip_up", "flip_down"]),
+    warmup=lambda p: p["length"] + 2, description="SSL channel",
+))
+register(IndicatorSpec(
+    name="utbot", func=lambda high, low, close, **p: _t2.ut_bot(high, low, close, **p), inputs=_HLC,
+    defaults=dict(key=1.0, atr_len=10), space=dict(key=_f(0.5, 4.0, 0.25), atr_len=_i(5, 30)),
+    primitives=_prims("utbot", ["buy", "sell", "long_pos", "short_pos"]),
+    warmup=lambda p: 5 * p["atr_len"], description="UT Bot Alerts",
+))
+register(IndicatorSpec(
+    name="rangefilter", func=lambda close, **p: _t2.range_filter(close, **p), inputs=("close",),
+    defaults=dict(period=100, mult=3.0), space=dict(period=_i(10, 150), mult=_f(1.5, 5.0, 0.25)),
+    primitives=_prims("rangefilter", ["buy", "sell", "bull", "bear"]),
+    warmup=lambda p: 6 * p["period"], description="Range Filter (DonovanWall)",
+))
+register(IndicatorSpec(
+    name="qqe", func=lambda close, **p: _t2.qqe(close, **p), inputs=("close",),
+    defaults=dict(rsi_len=14, smooth=5, factor=4.238),
+    space=dict(rsi_len=_i(7, 21), smooth=_i(2, 10), factor=_f(2.0, 6.0, 0.25)),
+    primitives=_prims("qqe", ["cross_up", "cross_down", "bull", "bear"]),
+    warmup=lambda p: 10 * p["rsi_len"], description="QQE",
+))
+register(IndicatorSpec(
+    name="obv", func=lambda close, volume, **p: _vl.obv(close, volume, **p), inputs=("close", "volume"),
+    defaults=dict(ma_len=20), space=dict(ma_len=_i(10, 100)),
+    primitives=_prims("obv", ["cross_up_ma", "cross_down_ma", "above_ma"]),
+    warmup=lambda p: p["ma_len"], description="On-Balance Volume vs its SMA",
+))
+register(IndicatorSpec(
+    name="cmf", func=lambda high, low, close, volume, **p: _vl.cmf(high, low, close, volume, **p),
+    inputs=("high", "low", "close", "volume"),
+    defaults=dict(length=20), space=dict(length=_i(10, 50)),
+    primitives=_prims("cmf", ["above_zero", "below_zero", "cross_up_zero", "cross_down_zero"]),
+    warmup=lambda p: p["length"], description="Chaikin Money Flow",
+))
+register(IndicatorSpec(
+    name="vwap", func=lambda high, low, close, volume, time, **p: _vl.vwap(high, low, close, volume, time),
+    inputs=("high", "low", "close", "volume", "time"), defaults={}, space={},
+    primitives=_prims("vwap", ["close_above", "close_below", "cross_up", "cross_down"]),
+    description="Session VWAP (resets 00:00 UTC)",
+))
+register(IndicatorSpec(
+    name="avwap",
+    func=lambda high, low, close, volume, time, **p: _vl.anchored_vwap(high, low, close, volume, time, **p),
+    inputs=("high", "low", "close", "volume", "time"), defaults=dict(anchor_time=0), space={},
+    primitives=_prims("avwap", ["close_above", "close_below", "cross_up", "cross_down"]),
+    description="Anchored VWAP (anchor_time epoch ms; 0 = data start)",
+))
+register(IndicatorSpec(
+    name="cvd", func=lambda open, high, low, close, volume, **p: _vl.cvd(open, high, low, close, volume, **p),
+    inputs=("open", "high", "low", "close", "volume"),
+    defaults=dict(ma_len=20), space=dict(ma_len=_i(10, 100)),
+    primitives=_prims("cvd", ["cross_up_ma", "cross_down_ma", "above_ma"]),
+    warmup=lambda p: p["ma_len"], description="Cumulative volume delta APPROXIMATED from OHLCV",
+))
+register(IndicatorSpec(
+    name="swing", func=lambda high, low, **p: _st.swings(high, low, **p), inputs=("high", "low"),
+    defaults=dict(left=5, right=5), space=dict(left=_i(2, 15), right=_i(2, 15)),
+    primitives=_prims("swing", ["pivot_high", "pivot_low"]),
+    warmup=lambda p: p["left"] + p["right"], description="Swing pivots, flagged at confirmation bar",
+))
+register(IndicatorSpec(
+    name="structure", func=lambda high, low, close, **p: _st.bos_choch(high, low, close, **p), inputs=_HLC,
+    defaults=dict(left=5, right=5), space=dict(left=_i(2, 15), right=_i(2, 15)),
+    primitives=_prims("structure", ["bos_up", "bos_down", "choch_up", "choch_down"]),
+    warmup=lambda p: 3 * (p["left"] + p["right"]), description="BOS / CHoCH on confirmed swings",
+))
+register(IndicatorSpec(
+    name="fvg", func=lambda high, low, close, **p: _st.fvg(high, low, close, **p), inputs=_HLC,
+    defaults=dict(min_gap=0.0), space=dict(min_gap=_f(0.0, 0.01, 0.001)),
+    primitives=_prims("fvg", ["bull_fvg", "bear_fvg", "retest_bull", "retest_bear"]),
+    warmup=lambda p: 3, description="Fair value gaps and retests",
+))
+register(IndicatorSpec(
+    name="ob", func=lambda open, high, low, close, **p: _st.order_blocks(open, high, low, close, **p),
+    inputs=("open", "high", "low", "close"),
+    defaults=dict(left=5, right=5, lookback=20),
+    space=dict(left=_i(2, 15), right=_i(2, 15), lookback=_i(5, 50)),
+    primitives=_prims("ob", ["bull_ob", "bear_ob", "retest_bull", "retest_bear"]),
+    warmup=lambda p: 3 * (p["left"] + p["right"]),
+    description="Order blocks (last opposite candle before a break)",
+))
+register(IndicatorSpec(
+    name="mayer", func=lambda close, **p: _cy.mayer(close, **p), inputs=("close",),
+    defaults=dict(length=200, hot=2.4, cold=0.8, bars_per_day=1),
+    space=dict(length=_i(100, 300, 10), hot=_f(1.8, 3.0, 0.1), cold=_f(0.6, 1.0, 0.05)),
+    primitives=_prims("mayer", ["overheated", "undervalued", "cross_above_hot", "cross_below_cold"]),
+    warmup=lambda p: p["length"] * p["bars_per_day"], description="Mayer multiple (daily)",
+))
+register(IndicatorSpec(
+    name="picycle", func=lambda close, **p: _cy.pi_cycle(close, **p), inputs=("close",),
+    defaults=dict(fast=111, slow=350, bars_per_day=1),
+    space=dict(fast=_i(80, 140, 5), slow=_i(280, 420, 10)),
+    primitives=_prims("picycle", ["top", "bottom", "fast_above_slow"]),
+    warmup=lambda p: p["slow"] * p["bars_per_day"], constraint=lambda p: p["fast"] < p["slow"],
+    description="Pi Cycle Top (daily)",
+))
