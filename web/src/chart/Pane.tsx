@@ -25,9 +25,9 @@ let curTf = "4h";
 const two = (n: number) => String(n).padStart(2, "0");
 const parts = (t: number) => {
   const d = new Date(t * 1000);
-  return curTf === "1d" || curTf === "1w"
-    ? { y: d.getUTCFullYear(), mo: d.getUTCMonth(), d: d.getUTCDate(), h: d.getUTCHours(), mi: d.getUTCMinutes() }
-    : { y: d.getFullYear(), mo: d.getMonth(), d: d.getDate(), h: d.getHours(), mi: d.getMinutes() };
+  // lightweight-charts places tick marks (new day/month/year) in UTC, so labels must be UTC too;
+  // formatting them in local time mislabels boundaries (e.g. 1 Nov 00:00 UTC shown as "Out" in UTC-6).
+  return { y: d.getUTCFullYear(), mo: d.getUTCMonth(), d: d.getUTCDate(), h: d.getUTCHours(), mi: d.getUTCMinutes() };
 };
 const tickFmt = (time: unknown, type: number) => {
   const q = parts(time as number);
@@ -590,6 +590,8 @@ function Pane(props: PaneProps) {
     const ac = new AbortController();
     barsAc.current = ac;
     bars.current = []; exhausted.current = false; extending.current = false;
+    // new symbol/TF: forget any manual price-scale drag/zoom from the previous one
+    chart.current?.priceScale("right").applyOptions({ autoScale: true });
     if (!frozen.current) { shown.current = []; candle.current?.setData([]); vol.current?.setData([]); }
     if (ovl.current) { ovl.current.drawings = drawings.get(symbol); ovl.current.selected = null; ovl.current.update(); }
     setSelected(null);
@@ -612,6 +614,7 @@ function Pane(props: PaneProps) {
           show(bars.current, false);
           const n = bars.current.length;
           if (n) chart.current?.timeScale().setVisibleLogicalRange({ from: n - 160, to: n + 6 });
+          chart.current?.priceScale("right").applyOptions({ autoScale: true });
           if (prim.current) { prim.current.tfSec = TF_SEC[tf]; prim.current.invalidate(); }
           if (pr.current.mode === "liq" && liqRange.current) void fns.current.showRange(...liqRange.current);
           legendLast();

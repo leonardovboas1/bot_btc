@@ -1,5 +1,4 @@
 import { memo, useEffect, useRef } from "react";
-import { tzLabel } from "../util";
 
 export const RANGES = ["1D", "5D", "1M", "3M", "6M", "YTD", "1A", "5A", "Todos"];
 
@@ -7,8 +6,7 @@ export const RANGES = ["1D", "5D", "1M", "3M", "6M", "YTD", "1A", "5A", "Todos"]
 function RangeBar({ onRange }: { onRange(k: string): void }) {
   const clk = useRef<HTMLSpanElement>(null);
   useEffect(() => {
-    const tz = tzLabel();
-    const tick = () => { if (clk.current) clk.current.textContent = new Date().toLocaleTimeString("pt-BR", { hour12: false }) + " " + tz; };
+    const tick = () => { if (clk.current) clk.current.textContent = new Date().toLocaleTimeString("pt-BR", { hour12: false, timeZone: "UTC" }) + " UTC"; };
     tick();
     const t = setInterval(tick, 1000);
     return () => clearInterval(t);
