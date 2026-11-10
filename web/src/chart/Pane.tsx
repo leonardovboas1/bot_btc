@@ -1,14 +1,15 @@
 import { memo, useEffect, useRef, useState } from "react";
 import {
-  CandlestickSeries, HistogramSeries, LineSeries, ColorType, CrosshairMode, LineStyle, PriceScaleMode, createChart, createSeriesMarkers, createTextWatermark,
-  type IChartApi, type ISeriesApi, type ITextWatermarkPluginApi, type ISeriesMarkersPluginApi, type MouseEventParams, type SeriesMarker, type Time, type UTCTimestamp,
+  CandlestickSeries, HistogramSeries, LineSeries, ColorType, CrosshairMode, LineStyle, PriceScaleMode, createChart, createSeriesMarkers,
+  type IChartApi, type ISeriesApi, type ISeriesMarkersPluginApi, type MouseEventParams, type SeriesMarker, type Time, type UTCTimestamp,
 } from "lightweight-charts";
 import type { Backtest, Bar, Strategy } from "../types";
 import { IND_TFS, SCOL, buildMarkers, buildTrades, getIndicator, reasonPt, type DrawTrade, type IndData } from "./strategyDraw";
 import { GridLayer, LayersPrimitive, VpLayer } from "../layers";
 import { cachedBars, getBacktest, getBook, getOhlcv, getRecent, getVp, prefetchNear, putBars } from "../api";
-import { barOpen, live } from "../live";
-import { ALL_TFS, TF_LABEL, TF_SEC, decimals, fmtDate, fmtPct, fmtPrice, fmtVol, isAbort } from "../util";
+import { barOpen, live, type LiveStatus } from "../live";
+import { ALL_TFS, TF_LEG, TF_SEC, decimals, fmtDate, fmtPct, fmtPrice, fmtVol, isAbort, symName, MON_PT } from "../util";
+import { I } from "../ui/icons";
 import { OverlayPrimitive } from "./overlay";
 import type { PaperFill } from "../paperApi";
 import { drawings, newId, type Drawing, type Tool } from "./drawings";
@@ -17,23 +18,39 @@ import LiqMode, { type LiqHost } from "../liq/LiqControls";
 
 const T = (n: number) => n as UTCTimestamp;
 const N_BARS = 1200;
-export const COL = { up: "#0ea894", dn: "#f25c54", eq: "#4c8dff", bh: "#5d6676", text: "#5d6676", grid: "#000000", line: "#1c222d", bg: "#000000" };
+export const COL = { up: "#26a69a", dn: "#ef5350", eq: "#2962ff", bh: "#787b86", text: "#d1d4dc", grid: "#000000", line: "#2a2e39", bg: "#000000" };
+
+// Time axis in the browser timezone for intraday, UTC for 1D/1W bars (their bars open at 00:00 UTC), pt-BR labels like TradingView.
+let curTf = "4h";
+const two = (n: number) => String(n).padStart(2, "0");
+const parts = (t: number) => {
+  const d = new Date(t * 1000);
+  return curTf === "1d" || curTf === "1w"
+    ? { y: d.getUTCFullYear(), mo: d.getUTCMonth(), d: d.getUTCDate(), h: d.getUTCHours(), mi: d.getUTCMinutes() }
+    : { y: d.getFullYear(), mo: d.getMonth(), d: d.getDate(), h: d.getHours(), mi: d.getMinutes() };
+};
+const tickFmt = (time: unknown, type: number) => {
+  const q = parts(time as number);
+  return type === 0 ? String(q.y) : type === 1 ? MON_PT[q.mo] : type === 2 ? String(q.d) : `${two(q.h)}:${two(q.mi)}`;
+};
+const timeFmt = (time: unknown) => { const q = parts(time as number); return `${two(q.d)} ${MON_PT[q.mo]} '${String(q.y).slice(2)}${curTf === "1d" || curTf === "1w" ? "" : `  ${two(q.h)}:${two(q.mi)}`}`; };
+const SPAN: Record<string, number> = { "1D": 1, "5D": 5, "1M": 30, "3M": 91, "6M": 182, "1A": 365, "5A": 1826 };
 
 const chartOpts = {
   layout: {
-    background: { type: ColorType.Solid, color: COL.bg }, textColor: "#7c8596", fontSize: 11,
+    background: { type: ColorType.Solid, color: COL.bg }, textColor: COL.text, fontSize: 12,
     fontFamily: "-apple-system, BlinkMacSystemFont, 'Trebuchet MS', Roboto, Ubuntu, sans-serif", attributionLogo: false,
-    panes: { separatorColor: COL.line, separatorHoverColor: "rgba(255,176,32,0.25)", enableResize: true },
+    panes: { separatorColor: COL.line, separatorHoverColor: "rgba(41,98,255,0.4)", enableResize: true },
   },
   grid: { vertLines: { visible: false }, horzLines: { visible: false } },  // pure black, no grid (also avoids black lines cutting the heatmap)
   crosshair: {
     mode: CrosshairMode.Normal,
-    vertLine: { color: "rgba(230,233,239,0.28)", width: 1 as const, style: LineStyle.Dashed, labelBackgroundColor: "#262d3a" },
-    horzLine: { color: "rgba(230,233,239,0.28)", width: 1 as const, style: LineStyle.Dashed, labelBackgroundColor: "#262d3a" },
+    vertLine: { color: "#787b86", width: 1 as const, style: LineStyle.Dashed, labelBackgroundColor: "#2a2e39" },
+    horzLine: { color: "#787b86", width: 1 as const, style: LineStyle.Dashed, labelBackgroundColor: "#2a2e39" },
   },
-  timeScale: { timeVisible: true, borderColor: COL.line, rightOffset: 8, barSpacing: 7, minBarSpacing: 0.5 },
-  rightPriceScale: { borderColor: COL.line, scaleMargins: { top: 0.08, bottom: 0.2 } },
-  localization: { locale: "pt-BR" },
+  timeScale: { timeVisible: true, borderColor: COL.line, tickMarkFormatter: tickFmt, rightOffset: 8, barSpacing: 7, minBarSpacing: 0.5 },
+  rightPriceScale: { borderColor: COL.line, scaleMargins: { top: 0.14, bottom: 0.2 } },
+  localization: { locale: "pt-BR", timeFormatter: timeFmt },
   autoSize: true,
 };
 
@@ -42,7 +59,7 @@ export interface PaneProps {
   idx: number; symbol: string; tf: string; tfs: string[]; mode: PaneMode; strategy: string; fee: string;
   active: boolean; multi: boolean; ha: boolean; log?: boolean; source: "real" | "ha"; showEq: boolean; details: boolean; showBook: boolean; showVp: boolean; hasLiq: boolean;
   tool: Tool; bus: SyncBus; spec: Strategy | null; paper: PaperFill[]; focus: { n: number; t0: number; t1: number; seq: number } | null;
-  onActivate(i: number): void; onBt(i: number, b: Backtest | null): void; onErr(e: string): void;
+  pos?: "LONG" | "SHORT" | "FLAT" | null; onActivate(i: number): void; onBt(i: number, b: Backtest | null): void; onErr(e: string): void;
   onTf(i: number, tf: string): void; onMode(i: number, m: PaneMode): void; onLog?(): void; onTool(t: Tool): void;
   onBarClose(symbol: string, tf: string): void;
 }
@@ -60,7 +77,8 @@ function Pane(props: PaneProps) {
   const bhS = useRef<ISeriesApi<"Line"> | null>(null);
   const markers = useRef<ISeriesMarkersPluginApi<Time> | null>(null);
   const prim = useRef<LayersPrimitive | null>(null);
-  const wm = useRef<ITextWatermarkPluginApi<Time> | null>(null);
+  const dot = useRef<HTMLElement>(null);
+  const lagEl = useRef<HTMLSpanElement>(null);
   const ovl = useRef<OverlayPrimitive | null>(null);
   const bars = useRef<Bar[]>([]);
   const shown = useRef<Bar[]>([]);         // what the chart displays (bars, or liq-mode candles)
@@ -80,6 +98,7 @@ function Pane(props: PaneProps) {
   const [btState, setBtState] = useState<"idle" | "busy" | "ok" | "err">("idle");
   const [loadedKey, setLoadedKey] = useState("");  // candles painted for symbol|tf: gates the backtest request
   const [tfOpen, setTfOpen] = useState(false);
+  const [lgOpen, setLgOpen] = useState(true);
   const [selected, setSelected] = useState<string | null>(null);
   const [eqTop, setEqTop] = useState<number | null>(null);
 
@@ -117,16 +136,15 @@ function Pane(props: PaneProps) {
     if (!e) return;
     if (!b) { e.innerHTML = ""; return; }
     const d = decimals(b.close);
-    const ch = prev ? b.close / prev.close - 1 : b.close / b.open - 1;
-    const cls = b.close >= b.open ? "up" : "dn";
-    e.innerHTML =
-      `<span><i>A</i>${fmtPrice(b.open, d)}</span><span><i>M</i>${fmtPrice(b.high, d)}</span>` +
-      `<span><i>m</i>${fmtPrice(b.low, d)}</span><span><i>F</i><b class="${cls}">${fmtPrice(b.close, d)}</b></span>` +
-      `<span class="${ch >= 0 ? "up" : "dn"}">${fmtPct(ch, true, 2)}</span><span class="vol"><i>Vol</i>${fmtVol(b.volume)}</span>`;
+    const chg = prev ? b.close - prev.close : b.close - b.open, pct = prev ? b.close / prev.close - 1 : b.close / b.open - 1;
+    const c = chg >= 0 ? "up" : "dn", sg = chg > 0 ? "+" : chg < 0 ? "−" : "";
+    const v = (k: string, x: number) => `<i>${k}</i><b class="${c}">${fmtPrice(x, d)}</b>`;
+    e.innerHTML = v("Abr", b.open) + v("Máx", b.high) + v("Mín", b.low) + v("Fch", b.close) +
+      `<b class="${c}">${sg}${fmtPrice(Math.abs(chg), d)} (${fmtPct(pct, true, 2)})</b><i class="vol">Vol</i><b class="vol">${fmtVol(b.volume)}</b>`;
   };
   const legendLast = () => { const b = shown.current; setLegend(b[b.length - 1], b[b.length - 2]); };
 
-  const volPt = (x: Bar) => ({ time: T(x.time), value: x.volume, color: x.close >= x.open ? "rgba(14,168,148,0.2)" : "rgba(242,92,84,0.2)" });
+  const volPt = (x: Bar) => ({ time: T(x.time), value: x.volume, color: x.close >= x.open ? "rgba(38,166,154,0.25)" : "rgba(239,83,80,0.25)" });
   const candPt = (x: Bar) => ({ time: T(x.time), open: x.open, high: x.high, low: x.low, close: x.close });
   // Heikin Ashi rendering (client-side): haArr mirrors shown candles when HA is on
   const haArr = useRef<Bar[]>([]);
@@ -274,12 +292,12 @@ function Pane(props: PaneProps) {
         const main = /filt|mid|basis|ma$|ema|sma/.test(sr.key);
         const band = !main;
         const ls = m.addSeries(LineSeries, {
-          color: main ? "rgba(230,233,239,0.92)" : "rgba(154,163,178,0.6)", lineWidth: main ? 2 : 1,
+          color: main ? "rgba(255,255,255,0.92)" : "rgba(178,181,190,0.55)", lineWidth: main ? 2 : 1,
           priceLineVisible: false, lastValueVisible: false, crosshairMarkerVisible: false,
         });
         ls.setData(sr.data.filter((p) => p.time >= t0).map((p) => ({
           time: T(p.time), value: p.value,
-          ...(band && reg ? { color: reg.get(p.time) ? "rgba(14,168,148,0.85)" : "rgba(242,92,84,0.8)" } : {}),
+          ...(band && reg ? { color: reg.get(p.time) ? "rgba(38,166,154,0.85)" : "rgba(239,83,80,0.8)" } : {}),
         })));
         indS.current.push(ls);
       }
@@ -316,7 +334,8 @@ function Pane(props: PaneProps) {
       return "<div><b>" + d.name + "</b>" + ps + vals + "</div>";
     }).join("");
     const note = IND_TFS.has(pr.current.tf) ? "" : "<em>indicadores em 4H/1D/1S</em>";
-    e.innerHTML = '<div class="st"><b>' + P.name + "</b><em>estratégia · " + TF_LABEL[pr.current.tf] + (pr.current.source === "ha" ? " · sinais HA" : "") + "</em>" + note + "</div>" + rows;
+    const ps = pr.current.pos, pos = ps ? '<span class="pos ' + ps + '">' + (ps === "FLAT" ? "fora" : (ps === "LONG" ? "long" : "short") + " · em posição") + "</span>" : "";
+    e.innerHTML = '<div class="st"><b>' + P.name + "</b>" + (pr.current.source === "ha" ? "<em>sinais HA</em>" : "") + pos + note + "</div>" + rows;
   };
 
   const drawBt = () => {
@@ -368,6 +387,20 @@ function Pane(props: PaneProps) {
     prim.current?.invalidate();
   };
 
+  /** Range-bar presets: last N days (YTD / all), loading older bars when needed; never past the data that exists. */
+  const presetRange = async (k: string) => {
+    const fromOf = (lastT: number, first: number) => k === "Todos" ? first : k === "YTD" ? Date.UTC(new Date(lastT * 1000).getUTCFullYear(), 0, 1) / 1000 : lastT - SPAN[k] * 86400;
+    for (let n = 0; n < 3 && !frozen.current; n++) {
+      const b = bars.current;
+      if (!b.length || k === "Todos" || b[0].time <= fromOf(b[b.length - 1].time, b[0].time) || exhausted.current) break;
+      await fns.current.extendLeft();
+    }
+    const sh = shown.current;
+    if (!sh.length) return;
+    const a = fns.current.logicalOf(Math.max(fromOf(sh[sh.length - 1].time, sh[0].time), sh[0].time));
+    if (a != null) chart.current?.timeScale().setVisibleLogicalRange({ from: a, to: sh.length - 1 + 6 });
+  };
+
   const fns = useRef({ showRange, drawInd, indLegend, extendLeft, refreshLayers, mergeTail, mergeGap, drawBt, logicalOf, timeOf, xOf, show, legendLast });
   fns.current = { showRange, drawInd, indLegend, extendLeft, refreshLayers, mergeTail, mergeGap, drawBt, logicalOf, timeOf, xOf, show, legendLast };
 
@@ -390,7 +423,6 @@ function Pane(props: PaneProps) {
     ovl.current.xOf = (t) => fns.current.xOf(t);
     candle.current.attachPrimitive(ovl.current);
     markers.current = createSeriesMarkers<Time>(candle.current, []);
-    wm.current = createTextWatermark(m.panes()[0], { horzAlign: "center", vertAlign: "center", lines: [] });
 
     const bus = pr.current.bus;
     const nearest = (t: number) => {
@@ -408,6 +440,7 @@ function Pane(props: PaneProps) {
         if (b && candle.current) m.setCrosshairPosition(b.close, T(b.time), candle.current);
         else m.clearCrosshairPosition();
       },
+      preset: (k) => { void presetRange(k); },
       range: (a, b) => {
         if (hover.current) return;
         const la = fns.current.logicalOf(a), lb = fns.current.logicalOf(b);
@@ -542,6 +575,16 @@ function Pane(props: PaneProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // live status dot + lag: DOM only, never React state
+  useEffect(() => {
+    const st = (x: LiveStatus) => { if (dot.current) dot.current.className = "dot " + x; };
+    const lg = (ms: number | null) => { if (lagEl.current) lagEl.current.textContent = ms != null ? ms + " ms" : ""; };
+    st(live.status); lg(live.lag);
+    const a = live.onStatus(st), b = live.onLag(lg);
+    return () => { a(); b(); };
+  }, []);
+  useEffect(() => fns.current.indLegend(null), [props.pos]);
+
   // ---- bars: reload on symbol/tf change (stale requests aborted)
   useEffect(() => {
     const ac = new AbortController();
@@ -551,10 +594,7 @@ function Pane(props: PaneProps) {
     if (ovl.current) { ovl.current.drawings = drawings.get(symbol); ovl.current.selected = null; ovl.current.update(); }
     setSelected(null);
     setLegend(null); setLoading(true);
-    wm.current?.applyOptions({ lines: [
-      { text: symbol.replace("USDT", ""), color: "rgba(230,233,239,0.035)", fontSize: 120, fontStyle: "800", fontFamily: "-apple-system, BlinkMacSystemFont, 'Trebuchet MS', Roboto, Ubuntu, sans-serif", lineHeight: 120 },
-      { text: `${TF_LABEL[tf]} · USDT PERP`, color: "rgba(230,233,239,0.05)", fontSize: 16, fontStyle: "600", fontFamily: "-apple-system, BlinkMacSystemFont, 'Trebuchet MS', Roboto, Ubuntu, sans-serif", lineHeight: 24 },
-    ] });
+    curTf = tf;
     // Instant paint from the in-memory LRU (warm switch), then refresh from the API (last 5000 bars + live tail).
     const tStart = performance.now();
     let painted = false, earlyK: Bar | null = null;
@@ -738,51 +778,40 @@ function Pane(props: PaneProps) {
     showRange: (t0: number, t1: number) => { void fns.current.showRange(t0, t1); },
   } : null;
 
-  const m = bt.current?.metrics;
-  const ret = typeof m?.total_return === "number" ? m.total_return : null;
-  const sh = typeof m?.sharpe === "number" ? m.sharpe : null;
 
   return (
     <div className={"pane" + (active ? " active" : "") + (tool !== "cursor" ? " drawing" : "")}
       onMouseDown={() => props.onActivate(idx)}
       onMouseEnter={() => { hover.current = true; }} onMouseLeave={() => { hover.current = false; props.bus.emitCross(idx, null); }}>
-      <div className="phead">
-        <span className="psym">{symbol.replace("USDT", "")}<em>/USDT</em><small>PERP</small></span>
-        {multi ? (
-          <div className="ptf">
-            <button className="chip" onClick={() => setTfOpen((v) => !v)} onBlur={() => setTimeout(() => setTfOpen(false), 150)}>{TF_LABEL[tf]}<svg width="8" height="8" viewBox="0 0 8 8"><path d="M1 3l3 3 3-3" stroke="currentColor" fill="none" /></svg></button>
-            {tfOpen && (
-              <div className="menu">
-                {ALL_TFS.map((t) => (
-                  <button key={t} className={t === tf ? "on" : ""} disabled={!props.tfs.includes(t)} onMouseDown={(e) => { e.preventDefault(); props.onTf(idx, t); setTfOpen(false); }}>{TF_LABEL[t]}</button>
-                ))}
-              </div>
-            )}
-          </div>
-        ) : null}
-        <div className="pmode">
-          <button className={mode === "candles" ? "on" : ""} onClick={() => props.onMode(idx, "candles")}>Velas</button>
-          <button className={liqOn ? "on" : ""} disabled={!hasLiq} title={hasLiq ? "Heatmap de liquidações" : "Sem dados de liquidação para este ativo"} onClick={() => props.onMode(idx, "liq")}>Liquidações</button>
-        </div>
-        <div ref={legend} className="legend" />
-        <div className="pright">
-          {note && <span className="pnote">{note}</span>}
-          {btState === "busy" && <span className="pnote"><i className="spin" />backtest</span>}
-          {btState === "ok" && ret != null && !liqOn && (
-            <span className="pbt" title="Backtest in-sample">
-              <span className={ret >= 0 ? "up" : "dn"}>{fmtPct(ret, true, 0)}</span>
-              <span>SR {sh?.toFixed(2) ?? "—"}</span>
-            </span>
-          )}
-        </div>
-      </div>
       <div className="pbody">
         <div className="pchart" ref={el} />
+        <div className={"lg" + (lgOpen ? "" : " closed")}>
+          <div className="lg1">
+            <span className="lgn">{symName(symbol)} PERPETUAL CONTRACT ·{" "}
+              {multi ? (
+                <span className="ptf">
+                  <button className="lgtf" onClick={() => setTfOpen((v) => !v)} onBlur={() => setTimeout(() => setTfOpen(false), 150)}>{TF_LEG[tf]}</button>
+                  {tfOpen && (
+                    <div className="menu">
+                      {ALL_TFS.map((t) => (
+                        <button key={t} className={t === tf ? "on" : ""} disabled={!props.tfs.includes(t)} onMouseDown={(e) => { e.preventDefault(); props.onTf(idx, t); setTfOpen(false); }}>{TF_LEG[t]}</button>
+                      ))}
+                    </div>
+                  )}
+                </span>
+              ) : TF_LEG[tf]} · Binance</span>
+            <i ref={dot} className="dot" title="Binance WebSocket" /><span className="lag" ref={lagEl} title="Atraso de ponta a ponta (evento Binance → candle desenhado)" />
+            <span className="ohlc" ref={legend} />
+            {note && <span className="pnote">{note}</span>}
+            {btState === "busy" && <i className="spin" title="calculando backtest" />}
+          </div>
+          <div className="indleg" ref={indLeg} />
+          <button className="lgc" onClick={() => setLgOpen((v) => !v)} aria-label="Recolher legenda">{lgOpen ? I.up : I.down}</button>
+        </div>
         <div className="pscale" title="Escala de preço (como no TradingView)">
           <button className={props.log ? "on" : ""} aria-pressed={!!props.log} title="Escala logarítmica (Alt+L)" onClick={(e) => { e.stopPropagation(); props.onLog?.(); }}>log</button>
           <button title="Auto-ajustar a escala de preço" onClick={(e) => { e.stopPropagation(); chart.current?.priceScale("right").applyOptions({ autoScale: true }); }}>auto</button>
         </div>
-        <div className="indleg" ref={indLeg} />
         <div className="ttip" ref={tip} />
         {eqTop != null && bt.current && (
           <div className="eqleg" style={{ top: eqTop + 6 }}>

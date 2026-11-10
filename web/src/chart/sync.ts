@@ -2,6 +2,7 @@
 export interface Peer {
   cross(t: number | null): void;
   range(from: number, to: number): void; // times (s), may extend past loaded data
+  preset?(k: string): void;               // range-bar presets (1D, 5D, ..., Todos)
 }
 export class SyncBus {
   peers = new Map<number, Peer>();

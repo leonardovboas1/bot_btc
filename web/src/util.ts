@@ -14,3 +14,16 @@ export const fmtNum = (v: number | null | undefined, digits = 2) =>
 export const fmtVol = (v: number) => (v >= 1e9 ? (v / 1e9).toFixed(2) + "B" : v >= 1e6 ? (v / 1e6).toFixed(2) + "M" : v >= 1e3 ? (v / 1e3).toFixed(1) + "K" : v.toFixed(0));
 export const isAbort = (e: unknown) => (e as { name?: string })?.name === "AbortError";
 export const base = (s: string) => (s.endsWith("USDT") ? s.slice(0, -4) : s);
+/** Top-bar timeframe labels (TradingView style: D / S for day / week). */
+export const TF_TV: Record<string, string> = { "5m": "5m", "15m": "15m", "1h": "1h", "4h": "4h", "1d": "D", "1w": "S" };
+/** Legend timeframe labels. */
+export const TF_LEG: Record<string, string> = { "5m": "5m", "15m": "15m", "1h": "1h", "4h": "4h", "1d": "1D", "1w": "1S" };
+const NAMES: Record<string, string> = { BTC: "Bitcoin", ETH: "Ethereum", SOL: "Solana", BNB: "BNB", XRP: "XRP", ADA: "Cardano", NEAR: "NEAR Protocol", FET: "Artificial Superintelligence Alliance" };
+export const symName = (s: string) => `${NAMES[base(s)] ?? base(s)} / TetherUS`;
+/** Clock label like "UTC-3" for the browser timezone. */
+export const tzLabel = () => {
+  const m = -new Date().getTimezoneOffset(), h = Math.trunc(m / 60), r = Math.abs(m % 60);
+  return "UTC" + (m < 0 ? "-" : "+") + Math.abs(h) + (r ? ":" + String(r).padStart(2, "0") : "");
+};
+const MON = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+export const MON_PT = MON;

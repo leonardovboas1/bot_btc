@@ -5,24 +5,24 @@ import { getPaperFills, type PaperFill } from "./paperApi";
 import Pane, { type PaneMode } from "./chart/Pane";
 import { SyncBus } from "./chart/sync";
 import { drawings, type Tool } from "./chart/drawings";
-import Inspector from "./ui/Inspector";
+import Side from "./ui/Side";
+import TopBar, { type Flags } from "./ui/TopBar";
+import RangeBar from "./ui/RangeBar";
+import Btn from "./ui/Btn";
 import Tester, { type TTab } from "./strategy/Tester";
 import Palette, { type Cmd } from "./ui/Palette";
-import Price from "./ui/Price";
-import { I, Logo } from "./ui/icons";
-import { live, type LiveStatus, type Tick } from "./live";
-import { ALL_TFS, TF_LABEL, fmtDate, fmtPct, base } from "./util";
+import { I } from "./ui/icons";
+import { ALL_TFS, TF_LABEL, base } from "./util";
 
 type Layout = 1 | 2 | 4;
-type Tab = "resumo" | "detalhes" | "trades";
 interface Ui {
   layout: Layout; symbol: string; tfs: string[]; modes: PaneMode[]; strategy: string; fee: string;
-  inspector: boolean; tab: Tab; details: boolean; eq: boolean; book: boolean; vp: boolean; syncCross: boolean; syncRange: boolean;
+  inspector: boolean; details: boolean; eq: boolean; book: boolean; vp: boolean; syncCross: boolean; syncRange: boolean;
   candles: "real" | "ha"; log: boolean; source: "real" | "ha"; testerH: number; testerOpen: boolean; testerMax: boolean; testerTab: TTab; capital: number;
 }
 const DEF: Ui = {
   layout: 1, symbol: "BTCUSDT", tfs: ["4h", "1h", "1d", "15m"], modes: ["candles", "candles", "candles", "candles"], strategy: "", fee: "",
-  inspector: true, tab: "resumo", details: false, eq: false, book: false, vp: false, syncCross: true, syncRange: false,
+  inspector: true, details: false, eq: false, book: false, vp: false, syncCross: true, syncRange: false,
   candles: "real", log: false, source: "real", testerH: 300, testerOpen: true, testerMax: false, testerTab: "overview", capital: 10000,
 };
 const KEY = "btclab.ui.v2";
@@ -68,10 +68,6 @@ export default function App() {
     return () => { dead = true; ac.abort(); clearInterval(t); };
   }, [paperSel]);
   const paperFills = useMemo(() => (paperRaw && paperSel?.includes(`-${ui.symbol}-`) ? paperRaw.fills : []), [paperRaw, paperSel, ui.symbol]);
-  const [ticks, setTicks] = useState<Map<string, Tick>>(new Map());
-  const [ws, setWs] = useState<LiveStatus>(live.status);
-  const [lag, setLag] = useState<number | null>(null);
-  const [now, setNow] = useState(() => new Date());
   const [sigRev, setSigRev] = useState(0);
   const [focus, setFocus] = useState<{ n: number; t0: number; t1: number; seq: number } | null>(null);
   const bus = useRef(new SyncBus()).current;
@@ -83,15 +79,6 @@ export default function App() {
     getStrategies().then((s) => { setApiOk(true); setStrategies(s); setUi((u) => (s.some((x) => x.name === u.strategy) ? u : { ...u, strategy: s[0]?.name ?? "" })); })
       .catch((e) => { setApiOk(false); setErr(String(e)); });
     getFees().then((f) => { setFees(f); setUi((u) => (f.some((x) => x.name === u.fee) ? u : { ...u, fee: f[0]?.name ?? "" })); }).catch(() => {});
-  }, []);
-
-  // live ticker (throttled to the 1 s miniTicker cadence) + socket status + clock
-  useEffect(() => {
-    const a = live.ticker((t) => setTicks(new Map(t)));
-    const b = live.onStatus(setWs);
-    const d = live.onLag(setLag);
-    const c = setInterval(() => setNow(new Date()), 1000);
-    return () => { a(); b(); d(); clearInterval(c); };
   }, []);
 
   const sym = useMemo(() => symbols.find((s) => s.symbol === ui.symbol) ?? symbols[0], [symbols, ui.symbol]);
@@ -185,75 +172,37 @@ export default function App() {
     const up = () => { window.removeEventListener("pointermove", mv); window.removeEventListener("pointerup", up); };
     window.addEventListener("pointermove", mv); window.addEventListener("pointerup", up);
   };
-  const testerH = !ui.testerOpen ? 34 : ui.testerMax ? "calc(100vh - var(--top) - var(--stat) - 160px)" : `min(${ui.testerH}px, calc(100vh - var(--top) - var(--stat) - 200px))`;
-  const tick = ticks.get(ui.symbol);
+  const testerH = !ui.testerOpen ? 34 : ui.testerMax ? "calc(100vh - var(--top) - var(--rb) - 160px)" : `min(${ui.testerH}px, calc(100vh - var(--top) - var(--rb) - 200px))`;
   const bt = bts[ai] ?? null;
-  const holdout = bt?.holdout_start;
   const panes = Array.from({ length: ui.layout }, (_, i) => i);
-  const wsLabel: Record<LiveStatus, string> = { live: "ao vivo", connecting: "conectando", stale: "atrasado", offline: "offline" };
-  const st = sig?.state;
+  const onFlag = useCallback((k: keyof Flags, v: boolean) => setUi((u) => (k === "haSig" ? { ...u, source: v ? "ha" : "real" } : { ...u, [k]: v })), []);
+  const flags: Flags = { eq: ui.eq, book: ui.book, vp: ui.vp, details: ui.details, haSig: ui.source === "ha", syncCross: ui.syncCross, syncRange: ui.syncRange };
+  const onRange = useCallback((k: string) => bus.peers.get(ai)?.preset?.(k), [bus, ai]);
+  const liqOn = ui.modes[ai] === "liq" && !!sym?.has_liq;
 
   return (
     <div className={"app" + (ui.inspector ? "" : " noinsp")} style={{ ["--tester" as string]: typeof testerH === "number" ? testerH + "px" : testerH }}>
-      <header className="top">
-        <div className="brand"><Logo /><span>Signal<b>Lab</b></span></div>
-        <button className="symbtn" onClick={() => setPal(true)} title="Trocar símbolo (Ctrl+K)">
-          <i className={"dot " + ws} title={`Binance WS: ${ws}`} />
-          <span className={"lag" + (lag != null && lag > 1000 ? " slow" : "")} title="Atraso de ponta a ponta (evento Binance → candle desenhado)">{lag != null ? `${lag}ms` : "—"}</span>
-          <span className="sb">{base(ui.symbol)}<em>/USDT</em></span>
-          <Price value={tick?.price} className="sp" />
-          <span className={"sc " + (tick ? (tick.pct >= 0 ? "up" : "dn") : "")}>{tick ? fmtPct(tick.pct, true, 2) : "—"}</span>
-          {I.chev}
-        </button>
-        <div className="seg tfseg" role="group" aria-label="Timeframe do gráfico ativo">
-          {ALL_TFS.map((t) => (
-            <button key={t} className={t === activeTf ? "on" : ""} disabled={!!sym && !sym.tfs.includes(t)} onClick={() => setTf(ai, t)}>{TF_LABEL[t]}</button>
-          ))}
-        </div>
-        <div className="seg ha" role="group" aria-label="Tipo de vela" title="Velas: normais ou Heikin Ashi (apenas visual)">
-          <button className={ui.candles === "real" ? "on" : ""} onClick={() => set({ candles: "real" })}>Normais</button>
-          <button className={ui.candles === "ha" ? "on" : ""} onClick={() => set({ candles: "ha" })}>Heikin Ashi</button>
-        </div>
-        <label className="stsel" title="Estratégia">
-          <span>Estratégia</span>
-          <select value={ui.strategy} onChange={(e) => set({ strategy: e.target.value })}>
-            {strategies.map((s) => <option key={s.name} value={s.name}>{s.name}</option>)}
-          </select>
-        </label>
-        <div className={"sigpill " + (st ?? "none")} title={sig ? `Sinal em ${TF_LABEL[activeTf]} · candle fechado` : "Calculando sinal"}>
-          <i />{st === "LONG" ? "▲ LONG" : st === "SHORT" ? "▼ SHORT" : st === "FLAT" ? "— FLAT" : "…"}
-        </div>
-        <div className="spacer" />
-        <div className="seg icon" role="group" aria-label="Layout">
-          {([1, 2, 4] as Layout[]).map((n) => (
-            <button key={n} className={ui.layout === n ? "on" : ""} onClick={() => set({ layout: n })} title={`${n} gráfico${n > 1 ? "s" : ""}`}>{n === 1 ? I.l1 : n === 2 ? I.l2 : I.l4}</button>
-          ))}
-        </div>
-        <div className="seg icon" role="group" aria-label="Sincronização">
-          <button className={ui.syncCross ? "on" : ""} onClick={() => set({ syncCross: !ui.syncCross })} title="Crosshair sincronizado">{I.cross}</button>
-          <button className={ui.syncRange ? "on" : ""} onClick={() => set({ syncRange: !ui.syncRange })} title="Scroll/zoom sincronizado">{I.link}</button>
-        </div>
-        <button className={"tgl" + (ui.eq ? " on" : "")} onClick={() => set({ eq: !ui.eq })} title="Painel de equity">{I.equity}<span>Equity</span></button>
-        <button className="kbtn" onClick={() => setPal(true)} title="Paleta de comandos">{I.search}<span>Comandos</span><kbd>Ctrl K</kbd></button>
-        <button className={"tgl icon" + (ui.inspector ? " on" : "")} onClick={() => set({ inspector: !ui.inspector })} title="Painel lateral">{I.panel}</button>
-      </header>
+      <TopBar symbol={ui.symbol} onSearch={() => setPal(true)} tf={activeTf} tfs={sym?.tfs ?? []} onTf={(t) => setTf(ai, t)}
+        candles={ui.candles} onCandles={(c) => set({ candles: c })} strategies={strategies} strategy={ui.strategy} onStrategy={(s) => set({ strategy: s })}
+        fees={fees} fee={ui.fee} onFee={(f) => set({ fee: f })} flags={flags} onFlag={onFlag} layout={ui.layout} onLayout={(n) => set({ layout: n })}
+        inspector={ui.inspector} onInspector={() => set({ inspector: !ui.inspector })} err={err} onErr={() => setErr("")} apiOk={apiOk} />
 
       <nav className="rail" aria-label="Ferramentas de desenho">
-        {TOOLS.map(([t, l, h]) => (
-          <button key={t} className={tool === t ? "on" : ""} onClick={() => setTool(t)} title={`${l} (${h})`}>{I[t]}</button>
-        ))}
-        <div className="rsep" />
-        <button onClick={() => drawings.clear(ui.symbol)} title="Limpar desenhos deste símbolo">{I.trash}</button>
+        {TOOLS.map(([t, l, h]) => <Btn key={t} tip={l} kbd={h} pos="r" on={tool === t} onClick={() => setTool(t)}>{I[t]}</Btn>)}
+        <i className="rsep" />
+        <Btn tip="Limpar desenhos deste símbolo" pos="r" onClick={() => drawings.clear(ui.symbol)}>{I.trash}</Btn>
       </nav>
 
       <main className={`grid g${ui.layout}`}>
         {panes.map((i) => (
           <Pane key={i} idx={i} symbol={ui.symbol} tf={ui.tfs[i]} tfs={sym?.tfs ?? []} mode={ui.modes[i]} strategy={ui.strategy} fee={ui.fee}
-            active={i === ai && ui.layout > 1} multi={ui.layout > 1} ha={ui.candles === "ha"} log={ui.log} source={ui.source} spec={spec} focus={i === ai ? focus : null} paper={paperFills}showEq={ui.eq} details={ui.details} showBook={ui.book} showVp={ui.vp}
-            hasLiq={!!sym?.has_liq} tool={tool} bus={bus} onActivate={onActivate} onBt={onBt} onErr={onErr}
+            active={i === ai && ui.layout > 1} multi={ui.layout > 1} ha={ui.candles === "ha"} log={ui.log} source={ui.source} spec={spec} focus={i === ai ? focus : null} paper={paperFills} showEq={ui.eq} details={ui.details} showBook={ui.book} showVp={ui.vp}
+            hasLiq={!!sym?.has_liq} tool={tool} bus={bus} pos={i === ai ? sig?.state ?? null : null} onActivate={onActivate} onBt={onBt} onErr={onErr}
             onTf={setTf} onMode={setMode} onLog={toggleLog} onTool={setTool} onBarClose={onBarClose} />
         ))}
       </main>
+
+      <RangeBar onRange={onRange} />
 
       <div className="tester-wrap">
         {ui.testerOpen && <div className="tdrag" onPointerDown={startDrag} title="Arraste para redimensionar" />}
@@ -263,23 +212,13 @@ export default function App() {
           paperSel={paperSel} setPaperSel={setPaperSel} />
       </div>
 
-      {ui.inspector && (
-        <Inspector symbols={symbols} coming={coming} symbol={ui.symbol} onSymbol={(s) => set({ symbol: s })} ticks={ticks}
-          sig={sig} sigTf={activeTf} strategy={ui.strategy} bt={bt} btTf={activeTf} tab={ui.tab} setTab={(tab) => set({ tab })}
-          fees={fees} fee={ui.fee} setFee={(fee) => set({ fee })} book={ui.book} vp={ui.vp} exits={ui.details}
-          setFlag={(k, v) => set({ [k]: v } as Partial<Ui>)} />
-      )}
+      {ui.inspector && <Side symbols={symbols} coming={coming} symbol={ui.symbol} onSymbol={(s) => set({ symbol: s })} />}
 
-      <footer className="status">
-        <span className={"st " + (apiOk === false ? "bad" : apiOk ? "ok" : "")}><i />API {apiOk === false ? "indisponível" : apiOk ? "ok" : "…"}</span>
-        <span className={"st " + (ws === "live" ? "ok" : ws === "connecting" ? "" : "bad")}><i />Binance WS {wsLabel[ws]}{lag != null ? ` · ${lag} ms` : ""}</span>
-        {holdout != null && <span className="st"><b className="is">In-sample</b> até {fmtDate(holdout)} <b className="ho">Holdout</b> depois</span>}
-        <span className="st mut">{ui.strategy} · {ui.fee}</span>
-        {err && <button className="st bad errbtn" title={err} onClick={() => setErr("")}>Erro: {err.slice(0, 60)} ✕</button>}
-        <span className="spacer" />
-        <span className="st mut">{tool !== "cursor" ? `Ferramenta: ${TOOLS.find((x) => x[0] === tool)?.[1]} · Esc cancela` : "Ctrl+K comandos · Alt+T/H/R desenhar"}</span>
-        <span className="st clock">{now.toISOString().slice(11, 19)} UTC</span>
-      </footer>
+      <nav className="irail" aria-label="Painéis">
+        <Btn tip="Lista de selecionados" pos="l" on={ui.inspector} onClick={() => set({ inspector: !ui.inspector })}>{I.list}</Btn>
+        <Btn tip="Testador de estratégia" pos="l" on={ui.testerOpen} onClick={() => set({ testerOpen: !ui.testerOpen })}>{I.tester}</Btn>
+        <Btn tip={sym?.has_liq ? "Heatmap de liquidações" : "Sem dados de liquidação para este ativo"} pos="l" on={liqOn} disabled={!sym?.has_liq} onClick={() => setMode(ai, liqOn ? "candles" : "liq")}>{I.liq}</Btn>
+      </nav>
 
       {pal && <Palette cmds={cmds} onClose={() => setPal(false)} />}
     </div>

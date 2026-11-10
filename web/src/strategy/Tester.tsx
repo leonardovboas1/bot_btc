@@ -1,6 +1,7 @@
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { AreaSeries, BaselineSeries, ColorType, CrosshairMode, LineSeries, LineStyle, createChart, type IChartApi, type ISeriesApi, type UTCTimestamp } from "lightweight-charts";
 import type { Backtest, Bar, Strategy } from "../types";
+import { ChevronDown, ChevronUp, Maximize2, Minimize2 } from "lucide-react";
 import type { Fee } from "../api";
 import { getOhlcv } from "../api";
 import { TF_LABEL, TF_SEC, fmtDate, fmtPrice, fmtTime } from "../util";
@@ -407,8 +408,8 @@ function Tester(p: TesterProps) {
         <label className="tg mini" title="Sinais calculados sobre velas Heikin Ashi (execução a preços reais)">
           <input type="checkbox" checked={p.source === "ha"} onChange={(e) => p.setSource(e.target.checked ? "ha" : "real")} /><i />Sinais em Heikin Ashi
         </label>
-        <button className="ticon" onClick={() => p.setMax(!p.max)} title={p.max ? "Restaurar" : "Maximizar"}>{p.max ? "▭" : "⤢"}</button>
-        <button className="ticon" onClick={() => p.setCollapsed(!p.collapsed)} title={p.collapsed ? "Expandir" : "Recolher"}>{p.collapsed ? "▴" : "▾"}</button>
+        <button className="ticon" onClick={() => p.setMax(!p.max)} title={p.max ? "Restaurar" : "Maximizar"}>{p.max ? <Minimize2 size={16} strokeWidth={1.5} /> : <Maximize2 size={16} strokeWidth={1.5} />}</button>
+        <button className="ticon" onClick={() => p.setCollapsed(!p.collapsed)} title={p.collapsed ? "Expandir" : "Recolher"}>{p.collapsed ? <ChevronUp size={16} strokeWidth={1.5} /> : <ChevronDown size={16} strokeWidth={1.5} />}</button>
       </header>
       {!p.collapsed && (
         <div className="tbody">
