@@ -227,3 +227,17 @@ Plus 4 context features: realized vol z, 24h return, ER(24), coin id (one-hot).
 *Pass rule "robust across assets"* (per config, over the 7 alts): ALL of (i) median-over-alts OOS Sharpe > 0; (ii) OOS Sharpe > 0 on >= 5 of 7 alts; (iii) strategy Calmar > B&H Calmar on >= 4 of 7 alts. *Secondary question "loses less than B&H"*: strategy OOS max drawdown <= 0.6 x B&H max drawdown on >= 5 of 7 alts. Both are reported per config; no config is promoted by this test alone.
 
 *Trial accounting.* The 32 trials enter the `trials` table (stage `xasset`, family `xasset:<tf>:<source>`, tag = symbol) and the DSR `N`: N = rows of the main trials table before insertion + 32 + 1 (this amendment). A pooled-across-alts DSR is added per config: the pooled series is the equal-weight mean of the 7 alts' OOS daily returns on each day (available alts only), deflated at that updated N, with trial-Sharpe variance taken over the 28 alt trials. Holdout is not evaluated.
+
+## Amendment 6 (2026-11-10) — One-shot holdout judgment: brayvb_v2 default, 4h, Heikin Ashi signals
+
+*Written and committed before any holdout bar is evaluated by any strategy.* Choice of candidate was made after Amendment 5's cross-asset results (SOLUSDT 4h-HA was the best of 32 cells; selection disclosed — the winner's-curse inflation is expected, so the control set below is part of the judgment).
+
+*Candidate (primary).* brayvb_v2 default preset, no parameter change, `tf = 4h`, `source = "ha"` (Amendment 4: signals on causal HA candles, fills/stops/costs/funding on real prices), long-only, BINANCE_PERP_TAKER costs + funding, on **SOLUSDT** perp.
+
+*Window.* Signals computed on the full series (continuous state); evaluation only on bars with open time ≥ holdout cutoff (2026-03-10 14:00 UTC, btclab/data/holdout.json) up to the last on-disk bar. Equity is re-based at the cutoff; a position open at the cutoff is carried. Daily returns (UTC), Sharpe annualised with 365 days. Buy & hold = holding the same perp over the same window (with funding).
+
+*Pass rule (primary, all must hold).* (a) holdout Sharpe > 0; (b) holdout max drawdown ≤ 0.6 × B&H max drawdown; (c) holdout Calmar > B&H Calmar — if B&H CAGR ≤ 0, (c) becomes strategy CAGR > B&H CAGR. Reported, not gating: whether the holdout Sharpe lies inside the 5–95 % block-bootstrap band (block 20 days, 2,000 draws) of the candidate's walk-forward OOS daily returns.
+
+*Control (generalisation).* The same configuration on BTC ETH BNB XRP ADA NEAR FET. "Generalises" if (a) and (b) hold on ≥ 4 of these 7. Comparison only (not gating): `source = real` on SOLUSDT.
+
+*Verdicts.* PASS + generalises → first validated candidate of the project (to be traded only after paper-trading confirmation). PASS without generalisation → "SOL-specific, likely selection luck; paper trade only". FAIL → candidate rejected; no re-use of the holdout for any further selection. The holdout is spent after this run; all 9 evaluations are added to `N`. Honesty note (§4): ~8 months cannot separate Sharpe 1.0 from 0.5 (SE ≈ 1.2); this run can refute, not prove.
