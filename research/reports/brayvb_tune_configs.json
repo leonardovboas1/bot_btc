@@ -1,0 +1,441 @@
+{
+ "1h:real": {
+  "final_cfg": {
+   "gc.poles": 6,
+   "gc.period": 178,
+   "gc.mult": 2.3,
+   "gc.mode_lag": false,
+   "gc.mode_fast": false,
+   "stochrsi.rsi_len": 7,
+   "stochrsi.stoch_len": 17,
+   "stochrsi.smooth_k": 5,
+   "stochrsi.smooth_d": 5,
+   "stochrsi.ob": 80.0,
+   "stochrsi.os": 15.0,
+   "stochrsi.use_log": false,
+   "risk.sl_atr": 1.5,
+   "risk.trail_atr": 0.0
+  },
+  "spec": {
+   "name": "brayvb_v2",
+   "tf": "1h",
+   "indicators": {
+    "gc": {
+     "poles": 6,
+     "period": 178,
+     "mult": 2.3,
+     "mode_lag": false,
+     "mode_fast": false
+    },
+    "stochrsi": {
+     "rsi_len": 7,
+     "stoch_len": 17,
+     "smooth_k": 5,
+     "smooth_d": 5,
+     "ob": 80.0,
+     "os": 15.0,
+     "use_log": false
+    }
+   },
+   "long": [
+    "gc.filter_rising",
+    "gc.close_above_hband",
+    [
+     "stochrsi.k_ge_ob",
+     "stochrsi.k_le_os"
+    ]
+   ],
+   "exit_long": [
+    "gc.cross_below_hband"
+   ],
+   "risk": {
+    "sl_atr": 1.5
+   },
+   "costs": "BINANCE_PERP_TAKER"
+  },
+  "nested": {
+   "sharpe": -0.10728893006337695,
+   "ret": -0.11709922799540495,
+   "mdd": 0.3198387765827857,
+   "win": 0.2527881040892193,
+   "trades": 269
+  },
+  "default": {
+   "sharpe": 0.1328485208096437,
+   "ret": 0.0007195937680397613,
+   "mdd": 0.4662791941213372,
+   "win": 0.21188630490956073,
+   "trades": 387
+  },
+  "dsr_nested": 4.936942090384323e-10,
+  "pbo": 0.14273504273504273,
+  "is_sharpe": 0.5037311733871258
+ },
+ "1h:ha": {
+  "final_cfg": {
+   "gc.poles": 6,
+   "gc.period": 90,
+   "gc.mult": 2.4,
+   "gc.mode_lag": false,
+   "gc.mode_fast": true,
+   "stochrsi.rsi_len": 10,
+   "stochrsi.stoch_len": 7,
+   "stochrsi.smooth_k": 2,
+   "stochrsi.smooth_d": 5,
+   "stochrsi.ob": 85.0,
+   "stochrsi.os": 10.0,
+   "stochrsi.use_log": true,
+   "risk.sl_atr": 2.0,
+   "risk.trail_atr": 4.0
+  },
+  "spec": {
+   "name": "brayvb_v2",
+   "tf": "1h",
+   "indicators": {
+    "gc": {
+     "poles": 6,
+     "period": 90,
+     "mult": 2.4,
+     "mode_lag": false,
+     "mode_fast": true
+    },
+    "stochrsi": {
+     "rsi_len": 10,
+     "stoch_len": 7,
+     "smooth_k": 2,
+     "smooth_d": 5,
+     "ob": 85.0,
+     "os": 10.0,
+     "use_log": true
+    }
+   },
+   "long": [
+    "gc.filter_rising",
+    "gc.close_above_hband",
+    [
+     "stochrsi.k_ge_ob",
+     "stochrsi.k_le_os"
+    ]
+   ],
+   "exit_long": [
+    "gc.cross_below_hband"
+   ],
+   "risk": {
+    "sl_atr": 2.0,
+    "trail_atr": 4.0
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "source": "ha"
+  },
+  "nested": {
+   "sharpe": -0.13558864080568686,
+   "ret": -0.10496549540812616,
+   "mdd": 0.2594129773389149,
+   "win": 0.3064516129032258,
+   "trades": 248
+  },
+  "default": {
+   "sharpe": 0.412196218409252,
+   "ret": 0.25520497598800707,
+   "mdd": 0.43104586817038215,
+   "win": 0.23100303951367782,
+   "trades": 329
+  },
+  "dsr_nested": 1.857366369333125e-07,
+  "pbo": 0.38554778554778557,
+  "is_sharpe": 0.9335247230751907
+ },
+ "4h:real": {
+  "final_cfg": {
+   "gc.poles": 4,
+   "gc.period": 102,
+   "gc.mult": 1.7,
+   "gc.mode_lag": false,
+   "gc.mode_fast": true,
+   "stochrsi.rsi_len": 18,
+   "stochrsi.stoch_len": 15,
+   "stochrsi.smooth_k": 2,
+   "stochrsi.smooth_d": 2,
+   "stochrsi.ob": 80.0,
+   "stochrsi.os": 10.0,
+   "stochrsi.use_log": true,
+   "risk.sl_atr": 2.0,
+   "risk.trail_atr": 3.0
+  },
+  "spec": {
+   "name": "brayvb_v2",
+   "tf": "4h",
+   "indicators": {
+    "gc": {
+     "poles": 4,
+     "period": 102,
+     "mult": 1.7,
+     "mode_lag": false,
+     "mode_fast": true
+    },
+    "stochrsi": {
+     "rsi_len": 18,
+     "stoch_len": 15,
+     "smooth_k": 2,
+     "smooth_d": 2,
+     "ob": 80.0,
+     "os": 10.0,
+     "use_log": true
+    }
+   },
+   "long": [
+    "gc.filter_rising",
+    "gc.close_above_hband",
+    [
+     "stochrsi.k_ge_ob",
+     "stochrsi.k_le_os"
+    ]
+   ],
+   "exit_long": [
+    "gc.cross_below_hband"
+   ],
+   "risk": {
+    "sl_atr": 2.0,
+    "trail_atr": 3.0
+   },
+   "costs": "BINANCE_PERP_TAKER"
+  },
+  "nested": {
+   "sharpe": 0.07076369845621945,
+   "ret": -0.003500588327488896,
+   "mdd": 0.2762411163594124,
+   "win": 0.35664335664335667,
+   "trades": 143
+  },
+  "default": {
+   "sharpe": 0.746859456072283,
+   "ret": 0.6018688776846381,
+   "mdd": 0.21758715322357247,
+   "win": 0.2755102040816326,
+   "trades": 98
+  },
+  "dsr_nested": 0.007102019999870199,
+  "pbo": 0.798989898989899,
+  "is_sharpe": 1.1505157854207335
+ },
+ "4h:ha": {
+  "final_cfg": {
+   "gc.poles": 3,
+   "gc.period": 74,
+   "gc.mult": 1.9,
+   "gc.mode_lag": false,
+   "gc.mode_fast": true,
+   "stochrsi.rsi_len": 20,
+   "stochrsi.stoch_len": 12,
+   "stochrsi.smooth_k": 2,
+   "stochrsi.smooth_d": 3,
+   "stochrsi.ob": 90.0,
+   "stochrsi.os": 10.0,
+   "stochrsi.use_log": true,
+   "risk.sl_atr": 3.0,
+   "risk.trail_atr": 0.0
+  },
+  "spec": {
+   "name": "brayvb_v2",
+   "tf": "4h",
+   "indicators": {
+    "gc": {
+     "poles": 3,
+     "period": 74,
+     "mult": 1.9,
+     "mode_lag": false,
+     "mode_fast": true
+    },
+    "stochrsi": {
+     "rsi_len": 20,
+     "stoch_len": 12,
+     "smooth_k": 2,
+     "smooth_d": 3,
+     "ob": 90.0,
+     "os": 10.0,
+     "use_log": true
+    }
+   },
+   "long": [
+    "gc.filter_rising",
+    "gc.close_above_hband",
+    [
+     "stochrsi.k_ge_ob",
+     "stochrsi.k_le_os"
+    ]
+   ],
+   "exit_long": [
+    "gc.cross_below_hband"
+   ],
+   "risk": {
+    "sl_atr": 3.0
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "source": "ha"
+  },
+  "nested": {
+   "sharpe": -0.0552730350680816,
+   "ret": -0.050350335150474934,
+   "mdd": 0.1841497555847652,
+   "win": 0.3515625,
+   "trades": 128
+  },
+  "default": {
+   "sharpe": 0.874830545651341,
+   "ret": 0.7630096017565811,
+   "mdd": 0.2055859836145405,
+   "win": 0.3372093023255814,
+   "trades": 86
+  },
+  "dsr_nested": 0.002801355812106151,
+  "pbo": 0.7376068376068377,
+  "is_sharpe": 1.3465297175072912
+ },
+ "1d:real": {
+  "final_cfg": {
+   "gc.poles": 6,
+   "gc.period": 176,
+   "gc.mult": 1.4,
+   "gc.mode_lag": false,
+   "gc.mode_fast": true,
+   "stochrsi.rsi_len": 19,
+   "stochrsi.stoch_len": 10,
+   "stochrsi.smooth_k": 2,
+   "stochrsi.smooth_d": 2,
+   "stochrsi.ob": 80.0,
+   "stochrsi.os": 10.0,
+   "stochrsi.use_log": false,
+   "risk.sl_atr": 3.0,
+   "risk.trail_atr": 1.0
+  },
+  "spec": {
+   "name": "brayvb_v2",
+   "tf": "1d",
+   "indicators": {
+    "gc": {
+     "poles": 6,
+     "period": 176,
+     "mult": 1.4,
+     "mode_lag": false,
+     "mode_fast": true
+    },
+    "stochrsi": {
+     "rsi_len": 19,
+     "stoch_len": 10,
+     "smooth_k": 2,
+     "smooth_d": 2,
+     "ob": 80.0,
+     "os": 10.0,
+     "use_log": false
+    }
+   },
+   "long": [
+    "gc.filter_rising",
+    "gc.close_above_hband",
+    [
+     "stochrsi.k_ge_ob",
+     "stochrsi.k_le_os"
+    ]
+   ],
+   "exit_long": [
+    "gc.cross_below_hband"
+   ],
+   "risk": {
+    "sl_atr": 3.0,
+    "trail_atr": 1.0
+   },
+   "costs": "BINANCE_PERP_TAKER"
+  },
+  "nested": {
+   "sharpe": 0.6585660476290657,
+   "ret": 0.3584886875028883,
+   "mdd": 0.1716160257295153,
+   "win": 0.3953488372093023,
+   "trades": 43
+  },
+  "default": {
+   "sharpe": 1.1480457587895931,
+   "ret": 1.5042440652438418,
+   "mdd": 0.20337295246522724,
+   "win": 0.4666666666666667,
+   "trades": 15
+  },
+  "dsr_nested": 0.029435474538395363,
+  "pbo": 0.46985236985236983,
+  "is_sharpe": 1.654241987179899
+ },
+ "1d:ha": {
+  "final_cfg": {
+   "gc.poles": 4,
+   "gc.period": 132,
+   "gc.mult": 1.8,
+   "gc.mode_lag": false,
+   "gc.mode_fast": false,
+   "stochrsi.rsi_len": 15,
+   "stochrsi.stoch_len": 9,
+   "stochrsi.smooth_k": 2,
+   "stochrsi.smooth_d": 5,
+   "stochrsi.ob": 90.0,
+   "stochrsi.os": 10.0,
+   "stochrsi.use_log": false,
+   "risk.sl_atr": 3.0,
+   "risk.trail_atr": 1.0
+  },
+  "spec": {
+   "name": "brayvb_v2",
+   "tf": "1d",
+   "indicators": {
+    "gc": {
+     "poles": 4,
+     "period": 132,
+     "mult": 1.8,
+     "mode_lag": false,
+     "mode_fast": false
+    },
+    "stochrsi": {
+     "rsi_len": 15,
+     "stoch_len": 9,
+     "smooth_k": 2,
+     "smooth_d": 5,
+     "ob": 90.0,
+     "os": 10.0,
+     "use_log": false
+    }
+   },
+   "long": [
+    "gc.filter_rising",
+    "gc.close_above_hband",
+    [
+     "stochrsi.k_ge_ob",
+     "stochrsi.k_le_os"
+    ]
+   ],
+   "exit_long": [
+    "gc.cross_below_hband"
+   ],
+   "risk": {
+    "sl_atr": 3.0,
+    "trail_atr": 1.0
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "source": "ha"
+  },
+  "nested": {
+   "sharpe": 0.13119736905169554,
+   "ret": 0.026545863606546538,
+   "mdd": 0.23648213102579763,
+   "win": 0.3939393939393939,
+   "trades": 33
+  },
+  "default": {
+   "sharpe": 0.9461428162878538,
+   "ret": 1.0604523210620003,
+   "mdd": 0.2870711403541447,
+   "win": 0.3157894736842105,
+   "trades": 19
+  },
+  "dsr_nested": 0.0008310516512152426,
+  "pbo": 0.47583527583527585,
+  "is_sharpe": 1.3245980199913057
+ }
+}

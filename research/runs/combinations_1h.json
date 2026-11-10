@@ -1,0 +1,6902 @@
+[
+ {
+  "parent_hash": "993acb6b0293d4683d29ce3ab4fc952409726fda",
+  "third": "gc.filter_falling",
+  "abs_corr": 0.02766015712101893,
+  "spec": {
+   "name": "s3|s2|s1|cipherb.sommi_bull_flag|long|time&macd.hist_rising&gc.filter_falling",
+   "tf": "1h",
+   "indicators": {
+    "cipherb": {},
+    "macd": {},
+    "gc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "cipherb.sommi_bull_flag",
+    "macd.hist_rising",
+    "gc.filter_falling"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.03238610772564723,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.035205227767043996,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b3ce78de9fde562c9a58ab3d070c677fa1a5823a",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.036016516448359126,
+  "spec": {
+   "name": "s3|s2|s1|psar.short|long|time&qqe.cross_down&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "psar": {},
+    "qqe": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "psar.short",
+    "qqe.cross_down",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "922b9f6023db16427e43d5379133bdfb23147fad",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.037147616469697824,
+  "spec": {
+   "name": "s3|s2|s1|dmi.adx_rising|long|time&kc.below_lower&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "dmi": {},
+    "kc": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "dmi.adx_rising",
+    "kc.below_lower",
+    "cipherb.wt_bear_div_add"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b5afe73d67c9c9b8b5216081f0e91b63b472e05a",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.037147616469697824,
+  "spec": {
+   "name": "s3|s2|s1|kc.below_lower|long|time&dmi.adx_rising&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.below_lower",
+    "dmi.adx_rising",
+    "cipherb.wt_bear_div_add"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "fe962f95b723386ccd5c8c9a6e94e99a1d053b31",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.04188461145921399,
+  "spec": {
+   "name": "s3|s2|s1|ssl.flip_up|long|time&vwap.cross_up&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "ssl": {},
+    "vwap": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "ssl.flip_up",
+    "vwap.cross_up",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.042808976846333266,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "cipherb.wt_bear_div_add"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "0ff0b0b0ce33dbfb0718d3a43a3bbb9763c65ebe",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.04298215258976233,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&rangefilter.bull&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "rangefilter": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "rangefilter.bull",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "macross.fast_above_slow",
+  "abs_corr": 0.04583910409867679,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&macross.fast_above_slow",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "macross.fast_above_slow"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "1ba035bba19e12e5aa678dc17590e1a5eefa65d2",
+  "third": "macross.fast_above_slow",
+  "abs_corr": 0.04791509733721684,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ichimoku.below_cloud&macross.fast_above_slow",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ichimoku": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ichimoku.below_cloud",
+    "macross.fast_above_slow"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "macross.fast_above_slow",
+  "abs_corr": 0.049023920573944064,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&macross.fast_above_slow",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "macross.fast_above_slow"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "1f15ae1ae5a3fccbb9b59ef6353c219fc8af6fb4",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.04922127682667296,
+  "spec": {
+   "name": "s3|s2|s1|psar.short|long|time&ssl.flip_down&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "psar": {},
+    "ssl": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "psar.short",
+    "ssl.flip_down",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "922b9f6023db16427e43d5379133bdfb23147fad",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.05000551434378308,
+  "spec": {
+   "name": "s3|s2|s1|dmi.adx_rising|long|time&kc.below_lower&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "dmi": {},
+    "kc": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "dmi.adx_rising",
+    "kc.below_lower",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b5afe73d67c9c9b8b5216081f0e91b63b472e05a",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.05000551434378308,
+  "spec": {
+   "name": "s3|s2|s1|kc.below_lower|long|time&dmi.adx_rising&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.below_lower",
+    "dmi.adx_rising",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "1ba035bba19e12e5aa678dc17590e1a5eefa65d2",
+  "third": "cipherb.sommi_bull_diamond",
+  "abs_corr": 0.051683415238968196,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ichimoku.below_cloud&cipherb.sommi_bull_diamond",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ichimoku": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ichimoku.below_cloud",
+    "cipherb.sommi_bull_diamond"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "macross.fast_above_slow",
+  "abs_corr": 0.05319254052252187,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&macross.fast_above_slow",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "macross.fast_above_slow"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "922b9f6023db16427e43d5379133bdfb23147fad",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.05334510710565105,
+  "spec": {
+   "name": "s3|s2|s1|dmi.adx_rising|long|time&kc.below_lower&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "dmi": {},
+    "kc": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "dmi.adx_rising",
+    "kc.below_lower",
+    "cipherb.bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b5afe73d67c9c9b8b5216081f0e91b63b472e05a",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.05334510710565105,
+  "spec": {
+   "name": "s3|s2|s1|kc.below_lower|long|time&dmi.adx_rising&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.below_lower",
+    "dmi.adx_rising",
+    "cipherb.bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.05506553122333702,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "cipherb.bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "cipherb.sommi_bull_diamond",
+  "abs_corr": 0.05573306494867449,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&cipherb.sommi_bull_diamond",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "cipherb.sommi_bull_diamond"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "6cd7e4549d9bb947dcc4c2b51cba82bc0016b5f7",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.0566641701193082,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_le_os&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_le_os",
+    "cipherb.wt_bear_div_add"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a88ad9f0cc1c5688c598f76996c5ddfe0e61e0d",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.0566641701193082,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_below_os&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_below_os",
+    "cipherb.wt_bear_div_add"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "7a1ef51f1ea43e7d1c0783a4a4964380efe0528a",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.05668972206593048,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_extreme&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_extreme",
+    "cipherb.wt_bear_div_add"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "1ba035bba19e12e5aa678dc17590e1a5eefa65d2",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.05741631906562355,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ichimoku.below_cloud&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ichimoku": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ichimoku.below_cloud",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "cipherb.sommi_bull_diamond",
+  "abs_corr": 0.05875232047608261,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&cipherb.sommi_bull_diamond",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "cipherb.sommi_bull_diamond"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "cipherb.sommi_bull_diamond",
+  "abs_corr": 0.05879631243170123,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&cipherb.sommi_bull_diamond",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "cipherb.sommi_bull_diamond"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "macross.fast_above_slow",
+  "abs_corr": 0.05928045536189922,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&macross.fast_above_slow",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "macross.fast_above_slow"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "1ba035bba19e12e5aa678dc17590e1a5eefa65d2",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.0598540642964658,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ichimoku.below_cloud&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ichimoku": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ichimoku.below_cloud",
+    "cipherb.wt_bear_div_add"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "1ba035bba19e12e5aa678dc17590e1a5eefa65d2",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.06046472566310609,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ichimoku.below_cloud&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ichimoku": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ichimoku.below_cloud",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.061783657911812374,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "cipherb.wt_bear_div_add"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.06179380020947622,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "cipherb.wt_bear_div_add"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.06207697821968229,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.062294012227961736,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.06237007343504623,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.0626247678828744,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "gc.cross_above_hband",
+  "abs_corr": 0.06410963560544666,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&gc.cross_above_hband",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "gc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "gc.cross_above_hband"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "brayvb_v2.long_entry",
+  "abs_corr": 0.06436811494146547,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&brayvb_v2.long_entry",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "brayvb_v2": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "brayvb_v2.long_entry"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.06476333064413732,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "cipherb.wt_bear_div_add"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.06501796185004434,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "cipherb.wt_bear_div_add"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "brayvb_v2.long_entry",
+  "abs_corr": 0.06563253828733179,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&brayvb_v2.long_entry",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "brayvb_v2": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "brayvb_v2.long_entry"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "brayvb_v2.long_entry",
+  "abs_corr": 0.06614975118531563,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&brayvb_v2.long_entry",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "brayvb_v2": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "brayvb_v2.long_entry"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "macross.fast_above_slow",
+  "abs_corr": 0.06647144407750222,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&macross.fast_above_slow",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "macross.fast_above_slow"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "macross.fast_above_slow",
+  "abs_corr": 0.06718157227082272,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&macross.fast_above_slow",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "macross.fast_above_slow"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "brayvb_v2.long_entry",
+  "abs_corr": 0.0690229952981035,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&brayvb_v2.long_entry",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "brayvb_v2": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "brayvb_v2.long_entry"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "1ba035bba19e12e5aa678dc17590e1a5eefa65d2",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.06979829406777871,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ichimoku.below_cloud&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ichimoku": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ichimoku.below_cloud",
+    "cipherb.bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.0698004253911597,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "993acb6b0293d4683d29ce3ab4fc952409726fda",
+  "third": "gc.close_below_lband",
+  "abs_corr": 0.07166876613432484,
+  "spec": {
+   "name": "s3|s2|s1|cipherb.sommi_bull_flag|long|time&macd.hist_rising&gc.close_below_lband",
+   "tf": "1h",
+   "indicators": {
+    "cipherb": {},
+    "macd": {},
+    "gc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "cipherb.sommi_bull_flag",
+    "macd.hist_rising",
+    "gc.close_below_lband"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "993acb6b0293d4683d29ce3ab4fc952409726fda",
+  "third": "gc.cross_below_lband",
+  "abs_corr": 0.07166876613432484,
+  "spec": {
+   "name": "s3|s2|s1|cipherb.sommi_bull_flag|long|time&macd.hist_rising&gc.cross_below_lband",
+   "tf": "1h",
+   "indicators": {
+    "cipherb": {},
+    "macd": {},
+    "gc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "cipherb.sommi_bull_flag",
+    "macd.hist_rising",
+    "gc.cross_below_lband"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "kc.above_upper",
+  "abs_corr": 0.07226613672401165,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&kc.above_upper",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "kc.above_upper"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "kc.cross_above_upper",
+  "abs_corr": 0.07226613672401165,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&kc.cross_above_upper",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "kc.cross_above_upper"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.072403837080214,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.07245735304837973,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "cipherb.bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.07269993105291696,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.0730235070608245,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "cipherb.bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.07306064946374739,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "cipherb.bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.07340427665229825,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "7a1ef51f1ea43e7d1c0783a4a4964380efe0528a",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.07453392118120651,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_extreme&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_extreme",
+    "cipherb.wt_bear_div"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "6cd7e4549d9bb947dcc4c2b51cba82bc0016b5f7",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.0745359696859098,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_le_os&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_le_os",
+    "cipherb.wt_bear_div"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a88ad9f0cc1c5688c598f76996c5ddfe0e61e0d",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.0745359696859098,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_below_os&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_below_os",
+    "cipherb.wt_bear_div"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.0761655784920955,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "cipherb.bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "1ba035bba19e12e5aa678dc17590e1a5eefa65d2",
+  "third": "brayvb_v2.long_entry",
+  "abs_corr": 0.07752478996225413,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ichimoku.below_cloud&brayvb_v2.long_entry",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ichimoku": {},
+    "brayvb_v2": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ichimoku.below_cloud",
+    "brayvb_v2.long_entry"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "922b9f6023db16427e43d5379133bdfb23147fad",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.07763658978042753,
+  "spec": {
+   "name": "s3|s2|s1|dmi.adx_rising|long|time&kc.below_lower&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "dmi": {},
+    "kc": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "dmi.adx_rising",
+    "kc.below_lower",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b5afe73d67c9c9b8b5216081f0e91b63b472e05a",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.07763658978042753,
+  "spec": {
+   "name": "s3|s2|s1|kc.below_lower|long|time&dmi.adx_rising&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.below_lower",
+    "dmi.adx_rising",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "ichimoku.above_cloud",
+  "abs_corr": 0.07801166496417854,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&ichimoku.above_cloud",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "ichimoku": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "ichimoku.above_cloud"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "ichimoku.above_cloud",
+  "abs_corr": 0.07859222205341727,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&ichimoku.above_cloud",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "ichimoku": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "ichimoku.above_cloud"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "cipherb.sommi_bull_diamond",
+  "abs_corr": 0.07868731593287381,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&cipherb.sommi_bull_diamond",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "cipherb.sommi_bull_diamond"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "6a881c8e0e0cedc347cf8384c6cca5ccc6fe3e07",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.08027692318027846,
+  "spec": {
+   "name": "s3|s2|s1|structure.choch_down|long|time&psar.short&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "structure": {},
+    "psar": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "structure.choch_down",
+    "psar.short",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "7fbd7da7bf13dd4f23dd053dfade4210d8bc02da",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.08027692318027846,
+  "spec": {
+   "name": "s3|s2|s1|psar.short|long|time&structure.choch_down&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "psar": {},
+    "structure": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "psar.short",
+    "structure.choch_down",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "gc.cross_above_hband",
+  "abs_corr": 0.08043498455743883,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&gc.cross_above_hband",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "gc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "gc.cross_above_hband"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "ichimoku.above_cloud",
+  "abs_corr": 0.08138670128176727,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&ichimoku.above_cloud",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "ichimoku": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "ichimoku.above_cloud"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "31bbaacf1477169098e7115a87b5c9113dbb860c",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.08251165902636631,
+  "spec": {
+   "name": "s3|s2|s1|psar.short|long|time&rangefilter.sell&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "psar": {},
+    "rangefilter": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "psar.short",
+    "rangefilter.sell",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "de649c5da50943115c893deda84c456e16590e5d",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.08251165902636631,
+  "spec": {
+   "name": "s3|s2|s1|rangefilter.sell|long|time&psar.short&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "rangefilter": {},
+    "psar": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "rangefilter.sell",
+    "psar.short",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "cipherb.sommi_bull_flag",
+  "abs_corr": 0.08260948340757517,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&cipherb.sommi_bull_flag",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "cipherb.sommi_bull_flag"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "brayvb_v2.long_entry",
+  "abs_corr": 0.08316503489681523,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&brayvb_v2.long_entry",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "brayvb_v2": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "brayvb_v2.long_entry"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "brayvb_v2.long_entry",
+  "abs_corr": 0.08419658834664229,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&brayvb_v2.long_entry",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "brayvb_v2": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "brayvb_v2.long_entry"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "ab8c5a2a746950ea0c509b0e4100bc61ae541e5d",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.08470644648965676,
+  "spec": {
+   "name": "s3|s2|s1|structure.choch_down|long|time&vwap.close_below&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "structure": {},
+    "vwap": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "structure.choch_down",
+    "vwap.close_below",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "ichimoku.above_cloud",
+  "abs_corr": 0.08524141380493702,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&ichimoku.above_cloud",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "ichimoku": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "ichimoku.above_cloud"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "6cd7e4549d9bb947dcc4c2b51cba82bc0016b5f7",
+  "third": "supertrend.up",
+  "abs_corr": 0.08592988840603576,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_le_os&supertrend.up",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_le_os",
+    "supertrend.up"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a88ad9f0cc1c5688c598f76996c5ddfe0e61e0d",
+  "third": "supertrend.up",
+  "abs_corr": 0.08592988840603576,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_below_os&supertrend.up",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_below_os",
+    "supertrend.up"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "supertrend.up",
+  "abs_corr": 0.08640584896105795,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&supertrend.up",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "supertrend.up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "7a1ef51f1ea43e7d1c0783a4a4964380efe0528a",
+  "third": "supertrend.up",
+  "abs_corr": 0.08671246894250224,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_extreme&supertrend.up",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_extreme",
+    "supertrend.up"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "461254e459fe3b4e5f0ffa35d8afc6055f582f41",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.08692479176201988,
+  "spec": {
+   "name": "s3|s2|s1|structure.choch_down|long|time&hull.falling&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "structure": {},
+    "hull": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "structure.choch_down",
+    "hull.falling",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "cipherb.sommi_bull_diamond",
+  "abs_corr": 0.0875027989572794,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&cipherb.sommi_bull_diamond",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "cipherb.sommi_bull_diamond"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b362fdd766905b8852b1c35d113e575039f2ac40",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.08784346613984124,
+  "spec": {
+   "name": "s3|s2|s1|structure.choch_down|long|time&dmi.bear&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "structure": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "structure.choch_down",
+    "dmi.bear",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "ichimoku.above_cloud",
+  "abs_corr": 0.08859043150965555,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&ichimoku.above_cloud",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "ichimoku": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "ichimoku.above_cloud"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.08911135965387643,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "cipherb.wt_bear_div_add"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "supertrend.up",
+  "abs_corr": 0.0895655643861517,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&supertrend.up",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "supertrend.up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "0ff0b0b0ce33dbfb0718d3a43a3bbb9763c65ebe",
+  "third": "gc.filter_falling",
+  "abs_corr": 0.08975331346474483,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&rangefilter.bull&gc.filter_falling",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "rangefilter": {},
+    "gc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "rangefilter.bull",
+    "gc.filter_falling"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "kc.above_upper",
+  "abs_corr": 0.09066644972225363,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&kc.above_upper",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "kc.above_upper"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "kc.cross_above_upper",
+  "abs_corr": 0.09066644972225363,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&kc.cross_above_upper",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "kc.cross_above_upper"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "7a1ef51f1ea43e7d1c0783a4a4964380efe0528a",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.09138747796866145,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_extreme&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_extreme",
+    "cipherb.bear_div"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "6cd7e4549d9bb947dcc4c2b51cba82bc0016b5f7",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.09139019170143556,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_le_os&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_le_os",
+    "cipherb.bear_div"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a88ad9f0cc1c5688c598f76996c5ddfe0e61e0d",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.09139019170143556,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_below_os&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_below_os",
+    "cipherb.bear_div"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.09248045049683393,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "cipherb.wt_bear_div"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "7a1ef51f1ea43e7d1c0783a4a4964380efe0528a",
+  "third": "macross.fast_above_slow",
+  "abs_corr": 0.09282199998028191,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_extreme&macross.fast_above_slow",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_extreme",
+    "macross.fast_above_slow"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "6cd7e4549d9bb947dcc4c2b51cba82bc0016b5f7",
+  "third": "macross.fast_above_slow",
+  "abs_corr": 0.09284223667810317,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_le_os&macross.fast_above_slow",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_le_os",
+    "macross.fast_above_slow"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a88ad9f0cc1c5688c598f76996c5ddfe0e61e0d",
+  "third": "macross.fast_above_slow",
+  "abs_corr": 0.09284223667810317,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_below_os&macross.fast_above_slow",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_below_os",
+    "macross.fast_above_slow"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "supertrend.up",
+  "abs_corr": 0.09353045979572508,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&supertrend.up",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "supertrend.up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "7a1ef51f1ea43e7d1c0783a4a4964380efe0528a",
+  "third": "gc.cross_above_hband",
+  "abs_corr": 0.09380527855191381,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_extreme&gc.cross_above_hband",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "gc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_extreme",
+    "gc.cross_above_hband"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "6cd7e4549d9bb947dcc4c2b51cba82bc0016b5f7",
+  "third": "gc.cross_above_hband",
+  "abs_corr": 0.09392723260349219,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_le_os&gc.cross_above_hband",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "gc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_le_os",
+    "gc.cross_above_hband"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a88ad9f0cc1c5688c598f76996c5ddfe0e61e0d",
+  "third": "gc.cross_above_hband",
+  "abs_corr": 0.09392723260349219,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_below_os&gc.cross_above_hband",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "gc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_below_os",
+    "gc.cross_above_hband"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "structure.choch_up",
+  "abs_corr": 0.09487857127434077,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&structure.choch_up",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "structure": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "structure.choch_up"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "kc.above_upper",
+  "abs_corr": 0.09509777737331523,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&kc.above_upper",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "kc.above_upper"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "kc.cross_above_upper",
+  "abs_corr": 0.09509777737331523,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&kc.cross_above_upper",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "kc.cross_above_upper"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "3a2aca9bf74b6bb4ba4c8c6a7ad79819f5d1a479",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.09630601269115208,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&donchian.breakout_down&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "donchian": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "donchian.breakout_down",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "kc.above_upper",
+  "abs_corr": 0.09654137219068815,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&kc.above_upper",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "kc.above_upper"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "kc.cross_above_upper",
+  "abs_corr": 0.09654137219068815,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&kc.cross_above_upper",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "kc.cross_above_upper"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "supertrend.up",
+  "abs_corr": 0.09684353092860243,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&supertrend.up",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "supertrend.up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "kc.above_upper",
+  "abs_corr": 0.09691384728801629,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&kc.above_upper",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "kc.above_upper"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "kc.cross_above_upper",
+  "abs_corr": 0.09691384728801629,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&kc.cross_above_upper",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "kc.cross_above_upper"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "cci.cross_down_ob",
+  "abs_corr": 0.09878688387393124,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&cci.cross_down_ob",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "cci": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "cci.cross_down_ob"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "1ba035bba19e12e5aa678dc17590e1a5eefa65d2",
+  "third": "kc.above_upper",
+  "abs_corr": 0.09894793854772453,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ichimoku.below_cloud&kc.above_upper",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ichimoku": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ichimoku.below_cloud",
+    "kc.above_upper"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "1ba035bba19e12e5aa678dc17590e1a5eefa65d2",
+  "third": "kc.cross_above_upper",
+  "abs_corr": 0.09894793854772453,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ichimoku.below_cloud&kc.cross_above_upper",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ichimoku": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ichimoku.below_cloud",
+    "kc.cross_above_upper"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.10024052960328989,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "cipherb.bear_div"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "1ba035bba19e12e5aa678dc17590e1a5eefa65d2",
+  "third": "supertrend.up",
+  "abs_corr": 0.10225739797184641,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ichimoku.below_cloud&supertrend.up",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ichimoku": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ichimoku.below_cloud",
+    "supertrend.up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "6cd7e4549d9bb947dcc4c2b51cba82bc0016b5f7",
+  "third": "ichimoku.above_cloud",
+  "abs_corr": 0.10794571732555493,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_le_os&ichimoku.above_cloud",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "ichimoku": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_le_os",
+    "ichimoku.above_cloud"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a88ad9f0cc1c5688c598f76996c5ddfe0e61e0d",
+  "third": "ichimoku.above_cloud",
+  "abs_corr": 0.10794571732555493,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_below_os&ichimoku.above_cloud",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "ichimoku": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_below_os",
+    "ichimoku.above_cloud"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "7a1ef51f1ea43e7d1c0783a4a4964380efe0528a",
+  "third": "ichimoku.above_cloud",
+  "abs_corr": 0.10805976106703352,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_extreme&ichimoku.above_cloud",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "ichimoku": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_extreme",
+    "ichimoku.above_cloud"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "0ff0b0b0ce33dbfb0718d3a43a3bbb9763c65ebe",
+  "third": "cipherb.buy",
+  "abs_corr": 0.11184380674859042,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&rangefilter.bull&cipherb.buy",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "rangefilter": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "rangefilter.bull",
+    "cipherb.buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "cci.cross_up_ob",
+  "abs_corr": 0.11220246365456792,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&cci.cross_up_ob",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "cci": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "cci.cross_up_ob"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "1f15ae1ae5a3fccbb9b59ef6353c219fc8af6fb4",
+  "third": "cipherb.sommi_bull_diamond",
+  "abs_corr": 0.11323579066589802,
+  "spec": {
+   "name": "s3|s2|s1|psar.short|long|time&ssl.flip_down&cipherb.sommi_bull_diamond",
+   "tf": "1h",
+   "indicators": {
+    "psar": {},
+    "ssl": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "psar.short",
+    "ssl.flip_down",
+    "cipherb.sommi_bull_diamond"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "dmi.bull_strong",
+  "abs_corr": 0.11330278440623912,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&dmi.bull_strong",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "dmi": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "dmi.bull_strong"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "brayvb_v2.long_exit",
+  "abs_corr": 0.11343292156364865,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&brayvb_v2.long_exit",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "brayvb_v2": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "brayvb_v2.long_exit"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "993acb6b0293d4683d29ce3ab4fc952409726fda",
+  "third": "ichimoku.below_cloud",
+  "abs_corr": 0.11367936602419589,
+  "spec": {
+   "name": "s3|s2|s1|cipherb.sommi_bull_flag|long|time&macd.hist_rising&ichimoku.below_cloud",
+   "tf": "1h",
+   "indicators": {
+    "cipherb": {},
+    "macd": {},
+    "ichimoku": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "cipherb.sommi_bull_flag",
+    "macd.hist_rising",
+    "ichimoku.below_cloud"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "supertrend.up",
+  "abs_corr": 0.11378122116921036,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&supertrend.up",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "supertrend.up"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "0ff0b0b0ce33dbfb0718d3a43a3bbb9763c65ebe",
+  "third": "cipherb.wt_oversold",
+  "abs_corr": 0.11406788183469634,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&rangefilter.bull&cipherb.wt_oversold",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "rangefilter": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "rangefilter.bull",
+    "cipherb.wt_oversold"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "structure.choch_up",
+  "abs_corr": 0.11468117303890266,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&structure.choch_up",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "structure": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "structure.choch_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "3a2aca9bf74b6bb4ba4c8c6a7ad79819f5d1a479",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.11563766857092579,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&donchian.breakout_down&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "donchian": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "donchian.breakout_down",
+    "cipherb.wt_bear_div_add"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "461254e459fe3b4e5f0ffa35d8afc6055f582f41",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.11609977555328758,
+  "spec": {
+   "name": "s3|s2|s1|structure.choch_down|long|time&hull.falling&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "structure": {},
+    "hull": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "structure.choch_down",
+    "hull.falling",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b362fdd766905b8852b1c35d113e575039f2ac40",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.116378450578067,
+  "spec": {
+   "name": "s3|s2|s1|structure.choch_down|long|time&dmi.bear&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "structure": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "structure.choch_down",
+    "dmi.bear",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "7a1ef51f1ea43e7d1c0783a4a4964380efe0528a",
+  "third": "brayvb_v2.long_entry",
+  "abs_corr": 0.11639869461973006,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_extreme&brayvb_v2.long_entry",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "brayvb_v2": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_extreme",
+    "brayvb_v2.long_entry"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "6cd7e4549d9bb947dcc4c2b51cba82bc0016b5f7",
+  "third": "brayvb_v2.long_entry",
+  "abs_corr": 0.11644352297672085,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_le_os&brayvb_v2.long_entry",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "brayvb_v2": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_le_os",
+    "brayvb_v2.long_entry"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a88ad9f0cc1c5688c598f76996c5ddfe0e61e0d",
+  "third": "brayvb_v2.long_entry",
+  "abs_corr": 0.11644352297672085,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_below_os&brayvb_v2.long_entry",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "brayvb_v2": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_below_os",
+    "brayvb_v2.long_entry"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "922b9f6023db16427e43d5379133bdfb23147fad",
+  "third": "gc.cross_above_hband",
+  "abs_corr": 0.11668874951102519,
+  "spec": {
+   "name": "s3|s2|s1|dmi.adx_rising|long|time&kc.below_lower&gc.cross_above_hband",
+   "tf": "1h",
+   "indicators": {
+    "dmi": {},
+    "kc": {},
+    "gc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "dmi.adx_rising",
+    "kc.below_lower",
+    "gc.cross_above_hband"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b5afe73d67c9c9b8b5216081f0e91b63b472e05a",
+  "third": "gc.cross_above_hband",
+  "abs_corr": 0.11668874951102519,
+  "spec": {
+   "name": "s3|s2|s1|kc.below_lower|long|time&dmi.adx_rising&gc.cross_above_hband",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "dmi": {},
+    "gc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.below_lower",
+    "dmi.adx_rising",
+    "gc.cross_above_hband"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "993acb6b0293d4683d29ce3ab4fc952409726fda",
+  "third": "macross.cross_down",
+  "abs_corr": 0.1169919270443888,
+  "spec": {
+   "name": "s3|s2|s1|cipherb.sommi_bull_flag|long|time&macd.hist_rising&macross.cross_down",
+   "tf": "1h",
+   "indicators": {
+    "cipherb": {},
+    "macd": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "cipherb.sommi_bull_flag",
+    "macd.hist_rising",
+    "macross.cross_down"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "993acb6b0293d4683d29ce3ab4fc952409726fda",
+  "third": "macross.fast_below_slow",
+  "abs_corr": 0.1169919270443888,
+  "spec": {
+   "name": "s3|s2|s1|cipherb.sommi_bull_flag|long|time&macd.hist_rising&macross.fast_below_slow",
+   "tf": "1h",
+   "indicators": {
+    "cipherb": {},
+    "macd": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "cipherb.sommi_bull_flag",
+    "macd.hist_rising",
+    "macross.fast_below_slow"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "0dc4c8bceebaec520e94ace75ad921604088ba43",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.1195328933109423,
+  "spec": {
+   "name": "s3|s2|s1|rangefilter.sell|long|time&ssl.bear&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "rangefilter": {},
+    "ssl": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "rangefilter.sell",
+    "ssl.bear",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "gc.cross_below_hband",
+  "abs_corr": 0.12157671115388462,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&gc.cross_below_hband",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "gc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "gc.cross_below_hband"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "3a2aca9bf74b6bb4ba4c8c6a7ad79819f5d1a479",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.12318655934513661,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&donchian.breakout_down&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "donchian": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "donchian.breakout_down",
+    "cipherb.bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "3a2aca9bf74b6bb4ba4c8c6a7ad79819f5d1a479",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.12320396523273117,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&donchian.breakout_down&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "donchian": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "donchian.breakout_down",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "6a881c8e0e0cedc347cf8384c6cca5ccc6fe3e07",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.12334286663392685,
+  "spec": {
+   "name": "s3|s2|s1|structure.choch_down|long|time&psar.short&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "structure": {},
+    "psar": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "structure.choch_down",
+    "psar.short",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "7fbd7da7bf13dd4f23dd053dfade4210d8bc02da",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.12334286663392685,
+  "spec": {
+   "name": "s3|s2|s1|psar.short|long|time&structure.choch_down&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "psar": {},
+    "structure": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "psar.short",
+    "structure.choch_down",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "ab8c5a2a746950ea0c509b0e4100bc61ae541e5d",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.12383480002318258,
+  "spec": {
+   "name": "s3|s2|s1|structure.choch_down|long|time&vwap.close_below&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "structure": {},
+    "vwap": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "structure.choch_down",
+    "vwap.close_below",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "cipherb.sell",
+  "abs_corr": 0.1244747671442737,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&cipherb.sell",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "cipherb.sell"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "cci.cross_up_ob",
+  "abs_corr": 0.12470416659037542,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&cci.cross_up_ob",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "cci": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "cci.cross_up_ob"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "supertrend.up",
+  "abs_corr": 0.12487829108826423,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&supertrend.up",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "supertrend.up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5f8f1197b9bdf1af909a9c1a030375f1da80d765",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.1254324225255858,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_up|long|time&stochrsi.k_above_50&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_up",
+    "stochrsi.k_above_50",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "cipherb.sell",
+  "abs_corr": 0.12544657739088913,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&cipherb.sell",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "cipherb.sell"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "922b9f6023db16427e43d5379133bdfb23147fad",
+  "third": "macross.fast_above_slow",
+  "abs_corr": 0.12634654279813232,
+  "spec": {
+   "name": "s3|s2|s1|dmi.adx_rising|long|time&kc.below_lower&macross.fast_above_slow",
+   "tf": "1h",
+   "indicators": {
+    "dmi": {},
+    "kc": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "dmi.adx_rising",
+    "kc.below_lower",
+    "macross.fast_above_slow"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b5afe73d67c9c9b8b5216081f0e91b63b472e05a",
+  "third": "macross.fast_above_slow",
+  "abs_corr": 0.12634654279813232,
+  "spec": {
+   "name": "s3|s2|s1|kc.below_lower|long|time&dmi.adx_rising&macross.fast_above_slow",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "dmi": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.below_lower",
+    "dmi.adx_rising",
+    "macross.fast_above_slow"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "922b9f6023db16427e43d5379133bdfb23147fad",
+  "third": "brayvb_v2.long_entry",
+  "abs_corr": 0.12885884857380167,
+  "spec": {
+   "name": "s3|s2|s1|dmi.adx_rising|long|time&kc.below_lower&brayvb_v2.long_entry",
+   "tf": "1h",
+   "indicators": {
+    "dmi": {},
+    "kc": {},
+    "brayvb_v2": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "dmi.adx_rising",
+    "kc.below_lower",
+    "brayvb_v2.long_entry"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b5afe73d67c9c9b8b5216081f0e91b63b472e05a",
+  "third": "brayvb_v2.long_entry",
+  "abs_corr": 0.12885884857380167,
+  "spec": {
+   "name": "s3|s2|s1|kc.below_lower|long|time&dmi.adx_rising&brayvb_v2.long_entry",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "dmi": {},
+    "brayvb_v2": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.below_lower",
+    "dmi.adx_rising",
+    "brayvb_v2.long_entry"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "0ff0b0b0ce33dbfb0718d3a43a3bbb9763c65ebe",
+  "third": "gc.close_below_lband",
+  "abs_corr": 0.1298931788300101,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&rangefilter.bull&gc.close_below_lband",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "rangefilter": {},
+    "gc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "rangefilter.bull",
+    "gc.close_below_lband"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "0ff0b0b0ce33dbfb0718d3a43a3bbb9763c65ebe",
+  "third": "gc.cross_below_lband",
+  "abs_corr": 0.1298931788300101,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&rangefilter.bull&gc.cross_below_lband",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "rangefilter": {},
+    "gc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "rangefilter.bull",
+    "gc.cross_below_lband"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "47ce8525f3344cff4868d72cb207e11fa0020554",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.12990130842222256,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&hull.falling&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "hull": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "hull.falling",
+    "cipherb.gold_buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "47ce8525f3344cff4868d72cb207e11fa0020554",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.13158470243834075,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&hull.falling&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "hull": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "hull.falling",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "461254e459fe3b4e5f0ffa35d8afc6055f582f41",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.13183647757118372,
+  "spec": {
+   "name": "s3|s2|s1|structure.choch_down|long|time&hull.falling&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "structure": {},
+    "hull": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "structure.choch_down",
+    "hull.falling",
+    "cipherb.wt_bear_div_add"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "3a2aca9bf74b6bb4ba4c8c6a7ad79819f5d1a479",
+  "third": "structure.choch_up",
+  "abs_corr": 0.13199018162276285,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&donchian.breakout_down&structure.choch_up",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "donchian": {},
+    "structure": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "donchian.breakout_down",
+    "structure.choch_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "0ff0b0b0ce33dbfb0718d3a43a3bbb9763c65ebe",
+  "third": "macross.cross_down",
+  "abs_corr": 0.13219745347428627,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&rangefilter.bull&macross.cross_down",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "rangefilter": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "rangefilter.bull",
+    "macross.cross_down"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "0ff0b0b0ce33dbfb0718d3a43a3bbb9763c65ebe",
+  "third": "macross.fast_below_slow",
+  "abs_corr": 0.13219745347428627,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&rangefilter.bull&macross.fast_below_slow",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "rangefilter": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "rangefilter.bull",
+    "macross.fast_below_slow"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "macross.cross_up",
+  "abs_corr": 0.13295734517606286,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&macross.cross_up",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "macross.cross_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "922b9f6023db16427e43d5379133bdfb23147fad",
+  "third": "cipherb.sommi_bull_diamond",
+  "abs_corr": 0.13296981363214166,
+  "spec": {
+   "name": "s3|s2|s1|dmi.adx_rising|long|time&kc.below_lower&cipherb.sommi_bull_diamond",
+   "tf": "1h",
+   "indicators": {
+    "dmi": {},
+    "kc": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "dmi.adx_rising",
+    "kc.below_lower",
+    "cipherb.sommi_bull_diamond"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b5afe73d67c9c9b8b5216081f0e91b63b472e05a",
+  "third": "cipherb.sommi_bull_diamond",
+  "abs_corr": 0.13296981363214166,
+  "spec": {
+   "name": "s3|s2|s1|kc.below_lower|long|time&dmi.adx_rising&cipherb.sommi_bull_diamond",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.below_lower",
+    "dmi.adx_rising",
+    "cipherb.sommi_bull_diamond"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "922b9f6023db16427e43d5379133bdfb23147fad",
+  "third": "cci.cross_down_ob",
+  "abs_corr": 0.13360831470219614,
+  "spec": {
+   "name": "s3|s2|s1|dmi.adx_rising|long|time&kc.below_lower&cci.cross_down_ob",
+   "tf": "1h",
+   "indicators": {
+    "dmi": {},
+    "kc": {},
+    "cci": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "dmi.adx_rising",
+    "kc.below_lower",
+    "cci.cross_down_ob"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b5afe73d67c9c9b8b5216081f0e91b63b472e05a",
+  "third": "cci.cross_down_ob",
+  "abs_corr": 0.13360831470219614,
+  "spec": {
+   "name": "s3|s2|s1|kc.below_lower|long|time&dmi.adx_rising&cci.cross_down_ob",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "dmi": {},
+    "cci": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.below_lower",
+    "dmi.adx_rising",
+    "cci.cross_down_ob"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "cci.cross_up_ob",
+  "abs_corr": 0.134382984268529,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&cci.cross_up_ob",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "cci": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "cci.cross_up_ob"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "7a1ef51f1ea43e7d1c0783a4a4964380efe0528a",
+  "third": "macross.cross_up",
+  "abs_corr": 0.13526235071318835,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_extreme&macross.cross_up",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_extreme",
+    "macross.cross_up"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "6cd7e4549d9bb947dcc4c2b51cba82bc0016b5f7",
+  "third": "macross.cross_up",
+  "abs_corr": 0.13533443838099043,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_le_os&macross.cross_up",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_le_os",
+    "macross.cross_up"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a88ad9f0cc1c5688c598f76996c5ddfe0e61e0d",
+  "third": "macross.cross_up",
+  "abs_corr": 0.13533443838099043,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_below_os&macross.cross_up",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_below_os",
+    "macross.cross_up"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "0ff0b0b0ce33dbfb0718d3a43a3bbb9763c65ebe",
+  "third": "kc.below_lower",
+  "abs_corr": 0.13559505984987508,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&rangefilter.bull&kc.below_lower",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "rangefilter": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "rangefilter.bull",
+    "kc.below_lower"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "cipherb.wt_overbought",
+  "abs_corr": 0.1356793329313731,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&cipherb.wt_overbought",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "cipherb.wt_overbought"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "0dc4c8bceebaec520e94ace75ad921604088ba43",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.13648618665900653,
+  "spec": {
+   "name": "s3|s2|s1|rangefilter.sell|long|time&ssl.bear&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "rangefilter": {},
+    "ssl": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "rangefilter.sell",
+    "ssl.bear",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.13709971409655813,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "cipherb.gold_buy"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "structure.choch_up",
+  "abs_corr": 0.13717096426296518,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&structure.choch_up",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "structure": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "structure.choch_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "squeeze.fire_long",
+  "abs_corr": 0.1372067863181123,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&squeeze.fire_long",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "squeeze": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "squeeze.fire_long"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "donchian.breakout_up",
+  "abs_corr": 0.1377266993483643,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&donchian.breakout_up",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "donchian": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "donchian.breakout_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "cci.cross_down_ob",
+  "abs_corr": 0.13918458696987898,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&cci.cross_down_ob",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "cci": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "cci.cross_down_ob"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b362fdd766905b8852b1c35d113e575039f2ac40",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.13956710696539434,
+  "spec": {
+   "name": "s3|s2|s1|structure.choch_down|long|time&dmi.bear&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "structure": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "structure.choch_down",
+    "dmi.bear",
+    "cipherb.wt_bear_div_add"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "0ff0b0b0ce33dbfb0718d3a43a3bbb9763c65ebe",
+  "third": "ichimoku.below_cloud",
+  "abs_corr": 0.14017584788779575,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&rangefilter.bull&ichimoku.below_cloud",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "rangefilter": {},
+    "ichimoku": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "rangefilter.bull",
+    "ichimoku.below_cloud"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "kc.above_upper",
+  "abs_corr": 0.14041865333104064,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&kc.above_upper",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "kc.above_upper"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "kc.cross_above_upper",
+  "abs_corr": 0.14041865333104064,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&kc.cross_above_upper",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "kc.cross_above_upper"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "structure.choch_up",
+  "abs_corr": 0.1407567909892898,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&structure.choch_up",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "structure": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "structure.choch_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "hull.rising",
+  "abs_corr": 0.1418599835355691,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&hull.rising",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "hull": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "hull.rising"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "922b9f6023db16427e43d5379133bdfb23147fad",
+  "third": "cipherb.sell",
+  "abs_corr": 0.14214969490698007,
+  "spec": {
+   "name": "s3|s2|s1|dmi.adx_rising|long|time&kc.below_lower&cipherb.sell",
+   "tf": "1h",
+   "indicators": {
+    "dmi": {},
+    "kc": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "dmi.adx_rising",
+    "kc.below_lower",
+    "cipherb.sell"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b5afe73d67c9c9b8b5216081f0e91b63b472e05a",
+  "third": "cipherb.sell",
+  "abs_corr": 0.14214969490698007,
+  "spec": {
+   "name": "s3|s2|s1|kc.below_lower|long|time&dmi.adx_rising&cipherb.sell",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.below_lower",
+    "dmi.adx_rising",
+    "cipherb.sell"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "3a2aca9bf74b6bb4ba4c8c6a7ad79819f5d1a479",
+  "third": "supertrend.up",
+  "abs_corr": 0.14220400617159873,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&donchian.breakout_down&supertrend.up",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "donchian": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "donchian.breakout_down",
+    "supertrend.up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "macross.cross_up",
+  "abs_corr": 0.14327120176483568,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&macross.cross_up",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "macross.cross_up"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "461254e459fe3b4e5f0ffa35d8afc6055f582f41",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.14418635709940045,
+  "spec": {
+   "name": "s3|s2|s1|structure.choch_down|long|time&hull.falling&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "structure": {},
+    "hull": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "structure.choch_down",
+    "hull.falling",
+    "cipherb.bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "structure.choch_up",
+  "abs_corr": 0.14423155977058055,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&structure.choch_up",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "structure": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "structure.choch_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "cipherb.wt_overbought",
+  "abs_corr": 0.14447783179527446,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&cipherb.wt_overbought",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "cipherb.wt_overbought"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "0ff0b0b0ce33dbfb0718d3a43a3bbb9763c65ebe",
+  "third": "mfi.cross_up_os",
+  "abs_corr": 0.14493410815607988,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&rangefilter.bull&mfi.cross_up_os",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "rangefilter": {},
+    "mfi": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "rangefilter.bull",
+    "mfi.cross_up_os"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "c06a73785ae3c5fbd4b430cb86f031853b8eec5d",
+  "third": "donchian.breakout_down",
+  "abs_corr": 0.14499484960339204,
+  "spec": {
+   "name": "s3|s2|s1|ssl.flip_up|long|time&cipherb.wt_cross_up&donchian.breakout_down",
+   "tf": "1h",
+   "indicators": {
+    "ssl": {},
+    "cipherb": {},
+    "donchian": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "ssl.flip_up",
+    "cipherb.wt_cross_up",
+    "donchian.breakout_down"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "7a1ef51f1ea43e7d1c0783a4a4964380efe0528a",
+  "third": "cipherb.wt_overbought",
+  "abs_corr": 0.14512467276056967,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_extreme&cipherb.wt_overbought",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_extreme",
+    "cipherb.wt_overbought"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "6cd7e4549d9bb947dcc4c2b51cba82bc0016b5f7",
+  "third": "cipherb.wt_overbought",
+  "abs_corr": 0.14535014167368296,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_le_os&cipherb.wt_overbought",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_le_os",
+    "cipherb.wt_overbought"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a88ad9f0cc1c5688c598f76996c5ddfe0e61e0d",
+  "third": "cipherb.wt_overbought",
+  "abs_corr": 0.14535014167368296,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_below_os&cipherb.wt_overbought",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_below_os",
+    "cipherb.wt_overbought"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "cipherb.sommi_bull_flag",
+  "abs_corr": 0.1456575744610634,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&cipherb.sommi_bull_flag",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "cipherb.sommi_bull_flag"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "cipherb.sell",
+  "abs_corr": 0.14587083232225379,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&cipherb.sell",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "cipherb.sell"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "0ff0b0b0ce33dbfb0718d3a43a3bbb9763c65ebe",
+  "third": "kc.cross_below_lower",
+  "abs_corr": 0.14595615947356888,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&rangefilter.bull&kc.cross_below_lower",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "rangefilter": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "rangefilter.bull",
+    "kc.cross_below_lower"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "cipherb.sell",
+  "abs_corr": 0.14623988363648932,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&cipherb.sell",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "cipherb.sell"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "cci.cross_down_ob",
+  "abs_corr": 0.14642445393085993,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&cci.cross_down_ob",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "cci": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "cci.cross_down_ob"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "1ba035bba19e12e5aa678dc17590e1a5eefa65d2",
+  "third": "cipherb.sommi_bull_flag",
+  "abs_corr": 0.1467564082810958,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ichimoku.below_cloud&cipherb.sommi_bull_flag",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ichimoku": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ichimoku.below_cloud",
+    "cipherb.sommi_bull_flag"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "hull.rising",
+  "abs_corr": 0.14678481381892716,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&hull.rising",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "hull": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "hull.rising"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "c06a73785ae3c5fbd4b430cb86f031853b8eec5d",
+  "third": "supertrend.flip_down",
+  "abs_corr": 0.14685282784328846,
+  "spec": {
+   "name": "s3|s2|s1|ssl.flip_up|long|time&cipherb.wt_cross_up&supertrend.flip_down",
+   "tf": "1h",
+   "indicators": {
+    "ssl": {},
+    "cipherb": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "ssl.flip_up",
+    "cipherb.wt_cross_up",
+    "supertrend.flip_down"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "cipherb.wt_overbought",
+  "abs_corr": 0.14685731570003785,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&cipherb.wt_overbought",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "cipherb.wt_overbought"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "cipherb.wt_overbought",
+  "abs_corr": 0.1470015513077075,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&cipherb.wt_overbought",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "cipherb.wt_overbought"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "dmi.bull_strong",
+  "abs_corr": 0.1470420206380103,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&dmi.bull_strong",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "dmi": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "dmi.bull_strong"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "dmi.bull_strong",
+  "abs_corr": 0.14742801809744774,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&dmi.bull_strong",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "dmi": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "dmi.bull_strong"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "hull.rising",
+  "abs_corr": 0.14745006566748975,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&hull.rising",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "hull": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "hull.rising"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "dmi.bull_strong",
+  "abs_corr": 0.1476320863192917,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&dmi.bull_strong",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "dmi": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "dmi.bull_strong"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "1ba035bba19e12e5aa678dc17590e1a5eefa65d2",
+  "third": "cci.cross_up_ob",
+  "abs_corr": 0.14773849830011943,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ichimoku.below_cloud&cci.cross_up_ob",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ichimoku": {},
+    "cci": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ichimoku.below_cloud",
+    "cci.cross_up_ob"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "3a2aca9bf74b6bb4ba4c8c6a7ad79819f5d1a479",
+  "third": "kc.above_upper",
+  "abs_corr": 0.14775772951671015,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&donchian.breakout_down&kc.above_upper",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "donchian": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "donchian.breakout_down",
+    "kc.above_upper"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "3a2aca9bf74b6bb4ba4c8c6a7ad79819f5d1a479",
+  "third": "kc.cross_above_upper",
+  "abs_corr": 0.14775772951671015,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&donchian.breakout_down&kc.cross_above_upper",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "donchian": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "donchian.breakout_down",
+    "kc.cross_above_upper"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "31bbaacf1477169098e7115a87b5c9113dbb860c",
+  "third": "cipherb.sommi_bull_diamond",
+  "abs_corr": 0.14899275896259942,
+  "spec": {
+   "name": "s3|s2|s1|psar.short|long|time&rangefilter.sell&cipherb.sommi_bull_diamond",
+   "tf": "1h",
+   "indicators": {
+    "psar": {},
+    "rangefilter": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "psar.short",
+    "rangefilter.sell",
+    "cipherb.sommi_bull_diamond"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "de649c5da50943115c893deda84c456e16590e5d",
+  "third": "cipherb.sommi_bull_diamond",
+  "abs_corr": 0.14899275896259942,
+  "spec": {
+   "name": "s3|s2|s1|rangefilter.sell|long|time&psar.short&cipherb.sommi_bull_diamond",
+   "tf": "1h",
+   "indicators": {
+    "rangefilter": {},
+    "psar": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "rangefilter.sell",
+    "psar.short",
+    "cipherb.sommi_bull_diamond"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "cipherb.wt_overbought",
+  "abs_corr": 0.14932763380311648,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&cipherb.wt_overbought",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "cipherb.wt_overbought"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "1ba035bba19e12e5aa678dc17590e1a5eefa65d2",
+  "third": "cipherb.sell",
+  "abs_corr": 0.1493370067235424,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ichimoku.below_cloud&cipherb.sell",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ichimoku": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ichimoku.below_cloud",
+    "cipherb.sell"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "3a2aca9bf74b6bb4ba4c8c6a7ad79819f5d1a479",
+  "third": "ichimoku.above_cloud",
+  "abs_corr": 0.1493919257227756,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&donchian.breakout_down&ichimoku.above_cloud",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "donchian": {},
+    "ichimoku": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "donchian.breakout_down",
+    "ichimoku.above_cloud"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b362fdd766905b8852b1c35d113e575039f2ac40",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.1496738626121352,
+  "spec": {
+   "name": "s3|s2|s1|structure.choch_down|long|time&dmi.bear&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "structure": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "structure.choch_down",
+    "dmi.bear",
+    "cipherb.bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "6cd7e4549d9bb947dcc4c2b51cba82bc0016b5f7",
+  "third": "cipherb.sommi_bull_flag",
+  "abs_corr": 0.15003274538128095,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_le_os&cipherb.sommi_bull_flag",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_le_os",
+    "cipherb.sommi_bull_flag"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a88ad9f0cc1c5688c598f76996c5ddfe0e61e0d",
+  "third": "cipherb.sommi_bull_flag",
+  "abs_corr": 0.15003274538128095,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_below_os&cipherb.sommi_bull_flag",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_below_os",
+    "cipherb.sommi_bull_flag"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "cipherb.sell",
+  "abs_corr": 0.15041600852838902,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&cipherb.sell",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "cipherb.sell"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "47ce8525f3344cff4868d72cb207e11fa0020554",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.1508464213721109,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&hull.falling&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "hull": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "hull.falling",
+    "cipherb.wt_bear_div_add"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "7a1ef51f1ea43e7d1c0783a4a4964380efe0528a",
+  "third": "cipherb.sommi_bull_flag",
+  "abs_corr": 0.15110346839164124,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_extreme&cipherb.sommi_bull_flag",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_extreme",
+    "cipherb.sommi_bull_flag"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "cci.cross_down_ob",
+  "abs_corr": 0.1516789464296793,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&cci.cross_down_ob",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "cci": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "cci.cross_down_ob"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "3a2aca9bf74b6bb4ba4c8c6a7ad79819f5d1a479",
+  "third": "macross.cross_up",
+  "abs_corr": 0.15181552114923372,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&donchian.breakout_down&macross.cross_up",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "donchian": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "donchian.breakout_down",
+    "macross.cross_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "3a2aca9bf74b6bb4ba4c8c6a7ad79819f5d1a479",
+  "third": "cipherb.sommi_bull_diamond",
+  "abs_corr": 0.1519059783454235,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&donchian.breakout_down&cipherb.sommi_bull_diamond",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "donchian": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "donchian.breakout_down",
+    "cipherb.sommi_bull_diamond"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "0ff0b0b0ce33dbfb0718d3a43a3bbb9763c65ebe",
+  "third": "supertrend.flip_down",
+  "abs_corr": 0.15196690226154824,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&rangefilter.bull&supertrend.flip_down",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "rangefilter": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "rangefilter.bull",
+    "supertrend.flip_down"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "922b9f6023db16427e43d5379133bdfb23147fad",
+  "third": "supertrend.up",
+  "abs_corr": 0.1523148669478174,
+  "spec": {
+   "name": "s3|s2|s1|dmi.adx_rising|long|time&kc.below_lower&supertrend.up",
+   "tf": "1h",
+   "indicators": {
+    "dmi": {},
+    "kc": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "dmi.adx_rising",
+    "kc.below_lower",
+    "supertrend.up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b5afe73d67c9c9b8b5216081f0e91b63b472e05a",
+  "third": "supertrend.up",
+  "abs_corr": 0.1523148669478174,
+  "spec": {
+   "name": "s3|s2|s1|kc.below_lower|long|time&dmi.adx_rising&supertrend.up",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "dmi": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.below_lower",
+    "dmi.adx_rising",
+    "supertrend.up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "ab8c5a2a746950ea0c509b0e4100bc61ae541e5d",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.15243838382004787,
+  "spec": {
+   "name": "s3|s2|s1|structure.choch_down|long|time&vwap.close_below&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "structure": {},
+    "vwap": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "structure.choch_down",
+    "vwap.close_below",
+    "cipherb.wt_bear_div_add"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "0ff0b0b0ce33dbfb0718d3a43a3bbb9763c65ebe",
+  "third": "cipherb.stoch_bear_div_hidden",
+  "abs_corr": 0.1525620546311265,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&rangefilter.bull&cipherb.stoch_bear_div_hidden",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "rangefilter": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "rangefilter.bull",
+    "cipherb.stoch_bear_div_hidden"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "993acb6b0293d4683d29ce3ab4fc952409726fda",
+  "third": "gc.cross_above_lband",
+  "abs_corr": 0.15275856351162048,
+  "spec": {
+   "name": "s3|s2|s1|cipherb.sommi_bull_flag|long|time&macd.hist_rising&gc.cross_above_lband",
+   "tf": "1h",
+   "indicators": {
+    "cipherb": {},
+    "macd": {},
+    "gc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "cipherb.sommi_bull_flag",
+    "macd.hist_rising",
+    "gc.cross_above_lband"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "7a1ef51f1ea43e7d1c0783a4a4964380efe0528a",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.15279840828194546,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_extreme&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_extreme",
+    "cipherb.gold_buy"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "6cd7e4549d9bb947dcc4c2b51cba82bc0016b5f7",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.15286523131806165,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_le_os&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_le_os",
+    "cipherb.gold_buy"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a88ad9f0cc1c5688c598f76996c5ddfe0e61e0d",
+  "third": "cipherb.gold_buy",
+  "abs_corr": 0.15286523131806165,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_below_os&cipherb.gold_buy",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_below_os",
+    "cipherb.gold_buy"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "rangefilter.bull",
+  "abs_corr": 0.15347680449640833,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&rangefilter.bull",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "rangefilter": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "rangefilter.bull"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "rangefilter.buy",
+  "abs_corr": 0.15347680449640833,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&rangefilter.buy",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "rangefilter": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "rangefilter.buy"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "6a881c8e0e0cedc347cf8384c6cca5ccc6fe3e07",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.15364864288766514,
+  "spec": {
+   "name": "s3|s2|s1|structure.choch_down|long|time&psar.short&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "structure": {},
+    "psar": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "structure.choch_down",
+    "psar.short",
+    "cipherb.wt_bear_div_add"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "7fbd7da7bf13dd4f23dd053dfade4210d8bc02da",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.15364864288766514,
+  "spec": {
+   "name": "s3|s2|s1|psar.short|long|time&structure.choch_down&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "psar": {},
+    "structure": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "psar.short",
+    "structure.choch_down",
+    "cipherb.wt_bear_div_add"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "1ba035bba19e12e5aa678dc17590e1a5eefa65d2",
+  "third": "structure.choch_up",
+  "abs_corr": 0.1538190498391704,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ichimoku.below_cloud&structure.choch_up",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ichimoku": {},
+    "structure": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ichimoku.below_cloud",
+    "structure.choch_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "ob.bull_ob",
+  "abs_corr": 0.1541377657211972,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&ob.bull_ob",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "ob": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "ob.bull_ob"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "1ba035bba19e12e5aa678dc17590e1a5eefa65d2",
+  "third": "cipherb.wt_overbought",
+  "abs_corr": 0.1544255875304048,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ichimoku.below_cloud&cipherb.wt_overbought",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ichimoku": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ichimoku.below_cloud",
+    "cipherb.wt_overbought"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "7a1ef51f1ea43e7d1c0783a4a4964380efe0528a",
+  "third": "cipherb.sommi_bull_diamond",
+  "abs_corr": 0.15454808424172442,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_extreme&cipherb.sommi_bull_diamond",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_extreme",
+    "cipherb.sommi_bull_diamond"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "6cd7e4549d9bb947dcc4c2b51cba82bc0016b5f7",
+  "third": "cipherb.sommi_bull_diamond",
+  "abs_corr": 0.1545511056896492,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_le_os&cipherb.sommi_bull_diamond",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_le_os",
+    "cipherb.sommi_bull_diamond"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a88ad9f0cc1c5688c598f76996c5ddfe0e61e0d",
+  "third": "cipherb.sommi_bull_diamond",
+  "abs_corr": 0.1545511056896492,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_below_os&cipherb.sommi_bull_diamond",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_below_os",
+    "cipherb.sommi_bull_diamond"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "1ba035bba19e12e5aa678dc17590e1a5eefa65d2",
+  "third": "cci.cross_down_ob",
+  "abs_corr": 0.15472181780814434,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ichimoku.below_cloud&cci.cross_down_ob",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ichimoku": {},
+    "cci": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ichimoku.below_cloud",
+    "cci.cross_down_ob"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "supertrend.flip_up",
+  "abs_corr": 0.15495299543936517,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&supertrend.flip_up",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "supertrend.flip_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "mfi.cross_down_ob",
+  "abs_corr": 0.15512229729196128,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&mfi.cross_down_ob",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "mfi": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "mfi.cross_down_ob"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "cipherb.wt_overbought",
+  "abs_corr": 0.15517305865561726,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&cipherb.wt_overbought",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "cipherb.wt_overbought"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "3a2aca9bf74b6bb4ba4c8c6a7ad79819f5d1a479",
+  "third": "cci.cross_down_ob",
+  "abs_corr": 0.15555858588995564,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&donchian.breakout_down&cci.cross_down_ob",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "donchian": {},
+    "cci": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "donchian.breakout_down",
+    "cci.cross_down_ob"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "0dc4c8bceebaec520e94ace75ad921604088ba43",
+  "third": "cipherb.wt_bear_div_add",
+  "abs_corr": 0.15608833891133103,
+  "spec": {
+   "name": "s3|s2|s1|rangefilter.sell|long|time&ssl.bear&cipherb.wt_bear_div_add",
+   "tf": "1h",
+   "indicators": {
+    "rangefilter": {},
+    "ssl": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "rangefilter.sell",
+    "ssl.bear",
+    "cipherb.wt_bear_div_add"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "0ff0b0b0ce33dbfb0718d3a43a3bbb9763c65ebe",
+  "third": "mfi.below_os",
+  "abs_corr": 0.15630862740544563,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&rangefilter.bull&mfi.below_os",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "rangefilter": {},
+    "mfi": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "rangefilter.bull",
+    "mfi.below_os"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "922b9f6023db16427e43d5379133bdfb23147fad",
+  "third": "ichimoku.above_cloud",
+  "abs_corr": 0.1569948760861437,
+  "spec": {
+   "name": "s3|s2|s1|dmi.adx_rising|long|time&kc.below_lower&ichimoku.above_cloud",
+   "tf": "1h",
+   "indicators": {
+    "dmi": {},
+    "kc": {},
+    "ichimoku": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "dmi.adx_rising",
+    "kc.below_lower",
+    "ichimoku.above_cloud"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b5afe73d67c9c9b8b5216081f0e91b63b472e05a",
+  "third": "ichimoku.above_cloud",
+  "abs_corr": 0.1569948760861437,
+  "spec": {
+   "name": "s3|s2|s1|kc.below_lower|long|time&dmi.adx_rising&ichimoku.above_cloud",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "dmi": {},
+    "ichimoku": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.below_lower",
+    "dmi.adx_rising",
+    "ichimoku.above_cloud"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "cipherb.sommi_bull_flag",
+  "abs_corr": 0.15715068448497696,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&cipherb.sommi_bull_flag",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "cipherb.sommi_bull_flag"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "cipherb.sommi_bull_flag",
+  "abs_corr": 0.1583335362821694,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&cipherb.sommi_bull_flag",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "cipherb.sommi_bull_flag"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "9509f0893cc26a55f5efbdac2c723358b9c363f2",
+  "third": "cipherb.sommi_bull_flag",
+  "abs_corr": 0.15836789341055876,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&donchian.close_below_mid&cipherb.sommi_bull_flag",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "donchian": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "donchian.close_below_mid",
+    "cipherb.sommi_bull_flag"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "922b9f6023db16427e43d5379133bdfb23147fad",
+  "third": "cipherb.wt_overbought",
+  "abs_corr": 0.1586906848342649,
+  "spec": {
+   "name": "s3|s2|s1|dmi.adx_rising|long|time&kc.below_lower&cipherb.wt_overbought",
+   "tf": "1h",
+   "indicators": {
+    "dmi": {},
+    "kc": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "dmi.adx_rising",
+    "kc.below_lower",
+    "cipherb.wt_overbought"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b5afe73d67c9c9b8b5216081f0e91b63b472e05a",
+  "third": "cipherb.wt_overbought",
+  "abs_corr": 0.1586906848342649,
+  "spec": {
+   "name": "s3|s2|s1|kc.below_lower|long|time&dmi.adx_rising&cipherb.wt_overbought",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.below_lower",
+    "dmi.adx_rising",
+    "cipherb.wt_overbought"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "structure.bos_up",
+  "abs_corr": 0.15880191518758102,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&structure.bos_up",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "structure": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "structure.bos_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "47ce8525f3344cff4868d72cb207e11fa0020554",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.1589237245840211,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&hull.falling&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "hull": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "hull.falling",
+    "cipherb.bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "3a2aca9bf74b6bb4ba4c8c6a7ad79819f5d1a479",
+  "third": "macross.fast_above_slow",
+  "abs_corr": 0.1592448231993281,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&donchian.breakout_down&macross.fast_above_slow",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "donchian": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "donchian.breakout_down",
+    "macross.fast_above_slow"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "7a1ef51f1ea43e7d1c0783a4a4964380efe0528a",
+  "third": "cipherb.sell",
+  "abs_corr": 0.15932245292220965,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_extreme&cipherb.sell",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_extreme",
+    "cipherb.sell"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "6cd7e4549d9bb947dcc4c2b51cba82bc0016b5f7",
+  "third": "cipherb.sell",
+  "abs_corr": 0.15935738161773774,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_le_os&cipherb.sell",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_le_os",
+    "cipherb.sell"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a88ad9f0cc1c5688c598f76996c5ddfe0e61e0d",
+  "third": "cipherb.sell",
+  "abs_corr": 0.15935738161773774,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_below_os&cipherb.sell",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_below_os",
+    "cipherb.sell"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "structure.choch_down",
+  "abs_corr": 0.1596427886648903,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&structure.choch_down",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "structure": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "structure.choch_down"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "cci.cross_up_ob",
+  "abs_corr": 0.1596456671879791,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&cci.cross_up_ob",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "cci": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "cci.cross_up_ob"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "cipherb.stoch_bull_div_hidden",
+  "abs_corr": 0.16004026763214096,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&cipherb.stoch_bull_div_hidden",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "cipherb.stoch_bull_div_hidden"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "mfi.above_ob",
+  "abs_corr": 0.16008167976447943,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&mfi.above_ob",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "mfi": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "mfi.above_ob"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "macross.cross_up",
+  "abs_corr": 0.16042827185049202,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&macross.cross_up",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "macross.cross_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "donchian.breakout_up",
+  "abs_corr": 0.16044459528514265,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&donchian.breakout_up",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "donchian": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "donchian.breakout_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "cipherb.sell",
+  "abs_corr": 0.1610025259598092,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&cipherb.sell",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "cipherb.sell"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a7ccfaf1050aa3565507e214072b9be732a0306",
+  "third": "structure.choch_up",
+  "abs_corr": 0.16128084814265434,
+  "spec": {
+   "name": "s3|s2|s1|macd.cross_down|long|time&ichimoku.below_cloud&structure.choch_up",
+   "tf": "1h",
+   "indicators": {
+    "macd": {},
+    "ichimoku": {},
+    "structure": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "macd.cross_down",
+    "ichimoku.below_cloud",
+    "structure.choch_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "922b9f6023db16427e43d5379133bdfb23147fad",
+  "third": "macd.cross_down_above_zero",
+  "abs_corr": 0.16133273886279934,
+  "spec": {
+   "name": "s3|s2|s1|dmi.adx_rising|long|time&kc.below_lower&macd.cross_down_above_zero",
+   "tf": "1h",
+   "indicators": {
+    "dmi": {},
+    "kc": {},
+    "macd": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "dmi.adx_rising",
+    "kc.below_lower",
+    "macd.cross_down_above_zero"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "b5afe73d67c9c9b8b5216081f0e91b63b472e05a",
+  "third": "macd.cross_down_above_zero",
+  "abs_corr": 0.16133273886279934,
+  "spec": {
+   "name": "s3|s2|s1|kc.below_lower|long|time&dmi.adx_rising&macd.cross_down_above_zero",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "dmi": {},
+    "macd": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.below_lower",
+    "dmi.adx_rising",
+    "macd.cross_down_above_zero"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "3a2aca9bf74b6bb4ba4c8c6a7ad79819f5d1a479",
+  "third": "hull.rising",
+  "abs_corr": 0.16147506100311654,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&donchian.breakout_down&hull.rising",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "donchian": {},
+    "hull": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "donchian.breakout_down",
+    "hull.rising"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "3a2aca9bf74b6bb4ba4c8c6a7ad79819f5d1a479",
+  "third": "gc.cross_above_hband",
+  "abs_corr": 0.16185552243834908,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&donchian.breakout_down&gc.cross_above_hband",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "donchian": {},
+    "gc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "donchian.breakout_down",
+    "gc.cross_above_hband"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "0dc4c8bceebaec520e94ace75ad921604088ba43",
+  "third": "cipherb.sommi_bull_diamond",
+  "abs_corr": 0.16205859924239804,
+  "spec": {
+   "name": "s3|s2|s1|rangefilter.sell|long|time&ssl.bear&cipherb.sommi_bull_diamond",
+   "tf": "1h",
+   "indicators": {
+    "rangefilter": {},
+    "ssl": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "rangefilter.sell",
+    "ssl.bear",
+    "cipherb.sommi_bull_diamond"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "bb.cross_above_upper",
+  "abs_corr": 0.16263496798137986,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&bb.cross_above_upper",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "bb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "bb.cross_above_upper"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "6cd7e4549d9bb947dcc4c2b51cba82bc0016b5f7",
+  "third": "donchian.breakout_up",
+  "abs_corr": 0.1626459733206675,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_le_os&donchian.breakout_up",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "donchian": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_le_os",
+    "donchian.breakout_up"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "8a88ad9f0cc1c5688c598f76996c5ddfe0e61e0d",
+  "third": "donchian.breakout_up",
+  "abs_corr": 0.1626459733206675,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_below_os&donchian.breakout_up",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "donchian": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_below_os",
+    "donchian.breakout_up"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "ob.bull_ob",
+  "abs_corr": 0.16292047564249212,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&ob.bull_ob",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "ob": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "ob.bull_ob"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "7a1ef51f1ea43e7d1c0783a4a4964380efe0528a",
+  "third": "donchian.breakout_up",
+  "abs_corr": 0.16343648339746902,
+  "spec": {
+   "name": "s3|s2|s1|kc.cross_below_lower|long|opposite&stochrsi.k_extreme&donchian.breakout_up",
+   "tf": "1h",
+   "indicators": {
+    "kc": {},
+    "stochrsi": {},
+    "donchian": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "kc.cross_below_lower",
+    "stochrsi.k_extreme",
+    "donchian.breakout_up"
+   ],
+   "exit_long": [
+    "kc.cross_above_upper"
+   ]
+  }
+ },
+ {
+  "parent_hash": "31bbaacf1477169098e7115a87b5c9113dbb860c",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.1634546928504288,
+  "spec": {
+   "name": "s3|s2|s1|psar.short|long|time&rangefilter.sell&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "psar": {},
+    "rangefilter": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "psar.short",
+    "rangefilter.sell",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "de649c5da50943115c893deda84c456e16590e5d",
+  "third": "cipherb.wt_bear_div",
+  "abs_corr": 0.1634546928504288,
+  "spec": {
+   "name": "s3|s2|s1|rangefilter.sell|long|time&psar.short&cipherb.wt_bear_div",
+   "tf": "1h",
+   "indicators": {
+    "rangefilter": {},
+    "psar": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "rangefilter.sell",
+    "psar.short",
+    "cipherb.wt_bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "macross.cross_up",
+  "abs_corr": 0.16349677791790107,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&macross.cross_up",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "macross": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "macross.cross_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "donchian.breakout_up",
+  "abs_corr": 0.16397566120735413,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&donchian.breakout_up",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "donchian": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "donchian.breakout_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "55afff459168a5cd0895b81155e8118f10ed326d",
+  "third": "bb.cross_above_upper",
+  "abs_corr": 0.16447533330305042,
+  "spec": {
+   "name": "s3|s2|s1|donchian.breakout_down|long|opposite&dmi.adx_rising&bb.cross_above_upper",
+   "tf": "1h",
+   "indicators": {
+    "donchian": {},
+    "dmi": {},
+    "bb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "donchian.breakout_down",
+    "dmi.adx_rising",
+    "bb.cross_above_upper"
+   ],
+   "exit_long": [
+    "donchian.breakout_up"
+   ]
+  }
+ },
+ {
+  "parent_hash": "4e3f60d5802f6903bb5ae653cd2f67ec4fb29d96",
+  "third": "cipherb.sommi_bull_flag",
+  "abs_corr": 0.16578774108154748,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&hull.falling&cipherb.sommi_bull_flag",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "hull": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "hull.falling",
+    "cipherb.sommi_bull_flag"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "993acb6b0293d4683d29ce3ab4fc952409726fda",
+  "third": "kc.cross_below_lower",
+  "abs_corr": 0.16579105212866269,
+  "spec": {
+   "name": "s3|s2|s1|cipherb.sommi_bull_flag|long|time&macd.hist_rising&kc.cross_below_lower",
+   "tf": "1h",
+   "indicators": {
+    "cipherb": {},
+    "macd": {},
+    "kc": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "cipherb.sommi_bull_flag",
+    "macd.hist_rising",
+    "kc.cross_below_lower"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "5beb659333f14b02b9245a3a3bb73fb73e42350f",
+  "third": "supertrend.flip_up",
+  "abs_corr": 0.16583043553971014,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&cci.below_zero&supertrend.flip_up",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "cci": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "cci.below_zero",
+    "supertrend.flip_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "44b334340c3fc8092b5106f9a9a82d0760a5bb52",
+  "third": "supertrend.flip_up",
+  "abs_corr": 0.16655092298730334,
+  "spec": {
+   "name": "s3|s2|s1|gc.cross_below_lband|long|time&ssl.bear&supertrend.flip_up",
+   "tf": "1h",
+   "indicators": {
+    "gc": {},
+    "ssl": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "gc.cross_below_lband",
+    "ssl.bear",
+    "supertrend.flip_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "993acb6b0293d4683d29ce3ab4fc952409726fda",
+  "third": "supertrend.flip_up",
+  "abs_corr": 0.16667624478800253,
+  "spec": {
+   "name": "s3|s2|s1|cipherb.sommi_bull_flag|long|time&macd.hist_rising&supertrend.flip_up",
+   "tf": "1h",
+   "indicators": {
+    "cipherb": {},
+    "macd": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "cipherb.sommi_bull_flag",
+    "macd.hist_rising",
+    "supertrend.flip_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "ab8c5a2a746950ea0c509b0e4100bc61ae541e5d",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.1667101795542095,
+  "spec": {
+   "name": "s3|s2|s1|structure.choch_down|long|time&vwap.close_below&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "structure": {},
+    "vwap": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "structure.choch_down",
+    "vwap.close_below",
+    "cipherb.bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "3a2aca9bf74b6bb4ba4c8c6a7ad79819f5d1a479",
+  "third": "cci.cross_up_ob",
+  "abs_corr": 0.1668064626295673,
+  "spec": {
+   "name": "s3|s2|s1|bb.cross_below_lower|long|time&donchian.breakout_down&cci.cross_up_ob",
+   "tf": "1h",
+   "indicators": {
+    "bb": {},
+    "donchian": {},
+    "cci": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "bb.cross_below_lower",
+    "donchian.breakout_down",
+    "cci.cross_up_ob"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "461254e459fe3b4e5f0ffa35d8afc6055f582f41",
+  "third": "supertrend.flip_up",
+  "abs_corr": 0.167380603883981,
+  "spec": {
+   "name": "s3|s2|s1|structure.choch_down|long|time&hull.falling&supertrend.flip_up",
+   "tf": "1h",
+   "indicators": {
+    "structure": {},
+    "hull": {},
+    "supertrend": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "structure.choch_down",
+    "hull.falling",
+    "supertrend.flip_up"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "6a881c8e0e0cedc347cf8384c6cca5ccc6fe3e07",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.16790416047801426,
+  "spec": {
+   "name": "s3|s2|s1|structure.choch_down|long|time&psar.short&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "structure": {},
+    "psar": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "structure.choch_down",
+    "psar.short",
+    "cipherb.bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ },
+ {
+  "parent_hash": "7fbd7da7bf13dd4f23dd053dfade4210d8bc02da",
+  "third": "cipherb.bear_div",
+  "abs_corr": 0.16790416047801426,
+  "spec": {
+   "name": "s3|s2|s1|psar.short|long|time&structure.choch_down&cipherb.bear_div",
+   "tf": "1h",
+   "indicators": {
+    "psar": {},
+    "structure": {},
+    "cipherb": {}
+   },
+   "costs": "BINANCE_PERP_TAKER",
+   "long": [
+    "psar.short",
+    "structure.choch_down",
+    "cipherb.bear_div"
+   ],
+   "risk": {
+    "time_stop": 24
+   }
+  }
+ }
+]
