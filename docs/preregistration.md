@@ -241,3 +241,21 @@ Plus 4 context features: realized vol z, 24h return, ER(24), coin id (one-hot).
 *Control (generalisation).* The same configuration on BTC ETH BNB XRP ADA NEAR FET. "Generalises" if (a) and (b) hold on ≥ 4 of these 7. Comparison only (not gating): `source = real` on SOLUSDT.
 
 *Verdicts.* PASS + generalises → first validated candidate of the project (to be traded only after paper-trading confirmation). PASS without generalisation → "SOL-specific, likely selection luck; paper trade only". FAIL → candidate rejected; no re-use of the holdout for any further selection. The holdout is spent after this run; all 9 evaluations are added to `N`. Honesty note (§4): ~8 months cannot separate Sharpe 1.0 from 0.5 (SE ≈ 1.2); this run can refute, not prove.
+
+## Amendment 7 (2026-11-10) — New strategy classes, judged only on data never used
+
+*Context.* Single-asset indicator strategies are exhausted (≈191.6k trials; holdout spent in A6). This amendment registers three different, literature-backed classes before any of them is run.
+
+*Design set (may be used freely for building/tuning within the grids below).* The 8 current perps (BTC ETH SOL BNB XRP ADA NEAR FET), data up to the A6 holdout cutoff (2026-03-10 14:00 UTC).
+
+*Validation set (never used for any choice; evaluated once per config).* (V1) a fresh universe of ≥ 20 Binance USDT perps not in the design set, chosen mechanically before download: the largest by 30-day quote volume on 2026-11-10 with perp listing ≤ 2023-06-30, excluding stablecoins, leveraged tokens and the design set; full history to the last on-disk bar. (V2) all 8 design coins from the cutoff to the last on-disk bar (seen as market data, never used by these classes). (V3) BTC and ETH spot daily 2017-08-17 → 2019-09-08 (pre-perp; no funding, spot fees) for C1 and C2 only.
+
+*Candidates (fixed grids, all configs counted in N).*
+- **C1 Diversified trend (time-series momentum).** Daily. Per coin signal s = mean(sign(r_20), sign(r_60), sign(r_120)) of log returns; position = s × (σ_target / σ̂_60) capped at 1× per coin, σ̂ = 60-day EWMA vol; equal risk across coins; portfolio gross ≤ 2. Grid: {long-only (s⁺), long-short} × σ_target per coin {20 %, 40 %} → 4 configs.
+- **C2 Cross-sectional momentum.** Weekly rebalance (Monday 00:00 UTC). Rank coins by return over L days skipping the last day; hold top third equally vol-weighted (long-only) or top third long / bottom third short (long-short); L ∈ {14, 28, 56} → 6 configs.
+- **C3 Funding carry (delta-neutral).** Per coin, long spot + short perp of equal notional when the 7-day mean funding annualised > θ, close when it is < 0; θ ∈ {10 %, 20 %} → 2 configs; equal weight over coins with an open carry; both legs pay taker fees + slippage; perp leg receives/pays funding.
+Costs for all: BINANCE_PERP_TAKER (perp legs), Binance spot taker 0.1 % (spot legs), funding at settlement; no leverage beyond the stated gross.
+
+*Benchmarks (same universe, same window).* Equal-weight buy & hold (daily rebalance), BTC buy & hold, and the brayvb_v2 default 4h-HA applied to each coin with equal weight.
+
+*Success (on the validation sets; a config must pass on V1 and V2, and on V3 where applicable).* C1/C2: Sharpe ≥ equal-weight B&H Sharpe + 0.3 **and** max DD ≤ 0.7 × equal-weight B&H max DD **and** Sharpe ≥ the brayvb benchmark's. C3: Sharpe ≥ 1.0 **and** max DD ≤ 15 % **and** positive in ≥ 70 % of calendar quarters. Deflated Sharpe reported with N = all trials + these 12 configs; selection of the single best config across classes is reported as a selection (DSR at N). A passing config goes to paper trading before any live use. If nothing passes, that is the result.
