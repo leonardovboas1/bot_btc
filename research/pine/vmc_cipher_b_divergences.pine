@@ -1,0 +1,209 @@
+//@version=4
+// Source: VuManChu B Divergences, supplied by the user on 2026-11-10.
+// Verbatim for PARAMETERS, FUNCTIONS and CALCULATE INDICATORS (colour inputs dropped);
+// DRAW section omitted except signal definitions (plots do not affect signals).
+
+study(title = 'VuManChu B Divergences', shorttitle = 'VMC Cipher_B_Divergences')
+
+// WaveTrend
+wtChannelLen = input(9, title = 'WT Channel Length', type = input.integer)
+wtAverageLen = input(12, title = 'WT Average Length', type = input.integer)
+wtMASource = input(hlc3, title = 'WT MA Source', type = input.source)
+wtMALen = input(3, title = 'WT MA Length', type = input.integer)
+obLevel = input(53)
+obLevel2 = input(60)
+obLevel3 = input(100)
+osLevel = input(-53)
+osLevel2 = input(-60)
+osLevel3 = input(-75)
+
+// Divergence WT
+wtShowDiv = input(true)
+wtShowHiddenDiv = input(false)
+showHiddenDiv_nl = input(true)
+wtDivOBLevel = input(45)
+wtDivOSLevel = input(-65)
+wtDivOBLevel_addshow = input(true)
+wtDivOBLevel_add = input(15)
+wtDivOSLevel_add = input(-40)
+
+// RSI+MFI
+rsiMFIShow = input(true)
+rsiMFIperiod = input(60)
+rsiMFIMultiplier = input(150, type = input.float)
+rsiMFIPosY = input(2.5, type = input.float)
+
+// RSI
+rsiSRC = input(close)
+rsiLen = input(14)
+rsiOversold = input(30)
+rsiOverbought = input(60)
+rsiShowDiv = input(false)
+rsiShowHiddenDiv = input(false)
+rsiDivOBLevel = input(60)
+rsiDivOSLevel = input(30)
+
+// RSI Stochastic
+stochUseLog = input(true)
+stochAvg = input(false)
+stochSRC = input(close)
+stochLen = input(14)
+stochRsiLen = input(14)
+stochKSmooth = input(3)
+stochDSmooth = input(3)
+stochShowDiv = input(false)
+stochShowHiddenDiv = input(false)
+
+// Schaff Trend Cycle
+tcSRC = input(close)
+tclength = input(10)
+tcfastLength = input(23)
+tcslowLength = input(50)
+tcfactor = input(0.5, type=input.float)
+
+// Sommi Flag
+sommiVwapTF = input('720')
+sommiVwapBearLevel = input(0)
+sommiVwapBullLevel = input(0)
+soomiFlagWTBearLevel = input(0)
+soomiFlagWTBullLevel = input(0)
+soomiRSIMFIBearLevel = input(0)
+soomiRSIMFIBullLevel = input(0)
+
+// Sommi Diamond
+sommiHTCRes = input('60')
+sommiHTCRes2 = input('240')
+soomiDiamondWTBearLevel = input(0)
+soomiDiamondWTBullLevel = input(0)
+
+// macd Colors
+macdWTColorsTF = input('240')
+
+// FUNCTIONS {
+f_top_fractal(src) => src[4] < src[2] and src[3] < src[2] and src[2] > src[1] and src[2] > src[0]
+f_bot_fractal(src) => src[4] > src[2] and src[3] > src[2] and src[2] < src[1] and src[2] < src[0]
+f_fractalize(src) => f_top_fractal(src) ? 1 : f_bot_fractal(src) ? -1 : 0
+
+f_findDivs(src, topLimit, botLimit, useLimits) =>
+    fractalTop = f_fractalize(src) > 0 and (useLimits ? src[2] >= topLimit : true) ? src[2] : na
+    fractalBot = f_fractalize(src) < 0 and (useLimits ? src[2] <= botLimit : true) ? src[2] : na
+    highPrev = valuewhen(fractalTop, src[2], 0)[2]
+    highPrice = valuewhen(fractalTop, high[2], 0)[2]
+    lowPrev = valuewhen(fractalBot, src[2], 0)[2]
+    lowPrice = valuewhen(fractalBot, low[2], 0)[2]
+    bearSignal = fractalTop and high[2] > highPrice and src[2] < highPrev
+    bullSignal = fractalBot and low[2] < lowPrice and src[2] > lowPrev
+    bearDivHidden = fractalTop and high[2] < highPrice and src[2] > highPrev
+    bullDivHidden = fractalBot and low[2] > lowPrice and src[2] < lowPrev
+    [fractalTop, fractalBot, lowPrev, bearSignal, bullSignal, bearDivHidden, bullDivHidden]
+
+f_rsimfi(_period, _multiplier, _tf) => security(syminfo.tickerid, _tf, sma(((close - open) / (high - low)) * _multiplier, _period) - rsiMFIPosY)
+
+f_wavetrend(src, chlen, avg, malen, tf) =>
+    tfsrc = security(syminfo.tickerid, tf, src)
+    esa = ema(tfsrc, chlen)
+    de = ema(abs(tfsrc - esa), chlen)
+    ci = (tfsrc - esa) / (0.015 * de)
+    wt1 = security(syminfo.tickerid, tf, ema(ci, avg))
+    wt2 = security(syminfo.tickerid, tf, sma(wt1, malen))
+    wtVwap = wt1 - wt2
+    wtOversold = wt2 <= osLevel
+    wtOverbought = wt2 >= obLevel
+    wtCross = cross(wt1, wt2)
+    wtCrossUp = wt2 - wt1 <= 0
+    wtCrossDown = wt2 - wt1 >= 0
+    wtCrosslast = cross(wt1[2], wt2[2])
+    wtCrossUplast = wt2[2] - wt1[2] <= 0
+    wtCrossDownlast = wt2[2] - wt1[2] >= 0
+    [wt1, wt2, wtOversold, wtOverbought, wtCross, wtCrossUp, wtCrossDown, wtCrosslast, wtCrossUplast, wtCrossDownlast, wtVwap]
+
+f_tc(src, length, fastLength, slowLength) =>
+    ema1 = ema(src, fastLength)
+    ema2 = ema(src, slowLength)
+    macdVal = ema1 - ema2
+    alpha = lowest(macdVal, length)
+    beta = highest(macdVal, length) - alpha
+    gamma = (macdVal - alpha) / beta * 100
+    gamma := beta > 0 ? gamma : nz(gamma[1])
+    delta = gamma
+    delta := na(delta[1]) ? delta : delta[1] + tcfactor * (gamma - delta[1])
+    epsilon = lowest(delta, length)
+    zeta = highest(delta, length) - epsilon
+    eta = (delta - epsilon) / zeta * 100
+    eta := zeta > 0 ? eta : nz(eta[1])
+    stcReturn = eta
+    stcReturn := na(stcReturn[1]) ? stcReturn : stcReturn[1] + tcfactor * (eta - stcReturn[1])
+    stcReturn
+
+f_stochrsi(_src, _stochlen, _rsilen, _smoothk, _smoothd, _log, _avg) =>
+    src = _log ? log(_src) : _src
+    rsi = rsi(src, _rsilen)
+    kk = sma(stoch(rsi, rsi, rsi, _stochlen), _smoothk)
+    d1 = sma(kk, _smoothd)
+    avg_1 = avg(kk, d1)
+    k = _avg ? avg_1 : kk
+    [k, d1]
+
+f_macd(src, fastlen, slowlen, sigsmooth, tf) =>
+    fast_ma = security(syminfo.tickerid, tf, ema(src, fastlen))
+    slow_ma = security(syminfo.tickerid, tf, ema(src, slowlen))
+    macd = fast_ma - slow_ma,
+    signal = security(syminfo.tickerid, tf, sma(macd, sigsmooth))
+    hist = macd - signal
+    [macd, signal, hist]
+
+f_getTFCandle(_tf) =>
+    _open  = security(heikinashi(syminfo.tickerid), _tf, open, barmerge.gaps_off, barmerge.lookahead_on)
+    _close = security(heikinashi(syminfo.tickerid), _tf, close, barmerge.gaps_off, barmerge.lookahead_on)
+    _high  = security(heikinashi(syminfo.tickerid), _tf, high, barmerge.gaps_off, barmerge.lookahead_on)
+    _low   = security(heikinashi(syminfo.tickerid), _tf, low, barmerge.gaps_off, barmerge.lookahead_on)
+    hl2   = (_high + _low) / 2.0
+    newBar = change(_open)
+    candleBodyDir = _close > _open
+    [candleBodyDir, newBar]
+
+f_findSommiFlag(tf, wt1, wt2, rsimfi, wtCross, wtCrossUp, wtCrossDown) =>
+    [hwt1, hwt2, hwtOversold, hwtOverbought, hwtCross, hwtCrossUp, hwtCrossDown, hwtCrosslast, hwtCrossUplast, hwtCrossDownlast, hwtVwap] = f_wavetrend(wtMASource, wtChannelLen, wtAverageLen, wtMALen, tf)
+    bearPattern = rsimfi < soomiRSIMFIBearLevel and wt2 > soomiFlagWTBearLevel and wtCross and wtCrossDown and hwtVwap < sommiVwapBearLevel
+    bullPattern = rsimfi > soomiRSIMFIBullLevel and wt2 < soomiFlagWTBullLevel and wtCross and wtCrossUp and hwtVwap > sommiVwapBullLevel
+    [bearPattern, bullPattern, hwtVwap]
+
+f_findSommiDiamond(tf, tf2, wt1, wt2, wtCross, wtCrossUp, wtCrossDown) =>
+    [candleBodyDir, newBar] = f_getTFCandle(tf)
+    [candleBodyDir2, newBar2] = f_getTFCandle(tf2)
+    bearPattern = wt2 >= soomiDiamondWTBearLevel and wtCross and wtCrossDown and not candleBodyDir and not candleBodyDir2
+    bullPattern = wt2 <= soomiDiamondWTBullLevel and wtCross and wtCrossUp and candleBodyDir and candleBodyDir2
+    [bearPattern, bullPattern]
+// } FUNCTIONS
+
+// CALCULATE INDICATORS {
+rsi = rsi(rsiSRC, rsiLen)
+rsiMFI = f_rsimfi(rsiMFIperiod, rsiMFIMultiplier, timeframe.period)
+[wt1, wt2, wtOversold, wtOverbought, wtCross, wtCrossUp, wtCrossDown, wtCross_last, wtCrossUp_last, wtCrossDown_last, wtVwap] = f_wavetrend(wtMASource, wtChannelLen, wtAverageLen, wtMALen, timeframe.period)
+[stochK, stochD] = f_stochrsi(stochSRC, stochLen, stochRsiLen, stochKSmooth, stochDSmooth, stochUseLog, stochAvg)
+tcVal = f_tc(tcSRC, tclength, tcfastLength, tcslowLength)
+[sommiBearish, sommiBullish, hvwap] = f_findSommiFlag(sommiVwapTF, wt1, wt2, rsiMFI, wtCross,  wtCrossUp, wtCrossDown)
+[sommiBearishDiamond, sommiBullishDiamond] = f_findSommiDiamond(sommiHTCRes, sommiHTCRes2, wt1, wt2, wtCross, wtCrossUp, wtCrossDown)
+
+[wtFractalTop, wtFractalBot, wtLow_prev, wtBearDiv, wtBullDiv, wtBearDivHidden, wtBullDivHidden] = f_findDivs(wt2, wtDivOBLevel, wtDivOSLevel, true)
+[wtFractalTop_add, wtFractalBot_add, wtLow_prev_add, wtBearDiv_add, wtBullDiv_add, wtBearDivHidden_add, wtBullDivHidden_add] =  f_findDivs(wt2, wtDivOBLevel_add, wtDivOSLevel_add, true)
+[wtFractalTop_nl, wtFractalBot_nl, wtLow_prev_nl, wtBearDiv_nl, wtBullDiv_nl, wtBearDivHidden_nl, wtBullDivHidden_nl] =  f_findDivs(wt2, 0, 0, false)
+wtBearDivHidden_ = showHiddenDiv_nl ? wtBearDivHidden_nl : wtBearDivHidden
+wtBullDivHidden_ = showHiddenDiv_nl ? wtBullDivHidden_nl : wtBullDivHidden
+
+[rsiFractalTop, rsiFractalBot, rsiLow_prev, rsiBearDiv, rsiBullDiv, rsiBearDivHidden, rsiBullDivHidden] = f_findDivs(rsi, rsiDivOBLevel, rsiDivOSLevel, true)
+[rsiFractalTop_nl, rsiFractalBot_nl, rsiLow_prev_nl, rsiBearDiv_nl, rsiBullDiv_nl, rsiBearDivHidden_nl, rsiBullDivHidden_nl] = f_findDivs(rsi, 0, 0, false)
+rsiBearDivHidden_ = showHiddenDiv_nl ? rsiBearDivHidden_nl : rsiBearDivHidden
+rsiBullDivHidden_ = showHiddenDiv_nl ? rsiBullDivHidden_nl : rsiBullDivHidden
+
+[stochFractalTop, stochFractalBot, stochLow_prev, stochBearDiv, stochBullDiv, stochBearDivHidden, stochBullDivHidden] = f_findDivs(stochK, 0, 0, false)
+
+buySignal = wtCross and wtCrossUp and wtOversold
+buySignalDiv = (wtShowDiv and wtBullDiv) or (wtShowDiv and wtBullDiv_add) or (stochShowDiv and stochBullDiv) or (rsiShowDiv and rsiBullDiv)
+sellSignal = wtCross and wtCrossDown and wtOverbought
+sellSignalDiv = (wtShowDiv and wtBearDiv) or (wtShowDiv and wtBearDiv_add) or (stochShowDiv and stochBearDiv) or (rsiShowDiv and rsiBearDiv)
+
+lastRsi = valuewhen(wtFractalBot, rsi[2], 0)[2]
+wtGoldBuy = ((wtShowDiv and wtBullDiv) or (rsiShowDiv and rsiBullDiv)) and wtLow_prev <= osLevel3 and wt2 > osLevel3 and wtLow_prev - wt2 <= -5 and lastRsi < 30
+// } CALCULATE INDICATORS
+// Note: divergence plotchars use offset=-2 (drawn 2 bars back), i.e. the signal is only known at the current bar.

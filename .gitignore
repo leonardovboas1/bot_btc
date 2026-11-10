@@ -8,3 +8,4 @@ data/
 research/cache/
 *.parquet
 .env
+research/*.log
