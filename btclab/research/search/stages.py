@@ -295,6 +295,8 @@ def _s3_study(tf: str, kw: dict, spec: dict, n_trials: int, seed: int, family: s
         h = spec_hash(s)
         if h not in seen:
             try:
+                if len(cache) > 48:
+                    cache.clear()
                 rec = evaluate_spec(ctx, s, cache)
             except Exception:
                 raise optuna.TrialPruned()

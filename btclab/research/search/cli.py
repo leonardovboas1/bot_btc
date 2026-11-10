@@ -36,7 +36,7 @@ def main(argv=None) -> int:
                 elif st == "s2":
                     info = stages.run_s2(store, ctx, tf, a.limit, n_jobs)
                 elif st == "s3":
-                    info = stages.run_s3(store, ctx, tf, a.limit, n_jobs, n_trials=a.s3_trials, cap=a.s3_cap)
+                    info = stages.run_s3(store, ctx, tf, a.limit, min(n_jobs, 6), n_trials=a.s3_trials, cap=a.s3_cap)
                 else:
                     info = stages.run_s4(store, ctx, tf, a.top)
                 print(f"[{st} {tf}] done in {time.time() - t0:.1f}s; report: {info.get('report')}", flush=True)
