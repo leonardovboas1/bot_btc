@@ -1,0 +1,10 @@
+.venv/
+data/raw/
+__pycache__/
+*.pyc
+.venv-parity/
+.pytest_cache/
+data/
+research/cache/
+*.parquet
+.env

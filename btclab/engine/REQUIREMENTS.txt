@@ -1,0 +1,8 @@
+# Pinned engine dependencies (Windows 11 / Python 3.10, verified 2026-11-10).
+# Install into the project venv:
+#   .venv/Scripts/python.exe -m pip install -r btclab/engine/REQUIREMENTS.txt
+numba==0.68.1
+llvmlite==0.50.0
+numpy==2.2.6
+pandas==2.3.3
+pytest==9.2.0
