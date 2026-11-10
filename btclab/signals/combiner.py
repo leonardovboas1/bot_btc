@@ -22,9 +22,29 @@ def _cost_model(name):
     raise ValueError(f"unknown cost model {name!r}")
 
 
-def _cached_compute(cache: dict, df, name: str, params: dict):
+SOURCES = ("real", "ha")
+
+
+def heikin_ashi(df):
+    """Heikin Ashi OHLC (causal: bar t uses bars <= t). Other columns are copied unchanged."""
+    from scipy.signal import lfilter
+    o, h, l, c = (df[k].to_numpy(dtype=np.float64) for k in ("open", "high", "low", "close"))
+    hc = (o + h + l + c) / 4.0
+    ho = np.empty_like(hc)
+    if len(hc):
+        # ho[i] = 0.5*ho[i-1] + 0.5*hc[i-1], ho[0] = (o0+c0)/2
+        x = np.concatenate(([(o[0] + c[0]) / 2.0], 0.5 * hc[:-1]))
+        ho = lfilter([1.0], [1.0, -0.5], x)
+    out = df.copy()
+    out["open"], out["close"] = ho, hc
+    out["high"] = np.maximum.reduce([h, ho, hc])
+    out["low"] = np.minimum.reduce([l, ho, hc])
+    return out
+
+
+def _cached_compute(cache: dict, df, name: str, params: dict, source: str = "real"):
     full = {**REGISTRY[name].defaults, **(params or {})}
-    key = (name, json.dumps(full, sort_keys=True, default=str))
+    key = (name, source, json.dumps(full, sort_keys=True, default=str))
     if key not in cache:
         cache[key] = compute(name, df, **(params or {}))
     return cache[key]
@@ -37,10 +57,20 @@ def run_spec(spec: dict, df, _cache: dict | None = None):
     cache = {} if _cache is None else _cache
     n = len(df)
     inds = spec["indicators"]
+    source = spec.get("source", "real")
+    if source not in SOURCES:
+        raise ValueError(f"unknown source {source!r}; use one of {SOURCES}")
+    # Signals read the chosen candles; fills, stops, ATR and costs always use real prices.
+    sig_df = df
+    if source == "ha":
+        hk = ("__ha__", id(df), len(df))
+        if hk not in cache:
+            cache[hk] = heikin_ashi(df)
+        sig_df = cache[hk]
 
     def lookup(prim):
         name, _, key = prim.partition(".")
-        return _cached_compute(cache, df, name, inds[name])[key]
+        return _cached_compute(cache, sig_df, name, inds[name], source)[key]
 
     sigs = {s: build_signal(spec.get(s), lookup, n)
             for s in ("long", "short", "exit_long", "exit_short")}

@@ -209,3 +209,9 @@ Plus 4 context features: realized vol z, 24h return, ER(24), coin id (one-hot).
 *Costs.* Taker fee both sides + slippage per `btclab/engine/costs.py` "realistic" preset + funding at settlement; reported also at 2× costs.
 
 *Falsification.* Rejected if any holds: (i) OOS Sharpe after costs does not beat the ungated primary in ≥ 4/6 folds; (ii) OOS precision of taken trades ≤ 53 %; (iii) the GBT gate does not beat the logistic gate OOS (then only the logistic variant may proceed); (iv) a shuffled-label placebo gate reaches ≥ 80 % of the real gate's OOS Sharpe gain; (v) Sharpe at 2× costs ≤ 0; (vi) one family carries > 60 % of permutation importance (treated as a leak or a single-signal strategy and re-evaluated as that). Results are reported per coin and for the portfolio; the portfolio is the registered claim. Same holdout cutoff for all coins; holdout judged once.
+
+## Amendment 4 (2026-11-10) — Heikin Ashi as a signal source
+
+*Disclosure.* Before this amendment, brayvb_v2 was run in-sample on 1h/4h/1d with real and HA signal candles (6 runs: HA better on 4h, worse on 1h and 1d). Those 6 runs are added to `N`.
+
+*Rule.* A spec may set `source: "ha"`: indicators and signal rules read causal Heikin Ashi candles; entries, exits, stops, ATR, funding and costs always use real OHLC (next-bar open fills, as for every spec). Executing at HA prices is forbidden (it is TradingView's "non-standard chart" bias). HA is a variant, not a free parameter: for any catalog strategy or search survivor evaluated with HA, the HA run is a separate trial family in the same `trials` table and in `N`. A strategy may switch to HA only if the HA variant itself passes every gate (WF, DSR, PBO) on its own; picking the better of real/HA per strategy without that counts as a selection and is reported as such.
