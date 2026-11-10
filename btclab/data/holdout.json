@@ -1,0 +1,6 @@
+{
+  "cutoff": "2026-03-10T14:00:00+00:00",
+  "last_perp_bar": "2026-11-10T14:00:00+00:00",
+  "months": 8,
+  "source": "klines_1h perp"
+}
