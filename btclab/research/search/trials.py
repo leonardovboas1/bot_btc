@@ -25,6 +25,8 @@ def spec_hash(spec: dict) -> str:
     d = {k: spec.get(k) for k in _HASH_KEYS}
     d["costs"] = d["costs"] or "BINANCE_PERP_TAKER"
     d["risk"] = d["risk"] or {}
+    if spec.get("source", "real") != "real":      # Amendment 4: HA signals are a separate trial (real keeps old hashes)
+        d["source"] = spec["source"]
     return hashlib.sha1(json.dumps(d, sort_keys=True, default=str).encode()).hexdigest()
 
 
