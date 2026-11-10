@@ -107,3 +107,74 @@ If B&H is negative in the holdout, the Sharpe row becomes "custom > 0 and > B&H"
 ## Amendments
 
 *(none)*
+
+## Amendment 1 (2026-11-10, before any backtest result)
+
+**Status at the time of writing.** No backtest has run, `research/runs/` has not been opened and no strategy result exists. The only inspection performed for this amendment was of column names, dtypes and date coverage of the files listed in A1.1 (parquet schema and the time index); no series was joined to returns. The `*(none)*` placeholder above is superseded by this section but left in place so the original text is byte-identical to the frozen commit. Per the header rule this amendment counts as extra trials in DSR `N` (A1.3).
+
+### A1.1 What changed, and why an amendment before results is legitimate
+
+*What changed.* The "Not registered" paragraph excluded open interest (OI), long/short ratios and liquidity data for one reason only: the Binance API serves 30 days of history. That reason is gone. Free archival history exists:
+
+| Source | File / location | Columns (dtype) | Coverage | Cadence |
+|---|---|---|---|---|
+| Binance UM `metrics` archive | `data/raw/um_futures/metrics_archive_5m.parquet` | `sum_open_interest`, `sum_open_interest_value`, `count_toptrader_long_short_ratio` (top-trader *accounts*), `sum_toptrader_long_short_ratio` (top-trader *positions*), `count_long_short_ratio` (global accounts), `sum_taker_long_short_vol_ratio`; all `double`; index `create_time` (UTC, ns) | 2021-01-01 00:00 to 2026-11-09 23:55 UTC, 615,431 rows | 5 min; 601 bars missing in 152 runs, longest gap 10 h 30 min |
+| Binance UM `bookDepth` daily archives | being downloaded to `data/raw/um_futures/` (not yet on disk at the time of writing) | cumulative bid/ask depth at ±1, 2, 3, 4, 5 % from mid per snapshot | 2023-01-01 to present | ~30 s snapshots |
+| Funding | `data/raw/um_futures/funding_rate.parquet` (`fundingRate`, `markPrice`; index `funding_time`) | `double` | 2019-09-10 to 2026-11-10, 7,855 prints, no gaps | 8 h |
+| Perp klines | `klines_{15m,1h,4h,1d}.parquet` (`open, high, low, close, volume, quote_volume, trades, taker_buy_base, taker_buy_quote`; index `open_time`) | `double` | 2019-09-08 to 2026-11-10, no gaps at 1d/4h | 15m / 1h / 4h / 1d |
+
+The API pollers (`openInterestHist_*.parquet`, `*LongShort*Ratio_*.parquet`, `takerlongshortRatio_*.parquet`, from 2026-10-12) are **not** backtest inputs; the archive is the sole research source for these series, and the pollers serve live trading only. No stitching of the two sources in research.
+
+*Why this is legitimate.* Pre-registration protects one thing: that hypotheses and their falsification criteria are fixed before the data can speak. This amendment changes the hypothesis set, not any decision made after seeing outcomes. Nothing in it is conditioned on a return series, a Sharpe, a fold result or a plot; the only new information is that the data exist and what their coverage is. The amendment is committed with a git timestamp, the frozen v1 text is unchanged, and the added hypotheses enter DSR `N` like every other trial, so a reader can verify that the search space grew *before* the search started. Had the same change been made after the first run, it would be a result-driven expansion of the search and would have to be reported as such; made now, it is a change of plan and its cost is paid in `N`.
+
+*Coverage limit (disclosed now).* The search window is 40 months of WF plus the 8-month holdout, about 48 months ending at the last data date (2026-11-09): the WF window opens around 2022-11 and the holdout around 2026-03.
+
+- **OI, long/short and taker ratios (from 2021-01-01)** cover the full WF window and the holdout with at least 22 months of warm-up before fold 1's 18-month training window. H5 therefore runs on the standard 6-fold scheme and its results are comparable with H1 to H4 without caveat.
+- **bookDepth (from 2023-01-01)** does *not* cover the start of fold 1's training window and has no warm-up before it. Anything that uses depth (H6 and any combination containing H6) is validated on its own **depth window**: the standard fold boundaries are kept, the series starts 2023-01-01, every fold whose training window would be shorter than 12 months is dropped, and the fold-pass threshold becomes at least ceil(2k/3) of the k remaining folds (6 → 4, 5 → 4, 4 → 3). Its benchmarks (raw H1, B&H, best catalog strategy) are re-evaluated on the same depth window for the comparison; a depth result is never compared against a full-window number. The shorter window carries **lower statistical power**: with OOS months T_d < T, the standard error of the OOS Sharpe grows by about sqrt(T / T_d), and the window contains a single bull cycle (2023 to 2025) and one drawdown, so regime diversity is smaller than in the full window. Every report that mentions H6 states the depth-window fold count, the OOS months and this SE factor next to the number. If the final model contains H6, §4 is applied on the depth window and the report says so in its first line.
+
+Still **not registered** (unchanged): the liquidation feed (30-day history) and volume-profile/liquidity nodes from aggTrades (2022 onward). H4's eight features are **not** extended with OI or depth; H4 stays as written.
+
+### H5 — OI/price divergence and leverage flush (filter on H1, or standalone)
+
+*Rationale.* OI counts open leveraged positions; its change tells whether a move is being *opened into* (new leverage chasing price) or *closed out of* (positions forced shut). Price up with OI rising fast and the top-trader position ratio at an extreme means the move is carried by late leveraged longs with little buffer: fragile longs. Price down with OI falling sharply means positions are being closed at market by the liquidation engine, not by anyone's opinion: forced sellers who are exhausted once the cascade stops. The other side of the fragile-longs leg is the late leveraged long who will become the forced seller; the other side of the flush leg is the liquidation engine selling that long's position at market, plus the momentum follower who shorts the breakdown. The edge persists because liquidation is mechanical (margin, not view, closes the position), because each trader sees only their own account while the archive aggregates all of them, and because cross-exchange arbitrage absorbs *price*, not *positioning*. OI is used in BTC units (`sum_open_interest`), never in USD (`sum_open_interest_value` = OI × price, which is mechanically correlated with returns and would make the signal a disguised return feature).
+
+*Rules.* Daily bars; metrics aggregated to daily by as-of join (A1.4). `dOI_k = log(OI_t / OI_{t−k})`, `r_k = log(close_t / close_{t−k})`. `z_OI` = rolling z-score of `dOI_k` over `w` days; `z_top` = rolling z-score of `sum_toptrader_long_short_ratio` over `w` days.
+- **Fragile longs:** `r_k > 0` and `z_OI > τ` and `z_top > τ`. Filter mode: multiply H1's long by 0.5 (fixed, not searched) while the condition holds. Standalone mode: short 0.5 × H1's vol-scaled size for `hold` days; exit earlier if OI falls below its entry value (the leverage has left). Mirror for fragile shorts: `r_k < 0`, `z_OI > τ`, `z_top < −τ`.
+- **Leverage flush:** `r_k < 0` and `z_OI < −τ`. Both modes: long 0.5 × vol-scaled size for `hold` days; exit at `hold` or if close falls below the flush bar's low. (This leg has a stop, unlike H1, because the thesis is "the forced selling is over"; a new low falsifies it bar by bar.)
+- In filter mode the H5 position is added to H1's per §2.3(b); in standalone mode H5 is an engine. The two modes are two registered variants, each a separate trial family in `N`. H1 runs at its median parameters, not re-tuned.
+
+*Parameters (4).* `k` ∈ {1, 3} d; `w` 30–90 d; `τ` 1.5–3.0; `hold` 1–7 d. Size multipliers (0.5) and the OI exit are fixed.
+
+*Data.* `metrics_archive_5m.parquet` (`sum_open_interest`, `sum_toptrader_long_short_ratio`) from 2021-01-01; daily OHLCV. Standard 6-fold WF.
+
+*Falsification.* Filter mode rejected if it does not beat raw H1 on OOS Sharpe in ≥ 4/6 folds. Standalone mode rejected if OOS net Sharpe is not > 0 in ≥ 4/6 folds, **or** net expectancy per round trip is < 50 bp (§3). Either mode declared **untestable** if the WF window holds < 20 independent events per leg (condition true, ≥ 5 days apart), reported per leg. Also rejected if the result reverses sign when `sum_open_interest` is replaced by `sum_open_interest_value` *and* the value version is the better one (that would mean the signal is price, not positioning).
+
+### H6 — Book-depth imbalance as an entry filter (depth window only, 2023 onward)
+
+*Rationale.* Resting depth within ±1 % of mid is the inventory that market makers and limit buyers are willing to absorb right now. When bid depth is abnormally thin relative to ask depth, a long entry has to be filled against a book that will not hold, and the breakout is more likely to be a stop-hunt that reverses (the H2 story); when bids are thick, the entry is confirmed. The other side is the market maker, who pulls quotes ahead of moves that hurt their inventory, and the spoofer, who posts depth they intend to cancel. Spoofed depth is fleeting and a single 30-second snapshot can be anything, so the rule uses the **median** of a full day's snapshots and a z-score over weeks; no intraday use. The edge, if any, is confirmation rather than prediction, and it is expected to be small: depth within 1 % is also a volatility proxy (makers widen in high vol), which is why a placebo on total depth is part of the falsification.
+
+*Rules.* Per daily bar, per snapshot: `I = (bid_b − ask_b) / (bid_b + ask_b)` with `bid_b`, `ask_b` the cumulative depth at band `b` from mid, `I` ∈ [−1, 1]. Daily `I_d` = median of the day's snapshots (as of the daily close; snapshots after the close belong to the next day). `z_I` = rolling z-score of `I_d` over `w` days. AND-gate on H1 entries (§2.3a): a long entry or add is taken only if `z_I > −γ` (veto when bids are abnormally thin); a short entry only if `z_I < γ`. The gate acts on entries only; it never closes an open position. A day with no valid `I_d` (A1.4) is **no veto** (no information is not a signal). H1 at median parameters, not re-tuned.
+
+*Parameters (3).* `b` ∈ {1 %, 2 %}; `w` 20–60 d; `γ` 0.5–1.5. The aggregator (median) and the entries-only scope are fixed.
+
+*Data.* `bookDepth` daily archives from 2023-01-01; daily OHLCV. Validated on the **depth window** of A1.1 with its reduced fold count and threshold ceil(2k/3).
+
+*Falsification.* Rejected if it does not beat raw H1 (evaluated on the same depth window) on OOS Sharpe in at least ceil(2k/3) of k folds, **or** if the placebo filter (the same rule and parameters applied to the z-score of *total* depth `bid_b + ask_b` instead of the imbalance) captures ≥ 80 % of H6's OOS Sharpe gain over raw H1; in that case the information is liquidity level, that is volatility, not direction, and H6 is redundant with a vol filter. Declared **untestable** if fewer than 20 entries are vetoed across the depth-window OOS folds.
+
+### A1.3 Eligible components and trial accounting (changes to §2.1 and §2.4)
+
+- **§2.1 component types, amended:** direction engine = H1, H2, H5-standalone, catalog survivor; filter/overlay = H3, H4, H5-filter, H6, regime filter; exit rule unchanged. §2.2 stands: at most one engine, one filter, one exit, so H5-filter and H6 cannot both appear in one combination, and H5-standalone is an engine that may be filtered by H3, H4 or H6 but not by H5-filter (same signal twice). The eligibility rule is unchanged: individual WF pass and family DSR p > 0.95 first. For H6 and any combination containing H6, "WF pass" means the depth-window pass of A1.1.
+- **§2.4 combination cap:** raised from 200 to **300** (an increase of 100, the maximum for one amendment; if the enumeration exceeds 300, keep the 300 lowest-correlation ones). Combinations containing H6 are enumerated in the same `combinations.json`, flagged `window: "depth"`, and run only on the depth window.
+- **DSR `N`, amended:** `N` = all S0–S4 trials + every H5 and H6 parameter trial in both windows (the two H5 modes are separate families) + combinations (now ≤ 300) + amendments, this one included (+1). Depth-window trials go into the same `trials` table and the same `N`, not a separate ledger; there is one search, not two. The first results report records `N` with and without the A1 additions so the inflation is visible.
+
+### A1.4 Causal handling of missing metrics and depth bars
+
+The 5-minute archive has 601 missing bars in 152 runs (longest gap 10 h 30 min); depth days may have partial snapshot coverage. Rules, fixed now:
+
+1. **Observation time.** A metrics row is treated as observed at its `create_time`; a 5-minute publication lag is assumed, so a daily feature uses only rows with `create_time ≤ daily close − 5 min`. Depth snapshots are observed at their snapshot time.
+2. **Daily aggregation = as-of join, backward only.** The daily OI, ratio and taker values are the last observation at or before the bar close (`merge_asof`, direction `backward`). The depth value is the median of the snapshots inside the bar.
+3. **Forward-fill with a maximum age.** The as-of value is used only if its observation is ≤ 12 h old at the bar close; older means the daily value is `NaN`. For depth, a day with < 50 % of its expected snapshots (fewer than 1,440 of about 2,880 at 30 s) means `I_d = NaN`.
+4. **Never interpolate.** No linear, spline or mean fill across a gap, in the 5-minute series or the daily series. `dOI_k` is `NaN` if either endpoint is `NaN`. Rolling z-scores skip `NaN` with `min_periods = 0.8 · w`; a window with fewer valid points is `NaN`.
+5. **`NaN` is "no signal, no veto".** H5 conditions evaluate to false (H1 unchanged, no standalone entry); H6 does not veto. Open H5 positions are managed by their `hold`/stop rules, which depend only on price, so a gap never freezes a trade.
+6. **Logged, not hidden.** Each daily bar carries `metrics_gap` and `depth_gap` flags; the results report states the number of flagged bars per series inside every WF fold and the holdout. If more than 5 % of a fold's bars are flagged for a series, that fold is reported as degraded for the hypotheses using it.
+7. **Future gaps.** If the archive is later found to have more gaps than stated here, the count is corrected in a further amendment; the rules above do not change.
