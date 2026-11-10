@@ -277,9 +277,28 @@ def signal_current(strategy: str = "brayvb_v2", tf: Optional[str] = None, market
             "time": int(_ts(df.index[-1:])[0]), "price": float(df["close"].iloc[-1])}
 
 
+def _with_tail(market: str, tf: str, symbol: str) -> pd.DataFrame:
+    """Cached on-disk bars plus live bars after them (display only)."""
+    df = _full(market, tf, symbol)
+    from btclab.api import live
+    extra = live.tail(market, tf, symbol, df.index[-1]) if len(df) else None
+    if extra is not None and len(extra):
+        if df.index.tz is None:
+            extra = extra.tz_convert("UTC").tz_localize(None)
+        df = pd.concat([df, extra])
+    return df
+
+
+_IND_CACHE: dict = {}
+IND_WARMUP = 4000
+
+
 @app.get("/indicator/{name}")
 def indicator(name: str, params: str = Query("{}", description="JSON object"),
-              tf: str = "4h", market: str = "perp", symbol: str = "BTCUSDT"):
+              tf: str = "4h", market: str = "perp", symbol: str = "BTCUSDT",
+              start: Optional[str] = None, limit: int = 5000):
+    """Indicator series computed on the full history (+ live tail) so warm-up is exact; returns
+    bars from ``start``, else the last ``limit`` bars (limit=0: all)."""
     if name not in REGISTRY:
         raise HTTPException(404, f"unknown indicator {name!r}")
     try:
@@ -288,21 +307,38 @@ def indicator(name: str, params: str = Query("{}", description="JSON object"),
             raise ValueError
     except ValueError:
         raise HTTPException(400, "params must be a JSON object")
-    df = _full(market, tf, _sym(symbol))
-    try:
-        out = compute(name, df, **p)
-    except TypeError as e:
-        raise HTTPException(400, str(e))
+    symbol = _sym(symbol)
+    df = _with_tail(market, tf, symbol)
+    if start is None and limit and limit > 0:
+        df = df.iloc[-(limit + IND_WARMUP):]   # display: a long warm-up makes recursive filters converge
+    key = (name, json.dumps(p, sort_keys=True), tf, market, symbol, start, limit)
+    hit = _IND_CACHE.get(key)
+    if hit and hit[0] == (len(df), df.index[-1], float(df["close"].iloc[-1])):
+        out = hit[1]
+    else:
+        try:
+            out = compute(name, df, **p)
+        except TypeError as e:
+            raise HTTPException(400, str(e))
+        if len(_IND_CACHE) > 64:
+            _IND_CACHE.clear()
+        _IND_CACHE[key] = ((len(df), df.index[-1], float(df["close"].iloc[-1])), out)
     t = _ts(df.index)
+    lo = 0
+    if start is not None:
+        lo = int(df.index.searchsorted(_local(df, pd.Timestamp(start, tz="UTC"))))
+    elif limit and limit > 0:
+        lo = max(0, len(t) - limit)
     series = {}
     for k, v in out.items():
         a = np.asarray(v)
-        if a.ndim != 1 or len(a) != len(t):
+        if a.ndim != 1 or len(a) != len(t) or a.dtype == bool:
             continue
-        a = a.astype(float)
+        a = a[lo:].astype(float)
+        tt = t[lo:]
         ok = np.isfinite(a)
-        series[k] = [{"time": int(x), "value": float(y)} for x, y in zip(t[ok], a[ok])]
-    return {"name": name, "tf": tf, "series": series}
+        series[k] = [{"time": int(x), "value": float(y)} for x, y in zip(tt[ok].tolist(), a[ok].tolist())]
+    return {"name": name, "tf": tf, "symbol": symbol, "series": series}
 
 
 # ------------------------------------------------------------------ fees

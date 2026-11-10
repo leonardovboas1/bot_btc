@@ -5,12 +5,33 @@ import type { CanvasRenderingTarget2D } from "fancy-canvas";
 
 export interface Grid { times: number[]; prices: number[]; a: number[][]; b?: number[][]; colA: string; colB?: string }
 export interface Profile { prices: number[]; volume: number[]; poc?: number }
-export interface LayerData { book: Grid | null; liq: Grid | null; vp: Profile | null }
 
-const rgba = (hex: string, a: number) => {
-  const n = parseInt(hex.slice(1), 16);
-  return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a.toFixed(3)})`;
-};
+/**
+ * Everything a layer needs to paint one frame. Layers write pixels into `px` (uint32 ABGR, bitmap
+ * coordinates) or return an overlay callback that draws with the 2D context afterwards.
+ */
+export interface Frame {
+  W: number; H: number; hr: number; vr: number;
+  /** Bar duration (s) of the pane timeframe, when known: lets layers merge sub-bar columns into bar cells. */
+  tfSec?: number;
+  px: Uint32Array;
+  xOf(time: number): number | null;   // bitmap px
+  yOf(price: number): number | null;  // bitmap px
+}
+export type Overlay = (ctx: CanvasRenderingContext2D) => void;
+
+/**
+ * HOOK: a heatmap layer plugs into a pane via `LayersPrimitive.setLayer(layer)`.
+ * Implement `paint` (runs only when range/size/rev change, never on crosshair moves) and bump `rev`
+ * whenever the layer's data changes. Remove with `removeLayer(id)`.
+ */
+export interface HeatmapLayer {
+  id: string;
+  rev: number;
+  paint(f: Frame): Overlay | void;
+}
+
+const hexRgb = (hex: string) => { const n = parseInt(hex.slice(1), 16); return [n >> 16, (n >> 8) & 255, n & 255]; };
 const q98 = (g: number[][][]) => {
   const v: number[] = [];
   for (const m of g) for (const r of m) for (const x of r) if (x > 0) v.push(x);
@@ -19,68 +40,116 @@ const q98 = (g: number[][][]) => {
   return v[Math.floor(v.length * 0.98)] || v[v.length - 1] || 1;
 };
 
-class Renderer implements IPrimitivePaneRenderer {
-  constructor(private p: LayersPrimitive) {}
-  draw(target: CanvasRenderingTarget2D) {
-    const { series, chart, data } = this.p;
-    if (!series || !chart || !data) return;
-    target.useBitmapCoordinateSpace(({ context: ctx, horizontalPixelRatio: hr, verticalPixelRatio: vr, bitmapSize }) => {
-      const ts = chart.timeScale();
-      const drawGrid = (g: Grid | null) => {
-        if (!g || g.times.length < 1 || g.prices.length < 2) return;
-        const step = g.times.length > 1 ? g.times[g.times.length - 1] - g.times[g.times.length - 2] : 3600;
-        const ys = g.prices.map((p) => series.priceToCoordinate(p));
-        const grids = g.b ? [g.a, g.b] : [g.a];
-        const mx = q98(grids);
-        const cols = [g.colA, g.colB ?? g.colA];
-        for (let i = 0; i < g.times.length; i++) {
-          const x0 = ts.timeToCoordinate(g.times[i] as unknown as Time);
-          const x1 = ts.timeToCoordinate((g.times[i] + step) as unknown as Time);
-          if (x0 == null || x1 == null) continue;
-          const px = Math.round(x0 * hr), pw = Math.max(1, Math.round((x1 - x0) * hr) + 1);
-          for (let k = 0; k < grids.length; k++) {
-            const row = grids[k][i];
-            for (let j = 0; j < row.length; j++) {
-              const v = row[j];
-              if (v <= 0) continue;
-              const y = ys[j];
-              if (y == null) continue;
-              const yu = ys[j + 1] ?? (ys[j - 1] != null ? 2 * y - (ys[j - 1] as number) : y + 4);
-              const h = Math.max(1, Math.abs(yu - y) * vr + 1);
-              ctx.fillStyle = rgba(cols[k], Math.min(1, v / mx) * 0.85);
-              ctx.fillRect(px, Math.round(y * vr - h / 2), pw, Math.round(h));
-            }
-          }
-        }
-      };
-      drawGrid(data.book);
-      drawGrid(data.liq);
-      const vp = data.vp;
-      if (vp && vp.prices.length > 1) {
-        const mx = Math.max(...vp.volume) || 1;
-        const maxW = bitmapSize.width * 0.2;
-        ctx.fillStyle = "rgba(76,141,255,0.35)";
-        for (let j = 0; j < vp.prices.length; j++) {
-          const y = series.priceToCoordinate(vp.prices[j]);
-          const yn = series.priceToCoordinate(vp.prices[Math.min(j + 1, vp.prices.length - 1)]);
-          const yp = series.priceToCoordinate(vp.prices[Math.max(j - 1, 0)]);
+/** Grid heatmap (order book / estimated liquidations), painted with ImageData. */
+export class GridLayer implements HeatmapLayer {
+  rev = 0;
+  private g: Grid | null = null;
+  constructor(public id: string) {}
+  setData(g: Grid | null) { this.g = g; this.rev++; }
+  paint(f: Frame) {
+    const g = this.g;
+    if (!g || g.times.length < 1 || g.prices.length < 2) return;
+    const step = g.times.length > 1 ? g.times[g.times.length - 1] - g.times[g.times.length - 2] : 3600;
+    const ys = g.prices.map((p) => f.yOf(p));
+    const grids = g.b ? [g.a, g.b] : [g.a];
+    const mx = q98(grids);
+    const cols = [g.colA, g.colB ?? g.colA].map(hexRgb);
+    for (let i = 0; i < g.times.length; i++) {
+      const x0 = f.xOf(g.times[i]), x1 = f.xOf(g.times[i] + step);
+      if (x0 == null || x1 == null) continue;
+      const xa = Math.max(0, Math.round(x0)), xb = Math.min(f.W, Math.max(xa + 1, Math.round(x1) + 1));
+      if (xa >= f.W || xb <= 0) continue;
+      for (let k = 0; k < grids.length; k++) {
+        const row = grids[k][i];
+        const [r, gg, b] = cols[k];
+        for (let j = 0; j < row.length; j++) {
+          const v = row[j];
+          if (v <= 0) continue;
+          const y = ys[j];
           if (y == null) continue;
-          const h = Math.max(1, Math.abs(((yn ?? y) - (yp ?? y)) / 2) * vr);
-          const w = (vp.volume[j] / mx) * maxW;
-          ctx.fillRect(bitmapSize.width - w, Math.round(y * vr - h / 2), w, Math.round(h));
-        }
-        if (vp.poc != null) {
-          const y = series.priceToCoordinate(vp.poc);
-          if (y != null) {
-            ctx.strokeStyle = "#e0b53a"; ctx.lineWidth = Math.max(1, Math.round(vr));
-            ctx.setLineDash([6 * hr, 4 * hr]);
-            ctx.beginPath(); ctx.moveTo(0, y * vr); ctx.lineTo(bitmapSize.width, y * vr); ctx.stroke();
-            ctx.setLineDash([]);
-            ctx.fillStyle = "#e0b53a"; ctx.font = `${Math.round(13 * vr)}px system-ui`;
-            ctx.fillText("POC", bitmapSize.width - maxW - 40 * hr, y * vr - 4 * vr);
+          const yu = ys[j + 1] ?? (ys[j - 1] != null ? 2 * y - (ys[j - 1] as number) : y + 4 * f.vr);
+          const h = Math.max(1, Math.abs(yu - y) + 1);
+          const ya = Math.max(0, Math.round(y - h / 2)), yb = Math.min(f.H, Math.round(y + h / 2) + 1);
+          const a = Math.round(Math.min(1, v / mx) * 0.85 * 255);
+          const c = ((a << 24) | (b << 16) | (gg << 8) | r) >>> 0;
+          for (let yy = ya; yy < yb; yy++) {
+            const o = yy * f.W;
+            for (let xx = xa; xx < xb; xx++) if ((f.px[o + xx] >>> 24) < a) f.px[o + xx] = c;
           }
         }
       }
+    }
+  }
+}
+
+/** Volume profile on the right edge (+ POC line). */
+export class VpLayer implements HeatmapLayer {
+  rev = 0;
+  private vp: Profile | null = null;
+  constructor(public id = "vp") {}
+  setData(v: Profile | null) { this.vp = v; this.rev++; }
+  paint(f: Frame): Overlay | void {
+    const vp = this.vp;
+    if (!vp || vp.prices.length < 2) return;
+    return (ctx) => {
+      const mx = Math.max(...vp.volume) || 1;
+      const maxW = f.W * 0.2;
+      ctx.fillStyle = "rgba(76,141,255,0.35)";
+      for (let j = 0; j < vp.prices.length; j++) {
+        const y = f.yOf(vp.prices[j]);
+        if (y == null) continue;
+        const yn = f.yOf(vp.prices[Math.min(j + 1, vp.prices.length - 1)]);
+        const yp = f.yOf(vp.prices[Math.max(j - 1, 0)]);
+        const h = Math.max(1, Math.abs(((yn ?? y) - (yp ?? y)) / 2));
+        const w = (vp.volume[j] / mx) * maxW;
+        ctx.fillRect(f.W - w, Math.round(y - h / 2), w, Math.round(h));
+      }
+      if (vp.poc != null) {
+        const y = f.yOf(vp.poc);
+        if (y != null) {
+          ctx.strokeStyle = "#e0b53a"; ctx.lineWidth = Math.max(1, Math.round(f.vr));
+          ctx.setLineDash([6 * f.hr, 4 * f.hr]);
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(f.W, y); ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.fillStyle = "#e0b53a"; ctx.font = `${Math.round(12 * f.vr)}px system-ui`;
+          ctx.fillText("POC", f.W - maxW - 36 * f.hr, y - 4 * f.vr);
+        }
+      }
+    };
+  }
+}
+
+class Renderer implements IPrimitivePaneRenderer {
+  private cv = document.createElement("canvas");
+  private key = "";
+  constructor(private p: LayersPrimitive) {}
+  draw(target: CanvasRenderingTarget2D) {
+    const { series, chart, layers } = this.p;
+    if (!series || !chart || !layers.size) return;
+    target.useBitmapCoordinateSpace(({ context, horizontalPixelRatio: hr, verticalPixelRatio: vr, bitmapSize }) => {
+      const W = bitmapSize.width, H = bitmapSize.height;
+      if (!W || !H) return;
+      const ts = chart.timeScale();
+      const lr = ts.getVisibleLogicalRange();
+      const key = [W, H, lr?.from, lr?.to, this.p.tfSec, this.p.rev, series.priceToCoordinate(1000), series.priceToCoordinate(100000),
+        ...[...layers.values()].map((l) => l.id + l.rev)].join("|");
+      if (key !== this.key) {
+        this.key = key;
+        this.cv.width = W; this.cv.height = H;
+        const c = this.cv.getContext("2d")!;
+        const img = c.createImageData(W, H);
+        const f: Frame = {
+          W, H, hr, vr, px: new Uint32Array(img.data.buffer), tfSec: this.p.tfSec ?? undefined,
+          // time -> x via the pane mapping (works for timestamps between bars, e.g. 15m heatmap columns on a 4h chart)
+          xOf: (t) => { const x = this.p.timeToX ? this.p.timeToX(t) : ts.timeToCoordinate(t as unknown as Time); return x == null ? null : x * hr; },
+          yOf: (pr) => { const y = series.priceToCoordinate(pr); return y == null ? null : y * vr; },
+        };
+        const overlays: Overlay[] = [];
+        for (const l of layers.values()) { const o = l.paint(f); if (o) overlays.push(o); }
+        c.putImageData(img, 0, 0);
+        overlays.forEach((o) => o(c));
+      }
+      context.drawImage(this.cv, 0, 0);
     });
   }
 }
@@ -92,11 +161,14 @@ class View implements IPrimitivePaneView {
   renderer() { return this.r; }
 }
 
-/** Pane primitive drawn behind candles: book/liquidation heatmaps + volume profile. */
+/** Pane primitive drawn behind candles; hosts any number of HeatmapLayers. */
 export class LayersPrimitive implements ISeriesPrimitive<Time> {
   series: ISeriesApi<"Candlestick"> | null = null;
   chart: SeriesAttachedParameter<Time>["chart"] | null = null;
-  data: LayerData | null = null;
+  layers = new Map<string, HeatmapLayer>();
+  /** Optional time -> media x mapping supplied by the pane (extrapolates between/after bars). */
+  timeToX: ((t: number) => number | null) | null = null;
+  tfSec: number | null = null;
   private req: (() => void) | null = null;
   private v = [new View(this)];
   attached(p: SeriesAttachedParameter<Time>) {
@@ -105,5 +177,9 @@ export class LayersPrimitive implements ISeriesPrimitive<Time> {
   detached() { this.chart = null; this.series = null; this.req = null; }
   paneViews() { return this.v; }
   updateAllViews() {}
-  setData(d: LayerData | null) { this.data = d; this.req?.(); }
+  /** Bump when the pane bars change (x mapping changes even if the visible logical range does not). */
+  rev = 0;
+  invalidate() { this.rev++; this.req?.(); }
+  setLayer(l: HeatmapLayer) { this.layers.set(l.id, l); this.req?.(); }
+  removeLayer(id: string) { if (this.layers.delete(id)) this.req?.(); }
 }

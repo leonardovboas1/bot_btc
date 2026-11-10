@@ -9,3 +9,7 @@ research/cache/
 *.parquet
 .env
 research/*.log
+
+web/_review/
+web/test-results/
+web/playwright-report/
