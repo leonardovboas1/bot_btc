@@ -1,0 +1,207 @@
+{
+  "generated_utc": "2026-11-10T22:51:17+00:00",
+  "rule": "USDT perps (PERPETUAL, TRADING), onboardDate <= 2023-06-30, excl. stablecoin bases, UP/DOWN/BULL/BEAR, design set; ranked by 30d quote volume (daily klines); top 25",
+  "candidates_count": 122,
+  "universe": [
+    {
+      "symbol": "ZECUSDT",
+      "base": "ZEC",
+      "onboard_date": "2020-02-05",
+      "quote_volume_30d_usdt": 54227661046.56,
+      "quote_volume_24h_usdt": 2604252883.58,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "1000PEPEUSDT",
+      "base": "1000PEPE",
+      "onboard_date": "2023-05-05",
+      "quote_volume_30d_usdt": 11150874317.65,
+      "quote_volume_24h_usdt": 532824365.26,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "DOGEUSDT",
+      "base": "DOGE",
+      "onboard_date": "2020-07-10",
+      "quote_volume_30d_usdt": 9248645826.83,
+      "quote_volume_24h_usdt": 316013309.57,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "UNIUSDT",
+      "base": "UNI",
+      "onboard_date": "2020-09-18",
+      "quote_volume_30d_usdt": 6002343041.11,
+      "quote_volume_24h_usdt": 209775424.59,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "SUIUSDT",
+      "base": "SUI",
+      "onboard_date": "2023-05-03",
+      "quote_volume_30d_usdt": 5830136238.97,
+      "quote_volume_24h_usdt": 151227766.87,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "LINKUSDT",
+      "base": "LINK",
+      "onboard_date": "2020-01-17",
+      "quote_volume_30d_usdt": 3629983199.92,
+      "quote_volume_24h_usdt": 107185579.7,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "AVAXUSDT",
+      "base": "AVAX",
+      "onboard_date": "2020-09-23",
+      "quote_volume_30d_usdt": 3591504966.36,
+      "quote_volume_24h_usdt": 164181766.22,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "FILUSDT",
+      "base": "FIL",
+      "onboard_date": "2020-10-16",
+      "quote_volume_30d_usdt": 3307038350.96,
+      "quote_volume_24h_usdt": 71880860.83,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "INJUSDT",
+      "base": "INJ",
+      "onboard_date": "2022-08-16",
+      "quote_volume_30d_usdt": 2981002214.69,
+      "quote_volume_24h_usdt": 97016569.88,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "AAVEUSDT",
+      "base": "AAVE",
+      "onboard_date": "2020-10-16",
+      "quote_volume_30d_usdt": 2884018755.51,
+      "quote_volume_24h_usdt": 120209842.15,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "QNTUSDT",
+      "base": "QNT",
+      "onboard_date": "2022-10-18",
+      "quote_volume_30d_usdt": 2618816813.58,
+      "quote_volume_24h_usdt": 60792797.45,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "ARBUSDT",
+      "base": "ARB",
+      "onboard_date": "2023-03-23",
+      "quote_volume_30d_usdt": 2515303853.17,
+      "quote_volume_24h_usdt": 106354053.33,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "BCHUSDT",
+      "base": "BCH",
+      "onboard_date": "2019-12-19",
+      "quote_volume_30d_usdt": 2411446768.39,
+      "quote_volume_24h_usdt": 62227935.37,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "XMRUSDT",
+      "base": "XMR",
+      "onboard_date": "2020-02-03",
+      "quote_volume_30d_usdt": 2126018368.23,
+      "quote_volume_24h_usdt": 73759771.77,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "GTCUSDT",
+      "base": "GTC",
+      "onboard_date": "2021-03-15",
+      "quote_volume_30d_usdt": 2070995005.38,
+      "quote_volume_24h_usdt": 6605792.91,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "LTCUSDT",
+      "base": "LTC",
+      "onboard_date": "2020-01-09",
+      "quote_volume_30d_usdt": 1955201065.03,
+      "quote_volume_24h_usdt": 58412729.8,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "TRXUSDT",
+      "base": "TRX",
+      "onboard_date": "2020-01-15",
+      "quote_volume_30d_usdt": 1912841267.61,
+      "quote_volume_24h_usdt": 37265664.61,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "IOSTUSDT",
+      "base": "IOST",
+      "onboard_date": "2020-02-21",
+      "quote_volume_30d_usdt": 1673556626.47,
+      "quote_volume_24h_usdt": 4174393.21,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "DOTUSDT",
+      "base": "DOT",
+      "onboard_date": "2020-08-22",
+      "quote_volume_30d_usdt": 1540385367.4,
+      "quote_volume_24h_usdt": 37310349.86,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "ONEUSDT",
+      "base": "ONE",
+      "onboard_date": "2021-03-17",
+      "quote_volume_30d_usdt": 1472461591.93,
+      "quote_volume_24h_usdt": 212696339.08,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "APTUSDT",
+      "base": "APT",
+      "onboard_date": "2022-10-18",
+      "quote_volume_30d_usdt": 1261890245.51,
+      "quote_volume_24h_usdt": 31144734.13,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "OPUSDT",
+      "base": "OP",
+      "onboard_date": "2022-06-01",
+      "quote_volume_30d_usdt": 1260857353.04,
+      "quote_volume_24h_usdt": 22116712.93,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "XLMUSDT",
+      "base": "XLM",
+      "onboard_date": "2020-01-20",
+      "quote_volume_30d_usdt": 1255820617.17,
+      "quote_volume_24h_usdt": 34811916.66,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "BATUSDT",
+      "base": "BAT",
+      "onboard_date": "2020-02-13",
+      "quote_volume_30d_usdt": 1181279421.72,
+      "quote_volume_24h_usdt": 8991632.85,
+      "klines_30d_returned": 30
+    },
+    {
+      "symbol": "RSRUSDT",
+      "base": "RSR",
+      "onboard_date": "2020-10-19",
+      "quote_volume_30d_usdt": 1175776501.76,
+      "quote_volume_24h_usdt": 13055996.19,
+      "klines_30d_returned": 30
+    }
+  ]
+}
