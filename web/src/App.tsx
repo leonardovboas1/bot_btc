@@ -17,12 +17,12 @@ type Tab = "resumo" | "detalhes" | "trades";
 interface Ui {
   layout: Layout; symbol: string; tfs: string[]; modes: PaneMode[]; strategy: string; fee: string;
   inspector: boolean; tab: Tab; details: boolean; eq: boolean; book: boolean; vp: boolean; syncCross: boolean; syncRange: boolean;
-  candles: "real" | "ha"; source: "real" | "ha"; testerH: number; testerOpen: boolean; testerMax: boolean; testerTab: TTab; capital: number;
+  candles: "real" | "ha"; log: boolean; source: "real" | "ha"; testerH: number; testerOpen: boolean; testerMax: boolean; testerTab: TTab; capital: number;
 }
 const DEF: Ui = {
   layout: 1, symbol: "BTCUSDT", tfs: ["4h", "1h", "1d", "15m"], modes: ["candles", "candles", "candles", "candles"], strategy: "", fee: "",
   inspector: true, tab: "resumo", details: false, eq: false, book: false, vp: false, syncCross: true, syncRange: false,
-  candles: "real", source: "real", testerH: 300, testerOpen: true, testerMax: false, testerTab: "overview", capital: 10000,
+  candles: "real", log: false, source: "real", testerH: 300, testerOpen: true, testerMax: false, testerTab: "overview", capital: 10000,
 };
 const KEY = "btclab.ui.v2";
 const load = (): Ui => {
@@ -118,6 +118,7 @@ export default function App() {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); setPal((v) => !v); return; }
       if ((e.target as HTMLElement).closest("input,select,textarea")) return;
       if (e.key === "Escape") setTool("cursor");
+      if (e.altKey && e.key.toLowerCase() === "l") { e.preventDefault(); setUi((u) => ({ ...u, log: !u.log })); return; }
       if (e.altKey) {
         const m: Record<string, Tool> = { t: "trend", h: "hline", r: "rect", e: "erase" };
         const t = m[e.key.toLowerCase()];
@@ -147,6 +148,7 @@ export default function App() {
     { id: "vtr", group: "Exibir", label: "Lista de negociações (testador)", run: () => set({ testerOpen: true, testerTab: "trades" }) },
     { id: "vov", group: "Exibir", label: "Testador de estratégia: visão geral", run: () => set({ testerOpen: true, testerTab: "overview" }) },
     { id: "van", group: "Exibir", label: "Testador: análise de desempenho", run: () => set({ testerOpen: true, testerTab: "analysis" }) },
+    { id: "vlog", group: "Exibir", label: ui.log ? "Escala linear" : "Escala logarítmica", run: () => set({ log: !ui.log }) },
     { id: "vha", group: "Exibir", label: ui.candles === "ha" ? "Velas normais" : "Velas Heikin Ashi", run: () => set({ candles: ui.candles === "ha" ? "real" : "ha" }) },
     { id: "vhs", group: "Estratégia", label: ui.source === "ha" ? "Sinais em velas normais" : "Sinais em Heikin Ashi", run: () => set({ source: ui.source === "ha" ? "real" : "ha" }) },
   ], [symbols, coming, strategies, sym, ai, ui.symbol, ui.eq, ui.candles, ui.source, ui.syncCross, ui.syncRange, ui.inspector, set, setTf, setMode]);
@@ -196,6 +198,9 @@ export default function App() {
           <button className={ui.candles === "real" ? "on" : ""} onClick={() => set({ candles: "real" })}>Normais</button>
           <button className={ui.candles === "ha" ? "on" : ""} onClick={() => set({ candles: "ha" })}>Heikin Ashi</button>
         </div>
+        <div className="seg" role="group" aria-label="Escala de preço" title="Escala de preço logarítmica (Alt+L)">
+          <button className={ui.log ? "on" : ""} aria-pressed={ui.log} onClick={() => set({ log: !ui.log })}>Log</button>
+        </div>
         <label className="stsel" title="Estratégia">
           <span>Estratégia</span>
           <select value={ui.strategy} onChange={(e) => set({ strategy: e.target.value })}>
@@ -231,7 +236,7 @@ export default function App() {
       <main className={`grid g${ui.layout}`}>
         {panes.map((i) => (
           <Pane key={i} idx={i} symbol={ui.symbol} tf={ui.tfs[i]} tfs={sym?.tfs ?? []} mode={ui.modes[i]} strategy={ui.strategy} fee={ui.fee}
-            active={i === ai && ui.layout > 1} multi={ui.layout > 1} ha={ui.candles === "ha"} source={ui.source} spec={spec} focus={i === ai ? focus : null} showEq={ui.eq} details={ui.details} showBook={ui.book} showVp={ui.vp}
+            active={i === ai && ui.layout > 1} multi={ui.layout > 1} ha={ui.candles === "ha"} log={ui.log} source={ui.source} spec={spec} focus={i === ai ? focus : null} showEq={ui.eq} details={ui.details} showBook={ui.book} showVp={ui.vp}
             hasLiq={!!sym?.has_liq} tool={tool} bus={bus} onActivate={onActivate} onBt={onBt} onErr={onErr}
             onTf={setTf} onMode={setMode} onTool={setTool} onBarClose={onBarClose} />
         ))}

@@ -1,6 +1,6 @@
 import { memo, useEffect, useRef, useState } from "react";
 import {
-  CandlestickSeries, HistogramSeries, LineSeries, ColorType, CrosshairMode, LineStyle, createChart, createSeriesMarkers, createTextWatermark,
+  CandlestickSeries, HistogramSeries, LineSeries, ColorType, CrosshairMode, LineStyle, PriceScaleMode, createChart, createSeriesMarkers, createTextWatermark,
   type IChartApi, type ISeriesApi, type ITextWatermarkPluginApi, type ISeriesMarkersPluginApi, type MouseEventParams, type SeriesMarker, type Time, type UTCTimestamp,
 } from "lightweight-charts";
 import type { Backtest, Bar, Strategy } from "../types";
@@ -39,7 +39,7 @@ const chartOpts = {
 export type PaneMode = "candles" | "liq";
 export interface PaneProps {
   idx: number; symbol: string; tf: string; tfs: string[]; mode: PaneMode; strategy: string; fee: string;
-  active: boolean; multi: boolean; ha: boolean; source: "real" | "ha"; showEq: boolean; details: boolean; showBook: boolean; showVp: boolean; hasLiq: boolean;
+  active: boolean; multi: boolean; ha: boolean; log?: boolean; source: "real" | "ha"; showEq: boolean; details: boolean; showBook: boolean; showVp: boolean; hasLiq: boolean;
   tool: Tool; bus: SyncBus; spec: Strategy | null; focus: { n: number; t0: number; t1: number; seq: number } | null;
   onActivate(i: number): void; onBt(i: number, b: Backtest | null): void; onErr(e: string): void;
   onTf(i: number, tf: string): void; onMode(i: number, m: PaneMode): void; onTool(t: Tool): void;
@@ -704,6 +704,10 @@ function Pane(props: PaneProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focus?.seq]);
   useEffect(() => { if (!frozen.current && bars.current.length) fns.current.show(bars.current, true); }, [props.ha]);
+  // Log / linear price scale (heatmaps and overlays map prices through the series, so they follow it)
+  useEffect(() => {
+    chart.current?.priceScale("right").applyOptions({ mode: props.log ? PriceScaleMode.Logarithmic : PriceScaleMode.Normal });
+  }, [props.log, ready]);
   useEffect(() => { fns.current.refreshLayers(); }, [symbol, tf, showBook, showVp, mode]);
 
   // tool change: drop any half-made drawing
