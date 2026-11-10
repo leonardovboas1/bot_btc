@@ -178,3 +178,6 @@ The 5-minute archive has 601 missing bars in 152 runs (longest gap 10 h 30 min);
 5. **`NaN` is "no signal, no veto".** H5 conditions evaluate to false (H1 unchanged, no standalone entry); H6 does not veto. Open H5 positions are managed by their `hold`/stop rules, which depend only on price, so a gap never freezes a trade.
 6. **Logged, not hidden.** Each daily bar carries `metrics_gap` and `depth_gap` flags; the results report states the number of flagged bars per series inside every WF fold and the holdout. If more than 5 % of a fold's bars are flagged for a series, that fold is reported as degraded for the hypotheses using it.
 7. **Future gaps.** If the archive is later found to have more gaps than stated here, the count is corrected in a further amendment; the rules above do not change.
+
+## Amendment 2 (2026-11-10, before any full-search result was seen)
+Daily (1d) bars cannot reach the plan's minimum of 100 in-sample / 30 per-OOS-fold trades in 40 months. For 1d only, the minimums are 40 in-sample trades and 8 per OOS fold. 1h and 4h keep 100 / 30. S3 Optuna tuning optimises in-sample Sharpe only (OOS folds never enter the objective). Recorded after a 50-config smoke run whose results were not used for any decision.
