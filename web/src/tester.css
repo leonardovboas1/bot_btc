@@ -130,3 +130,7 @@
 .props { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
 .props td:first-child { width: 190px; }
 @media (max-width: 1500px) { .thead .tchip { display: none; } .thead .tcap .tchip { display: inline-flex; } .duo, .props { grid-template-columns: 1fr; } }
+
+.paper .paperst { display: flex; gap: 14px; align-items: center; margin-bottom: 8px; font: 500 11px var(--mono); flex-wrap: wrap; }
+.paper tr { cursor: pointer; }
+.paper tr.sel td { background: #121823; }

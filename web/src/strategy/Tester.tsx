@@ -7,9 +7,10 @@ import { TF_LABEL, TF_SEC, fmtDate, fmtPrice, fmtTime } from "../util";
 import { PERIODS, benchByPeriod, bucket, computeStats, histogram, realizedByPeriod, type Period, type SideStats, type Stats } from "./stats";
 import { BarChart, Donut, Pills, Seg, Stat, kfmt } from "./charts";
 import { reasonPt } from "../chart/strategyDraw";
+import Paper from "./Paper";
 
-export type TTab = "overview" | "analysis" | "summary" | "trades" | "props";
-const TABS: [TTab, string][] = [["overview", "Visão geral"], ["analysis", "Análise de desempenho"], ["summary", "Resumo de desempenho"], ["trades", "Lista de negociações"], ["props", "Propriedades"]];
+export type TTab = "overview" | "analysis" | "summary" | "trades" | "props" | "paper";
+const TABS: [TTab, string][] = [["overview", "Visão geral"], ["analysis", "Análise de desempenho"], ["summary", "Resumo de desempenho"], ["trades", "Lista de negociações"], ["props", "Propriedades"], ["paper", "Paper trading"]];
 const CAPS = [1000, 10000, 60000, 100000, 1000000];
 const UP = "#0ea894", DN = "#f25c54", EQ = "#4c8dff", BH = "#5d6676";
 
@@ -28,6 +29,7 @@ export interface TesterProps {
   bt: Backtest | null; spec: Strategy | null; symbol: string; tf: string; fee: Fee | null; source: "real" | "ha";
   setSource(s: "real" | "ha"): void; tab: TTab; setTab(t: TTab): void; collapsed: boolean; setCollapsed(c: boolean): void;
   capital: number; setCapital(c: number): void; onFocusTrade(n: number, t0: number, t1: number): void; max: boolean; setMax(m: boolean): void;
+  paperSel: string | null; setPaperSel(id: string | null): void;
 }
 
 /** Full OHLCV over the backtest window, for per-trade run-up / drawdown (skipped when too many bars). */
@@ -54,7 +56,7 @@ function Overview({ s, C }: { s: Stats; C: number }) {
   const leg = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const m = createChart(el.current!, {
-      autoSize: true, layout: { background: { type: ColorType.Solid, color: "transparent" }, textColor: "#7c8596", fontSize: 10.5, fontFamily: "'JetBrains Mono Variable', monospace", attributionLogo: false, panes: { separatorColor: "#1c222d" } },
+      autoSize: true, layout: { background: { type: ColorType.Solid, color: "transparent" }, textColor: "#7c8596", fontSize: 10.5, fontFamily: "-apple-system, BlinkMacSystemFont, 'Trebuchet MS', Roboto, Ubuntu, sans-serif", attributionLogo: false, panes: { separatorColor: "#1c222d" } },
       grid: { vertLines: { visible: false }, horzLines: { color: "#11161e" } }, crosshair: { mode: CrosshairMode.Magnet },
       timeScale: { borderColor: "#1c222d", rightOffset: 2 }, rightPriceScale: { borderColor: "#1c222d" }, localization: { locale: "pt-BR" },
       handleScroll: false, handleScale: false,
@@ -410,7 +412,7 @@ function Tester(p: TesterProps) {
       </header>
       {!p.collapsed && (
         <div className="tbody">
-          {!p.bt || !s ? <div className="tempty">{p.bt === null ? "Carregando backtest…" : "Sem dados"}</div> : (<>
+          {p.tab === "paper" ? <Paper sel={p.paperSel} setSel={p.setPaperSel} /> : !p.bt || !s ? <div className="tempty">{p.bt === null ? "Carregando backtest…" : "Sem dados"}</div> : (<>
             {p.tab === "overview" && <Overview s={s} C={p.capital} />}
             {p.tab === "analysis" && <Analysis s={s} fee={p.fee} />}
             {p.tab === "summary" && <Summary s={s} />}

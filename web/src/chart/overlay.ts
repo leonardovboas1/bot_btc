@@ -4,6 +4,7 @@ import type {
 import type { CanvasRenderingTarget2D } from "fancy-canvas";
 import type { Drawing, DPoint } from "./drawings";
 import type { DrawTrade } from "./strategyDraw";
+import type { PaperFill } from "../paperApi";
 
 export interface BandPt { time: number; hi: number; lo: number; up: boolean }
 
@@ -33,7 +34,7 @@ class HoldoutRenderer implements IPrimitivePaneRenderer {
       ctx.setLineDash([4, 3]);
       ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
       ctx.setLineDash([]);
-      ctx.font = "600 9.5px 'JetBrains Mono Variable', monospace";
+      ctx.font = "600 9.5px -apple-system, BlinkMacSystemFont, 'Trebuchet MS', Roboto, Ubuntu, sans-serif";
       ctx.textBaseline = "bottom";
       if (W - x > 70) { ctx.fillStyle = C.holdText; ctx.fillText("HOLDOUT ▸", x + 6, H - 6); }
       if (x > 80) { ctx.fillStyle = C.isText; ctx.textAlign = "right"; ctx.fillText("◂ IN-SAMPLE", x - 6, H - 6); }
@@ -96,6 +97,29 @@ class TradeRenderer implements IPrimitivePaneRenderer {
   }
 }
 
+/** Forward paper fills: hollow rings (entries) and hollow diamonds (exits), green = buy, red = sell. */
+class PaperRenderer implements IPrimitivePaneRenderer {
+  constructor(private o: OverlayPrimitive) {}
+  draw(target: CanvasRenderingTarget2D) {
+    const o = this.o, s = o.series;
+    if (!s || !o.xOf || !o.paper.length) return;
+    target.useMediaCoordinateSpace(({ context: ctx, mediaSize }) => {
+      ctx.save();
+      ctx.lineWidth = 2;
+      for (const f of o.paper) {
+        const x = o.xOf!(f.time), y = s.priceToCoordinate(f.price);
+        if (x == null || y == null || x < -10 || x > mediaSize.width + 10) continue;
+        ctx.strokeStyle = f.buy ? "#3fe0c5" : "#ff7b72";
+        ctx.beginPath();
+        if (f.entry) ctx.arc(x, y, 6, 0, Math.PI * 2);
+        else { ctx.moveTo(x, y - 7); ctx.lineTo(x + 7, y); ctx.lineTo(x, y + 7); ctx.lineTo(x - 7, y); ctx.closePath(); }
+        ctx.stroke();
+      }
+      ctx.restore();
+    });
+  }
+}
+
 class DrawRenderer implements IPrimitivePaneRenderer {
   constructor(private o: OverlayPrimitive) {}
   draw(target: CanvasRenderingTarget2D) {
@@ -120,7 +144,7 @@ class DrawRenderer implements IPrimitivePaneRenderer {
           ctx.moveTo(g.x1, g.y1); ctx.lineTo(g.x2, g.y2); ctx.stroke();
         }
         if (d.kind === "hline") {
-          ctx.font = "600 10px 'JetBrains Mono Variable', monospace";
+          ctx.font = "600 10px -apple-system, BlinkMacSystemFont, 'Trebuchet MS', Roboto, Ubuntu, sans-serif";
           const txt = d.a.p.toLocaleString("pt-BR", { maximumFractionDigits: 2 });
           const w = ctx.measureText(txt).width + 8;
           ctx.fillStyle = sel ? C.drawSel : C.draw;
@@ -158,8 +182,9 @@ export class OverlayPrimitive implements ISeriesPrimitive<Time> {
   bands: BandPt[] = [];
   trades: DrawTrade[] = [];
   focus: number | null = null;
+  paper: PaperFill[] = [];
   private views = [new V(new HoldoutRenderer(this), "bottom"), new V(new BandRenderer(this), "bottom"),
-    new V(new TradeRenderer(this), "top"), new V(new DrawRenderer(this), "top")];
+    new V(new TradeRenderer(this), "top"), new V(new PaperRenderer(this), "top"), new V(new DrawRenderer(this), "top")];
   attached(p: SeriesAttachedParameter<Time>) { this.series = p.series as ISeriesApi<"Candlestick">; this.req = p.requestUpdate; }
   detached() { this.series = null; this.req = null; }
   paneViews() { return this.views; }

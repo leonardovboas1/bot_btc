@@ -515,3 +515,161 @@ def hl_stops(coin: str = "BTC", bins: int = 240):
     """Ordens trigger (stop/TP) abertas na Hyperliquid, agregadas por preco."""
     m, c = _hl_coin(coin)
     return _num(m.stops(c, bins))
+
+
+# ------------------------------------------------------------------ forward paper trading
+def _paper_db():
+    import sqlite3
+    from pathlib import Path
+    p = Path(loaders.ROOT) / "data" / "paper" / "paper.sqlite"
+    if not p.exists():
+        return None
+    con = sqlite3.connect(f"file:{p.as_posix()}?mode=ro", uri=True, timeout=10)
+    con.row_factory = sqlite3.Row
+    return con
+
+
+def _paper_rows(con, sql, args=()):
+    return [dict(r) for r in con.execute(sql, args).fetchall()]
+
+
+@app.get("/paper/strategies")
+def paper_strategies():
+    con = _paper_db()
+    if con is None:
+        return []
+    try:
+        out = []
+        for s in _paper_rows(con, "SELECT id,symbol,tf,source,spec,start_ts FROM strategies ORDER BY rowid"):
+            sid = s["id"]
+            eq = _paper_rows(con, "SELECT bar_time,equity,price FROM equity WHERE strategy=? ORDER BY bar_time",
+                             (sid,))
+            pos = con.execute("SELECT position,qty,entry_px,unrealized,bar_time FROM positions WHERE strategy=? "
+                              "ORDER BY bar_time DESC LIMIT 1", (sid,)).fetchone()
+            sig = con.execute("SELECT bar_time,bar_close_time,long_sig,short_sig,exit_long,exit_short FROM signals "
+                              "WHERE strategy=? ORDER BY bar_time DESC LIMIT 1", (sid,)).fetchone()
+            n_tr = con.execute("SELECT COUNT(*) FROM fills WHERE strategy=? AND leg='exit'", (sid,)).fetchone()[0]
+            ent = con.execute("SELECT COUNT(*) FROM fills WHERE strategy=? AND leg='entry'", (sid,)).fetchone()[0]
+            e0, e1 = (eq[0], eq[-1]) if eq else (None, None)
+            ret = bh = None
+            if e0:
+                ret = e1["equity"] / e0["equity"] - 1
+                bh = e1["price"] / e0["price"] - 1
+            spec = json.loads(s["spec"])
+            out.append({
+                "id": sid, "name": spec.get("name"), "symbol": s["symbol"], "tf": s["tf"],
+                "source": s["source"], "start_ts": s["start_ts"],
+                "first_bar": e0["bar_time"] if e0 else None,
+                "position": {1: "LONG", -1: "SHORT"}.get(pos["position"] if pos else 0, "FLAT"),
+                "qty": pos["qty"] if pos else 0.0, "entry_px": pos["entry_px"] if pos else 0.0,
+                "unrealized": pos["unrealized"] if pos else 0.0,
+                "n_trades": n_tr, "n_entries": ent,
+                "equity": e1["equity"] if e1 else None, "equity_start": e0["equity"] if e0 else None,
+                "price": e1["price"] if e1 else None,
+                "return": ret, "bh_return": bh,
+                "last_signal_time": sig["bar_time"] if sig else None,
+                "last_signal_close_time": sig["bar_close_time"] if sig else None,
+                "last_signal": ({"long": sig["long_sig"], "short": sig["short_sig"],
+                                 "exit_long": sig["exit_long"], "exit_short": sig["exit_short"]} if sig else None),
+            })
+        return _num(out)
+    finally:
+        con.close()
+
+
+def _paper_known(con, strategy: str):
+    if not con.execute("SELECT 1 FROM strategies WHERE id=?", (strategy,)).fetchone():
+        raise HTTPException(404, f"unknown paper strategy {strategy!r}")
+
+
+@app.get("/paper/ledger")
+def paper_ledger(strategy: str, limit: int = 500):
+    """Append-only ledger of one strategy: signals (last ``limit``), orders, fills, funding, positions
+    (last ``limit``), plus chart markers for the fills and closed/open trades."""
+    con = _paper_db()
+    if con is None:
+        raise HTTPException(404, "paper ledger not created yet")
+    try:
+        _paper_known(con, strategy)
+
+        def q(t, extra=""):
+            return _paper_rows(con, f"SELECT * FROM {t} WHERE strategy=? {extra}", (strategy,))
+
+        lim = f"ORDER BY bar_time DESC LIMIT {int(limit)}"
+        fills = q("fills", "ORDER BY bar_time, leg DESC")
+        markers = []
+        for f in fills:
+            long_ = f["position_side"] == 1
+            buy = f["side"] == "buy"
+            markers.append({"time": f["bar_time"], "position": "belowBar" if buy else "aboveBar",
+                            "color": GREEN if buy else RED, "shape": "arrowUp" if buy else "arrowDown",
+                            "text": ("L" if long_ else "S") + (" in" if f["leg"] == "entry" else " out"),
+                            "price": f["price"]})
+        by = {}
+        for f in fills:
+            by.setdefault(f["trade_no"], {})[f["leg"]] = f
+        trades = []
+        for k, d in sorted(by.items()):
+            e, x = d.get("entry"), d.get("exit")
+            side = e["position_side"]
+            r = {"trade_no": k, "side": "LONG" if side == 1 else "SHORT", "entry_time": e["bar_time"],
+                 "entry_px": e["price"], "qty": e["qty"], "exit_time": x["bar_time"] if x else None,
+                 "exit_px": x["price"] if x else None, "exit_reason": x["reason"] if x else None}
+            if x:
+                fund = con.execute("SELECT COALESCE(SUM(amount),0) FROM funding WHERE strategy=? AND bar_time>=? "
+                                   "AND bar_time<=?", (strategy, e["bar_time"], x["bar_time"])).fetchone()[0]
+                pnl = (x["price"] - e["price"]) * e["qty"] * side - e["fee"] - x["fee"] - fund
+                r.update(pnl=pnl, pnl_pct=pnl / e["notional"])
+            trades.append(r)
+        return _num({
+            "strategy": strategy,
+            "signals": list(reversed(q("signals", lim))), "orders": q("orders", "ORDER BY fill_bar_time"),
+            "fills": fills, "funding": q("funding", "ORDER BY bar_time"),
+            "positions": list(reversed(q("positions", lim))), "trades": trades, "markers": markers})
+    finally:
+        con.close()
+
+
+@app.get("/paper/equity")
+def paper_equity(strategy: str):
+    """Equity at every processed bar close, with buy & hold of the same symbol from the same first bar."""
+    con = _paper_db()
+    if con is None:
+        raise HTTPException(404, "paper ledger not created yet")
+    try:
+        _paper_known(con, strategy)
+        rows = _paper_rows(con, "SELECT bar_time,equity,price,position FROM equity WHERE strategy=? "
+                                "ORDER BY bar_time", (strategy,))
+        if not rows:
+            return {"strategy": strategy, "points": [], "start": None}
+        e0, p0 = rows[0]["equity"], rows[0]["price"]
+        pts = [{"time": r["bar_time"], "equity": r["equity"], "buy_hold": e0 * r["price"] / p0,
+                "price": r["price"], "position": r["position"]} for r in rows]
+        return _num({"strategy": strategy, "start": rows[0]["bar_time"], "points": pts})
+    finally:
+        con.close()
+
+
+@app.get("/paper/status")
+def paper_status():
+    """Last service run, lag (seconds since it) and recent errors."""
+    import time as _t
+    empty = {"running": False, "last_run": None, "lag_s": None, "errors": [], "last_bars": {}}
+    con = _paper_db()
+    if con is None:
+        return empty
+    try:
+        r = con.execute("SELECT ts,started_at,duration_s,n_strategies,n_new_rows,errors,last_bars FROM runs "
+                        "ORDER BY ts DESC LIMIT 1").fetchone()
+        if not r:
+            return empty
+        errs = []
+        for e in con.execute("SELECT ts,errors FROM runs WHERE errors != '[]' ORDER BY ts DESC LIMIT 20"):
+            errs += [{"time": e["ts"], "error": m} for m in json.loads(e["errors"])]
+        lag = _t.time() - r["ts"]
+        return _num({"running": lag < 180, "last_run": r["ts"], "last_run_iso": r["started_at"],
+                     "lag_s": lag, "duration_s": r["duration_s"], "n_strategies": r["n_strategies"],
+                     "n_new_rows": r["n_new_rows"], "current_errors": json.loads(r["errors"]),
+                     "errors": errs[:20], "last_bars": json.loads(r["last_bars"])})
+    finally:
+        con.close()

@@ -6,8 +6,8 @@
   --acc: #ffb020; --acc-d: rgba(255, 176, 32, 0.14);
   --up: #0ea894; --dn: #f25c54; --up-d: rgba(14, 168, 148, 0.14); --dn-d: rgba(242, 92, 84, 0.14);
   --eq: #4c8dff; --ho: #8b7cf6;
-  --sans: "Inter Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "JetBrains Mono Variable", ui-monospace, "Cascadia Mono", monospace;
+  --sans: -apple-system, BlinkMacSystemFont, "Trebuchet MS", Roboto, Ubuntu, sans-serif;
+  --mono: -apple-system, BlinkMacSystemFont, "Trebuchet MS", Roboto, Ubuntu, sans-serif;
   --top: 46px; --stat: 24px; --rail: 44px; --insp: 304px;
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
   color-scheme: dark;
@@ -15,7 +15,7 @@
 @media (max-width: 1500px) { :root { --insp: 268px; } }
 * { box-sizing: border-box; }
 html, body, #root { height: 100%; margin: 0; overflow: hidden; }
-body { background: var(--bg0); color: var(--t1); font: 12px/1.35 var(--sans); -webkit-font-smoothing: antialiased; font-feature-settings: "cv11", "ss01"; }
+body { background: var(--bg0); color: var(--t1); font: 12px/1.35 var(--sans); -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; }
 button, select, input { font: inherit; color: inherit; }
 button { cursor: pointer; background: none; border: 0; padding: 0; }
 button:disabled { cursor: default; opacity: 0.35; }
@@ -276,3 +276,9 @@ select option { background: var(--bg2); }
 .sigstate span { white-space: nowrap; }
 .lag { font: 500 9.5px var(--mono); color: var(--t3); margin-left: -4px; min-width: 34px; }
 .lag.slow { color: var(--acc); }
+
+/* TradingView-style scale buttons in the bottom-right corner (below the price axis values) */
+.pscale { position: absolute; right: 0; bottom: 0; height: 26px; min-width: 64px; display: flex; align-items: center; justify-content: center; gap: 2px; padding: 0 4px; background: var(--bg0); z-index: 6; }
+.pscale button { height: 20px; padding: 0 5px; border-radius: 3px; font: 500 12px var(--sans); color: #b2b5be; letter-spacing: 0; }
+.pscale button:hover { background: #2a2e39; color: #fff; }
+.pscale button.on { color: #2962ff; }

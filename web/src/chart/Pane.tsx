@@ -10,6 +10,7 @@ import { cachedBars, getBacktest, getBook, getOhlcv, getRecent, getVp, prefetchN
 import { barOpen, live } from "../live";
 import { ALL_TFS, TF_LABEL, TF_SEC, decimals, fmtDate, fmtPct, fmtPrice, fmtVol, isAbort } from "../util";
 import { OverlayPrimitive } from "./overlay";
+import type { PaperFill } from "../paperApi";
 import { drawings, newId, type Drawing, type Tool } from "./drawings";
 import type { SyncBus } from "./sync";
 import LiqMode, { type LiqHost } from "../liq/LiqControls";
@@ -21,7 +22,7 @@ export const COL = { up: "#0ea894", dn: "#f25c54", eq: "#4c8dff", bh: "#5d6676",
 const chartOpts = {
   layout: {
     background: { type: ColorType.Solid, color: COL.bg }, textColor: "#7c8596", fontSize: 11,
-    fontFamily: "'JetBrains Mono Variable', ui-monospace, monospace", attributionLogo: false,
+    fontFamily: "-apple-system, BlinkMacSystemFont, 'Trebuchet MS', Roboto, Ubuntu, sans-serif", attributionLogo: false,
     panes: { separatorColor: COL.line, separatorHoverColor: "rgba(255,176,32,0.25)", enableResize: true },
   },
   grid: { vertLines: { visible: false }, horzLines: { visible: false } },  // pure black, no grid (also avoids black lines cutting the heatmap)
@@ -40,9 +41,9 @@ export type PaneMode = "candles" | "liq";
 export interface PaneProps {
   idx: number; symbol: string; tf: string; tfs: string[]; mode: PaneMode; strategy: string; fee: string;
   active: boolean; multi: boolean; ha: boolean; log?: boolean; source: "real" | "ha"; showEq: boolean; details: boolean; showBook: boolean; showVp: boolean; hasLiq: boolean;
-  tool: Tool; bus: SyncBus; spec: Strategy | null; focus: { n: number; t0: number; t1: number; seq: number } | null;
+  tool: Tool; bus: SyncBus; spec: Strategy | null; paper: PaperFill[]; focus: { n: number; t0: number; t1: number; seq: number } | null;
   onActivate(i: number): void; onBt(i: number, b: Backtest | null): void; onErr(e: string): void;
-  onTf(i: number, tf: string): void; onMode(i: number, m: PaneMode): void; onTool(t: Tool): void;
+  onTf(i: number, tf: string): void; onMode(i: number, m: PaneMode): void; onLog?(): void; onTool(t: Tool): void;
   onBarClose(symbol: string, tf: string): void;
 }
 
@@ -551,8 +552,8 @@ function Pane(props: PaneProps) {
     setSelected(null);
     setLegend(null); setLoading(true);
     wm.current?.applyOptions({ lines: [
-      { text: symbol.replace("USDT", ""), color: "rgba(230,233,239,0.035)", fontSize: 120, fontStyle: "800", fontFamily: "Inter Variable, sans-serif", lineHeight: 120 },
-      { text: `${TF_LABEL[tf]} · USDT PERP`, color: "rgba(230,233,239,0.05)", fontSize: 16, fontStyle: "600", fontFamily: "JetBrains Mono Variable, monospace", lineHeight: 24 },
+      { text: symbol.replace("USDT", ""), color: "rgba(230,233,239,0.035)", fontSize: 120, fontStyle: "800", fontFamily: "-apple-system, BlinkMacSystemFont, 'Trebuchet MS', Roboto, Ubuntu, sans-serif", lineHeight: 120 },
+      { text: `${TF_LABEL[tf]} · USDT PERP`, color: "rgba(230,233,239,0.05)", fontSize: 16, fontStyle: "600", fontFamily: "-apple-system, BlinkMacSystemFont, 'Trebuchet MS', Roboto, Ubuntu, sans-serif", lineHeight: 24 },
     ] });
     // Instant paint from the in-memory LRU (warm switch), then refresh from the API (last 5000 bars + live tail).
     const tStart = performance.now();
@@ -705,6 +706,7 @@ function Pane(props: PaneProps) {
   }, [focus?.seq]);
   useEffect(() => { if (!frozen.current && bars.current.length) fns.current.show(bars.current, true); }, [props.ha]);
   // Log / linear price scale (heatmaps and overlays map prices through the series, so they follow it)
+  useEffect(() => { if (ovl.current) { ovl.current.paper = props.paper; ovl.current.update(); } }, [props.paper, ready]);
   useEffect(() => {
     chart.current?.priceScale("right").applyOptions({ mode: props.log ? PriceScaleMode.Logarithmic : PriceScaleMode.Normal });
   }, [props.log, ready]);
@@ -776,6 +778,10 @@ function Pane(props: PaneProps) {
       </div>
       <div className="pbody">
         <div className="pchart" ref={el} />
+        <div className="pscale" title="Escala de preço (como no TradingView)">
+          <button className={props.log ? "on" : ""} aria-pressed={!!props.log} title="Escala logarítmica (Alt+L)" onClick={(e) => { e.stopPropagation(); props.onLog?.(); }}>log</button>
+          <button title="Auto-ajustar a escala de preço" onClick={(e) => { e.stopPropagation(); chart.current?.priceScale("right").applyOptions({ autoScale: true }); }}>auto</button>
+        </div>
         <div className="indleg" ref={indLeg} />
         <div className="ttip" ref={tip} />
         {eqTop != null && bt.current && (

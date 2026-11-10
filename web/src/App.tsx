@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { COMING, FALLBACK_SYMBOLS, getFees, getSignal, getStrategies, getSymbols, type Fee } from "./api";
 import type { Backtest, Signal, Strategy, SymbolInfo } from "./types";
+import { getPaperFills, type PaperFill } from "./paperApi";
 import Pane, { type PaneMode } from "./chart/Pane";
 import { SyncBus } from "./chart/sync";
 import { drawings, type Tool } from "./chart/drawings";
@@ -53,6 +54,20 @@ export default function App() {
   const [apiOk, setApiOk] = useState<boolean | null>(null);
   const [tool, setTool] = useState<Tool>("cursor");
   const [pal, setPal] = useState(false);
+  // forward paper trading: selected strategy id and its fills (drawn as hollow markers on the chart)
+  const [paperSel, setPaperSel] = useState<string | null>(null);
+  const [paperRaw, setPaperRaw] = useState<{ id: string; fills: PaperFill[] } | null>(null);
+  useEffect(() => {
+    setPaperRaw(null);
+    if (!paperSel) return;
+    let dead = false;
+    const ac = new AbortController();
+    const load = () => getPaperFills(paperSel, ac.signal).then((fills) => { if (!dead) setPaperRaw({ id: paperSel, fills }); }).catch(() => {});
+    load();
+    const t = setInterval(load, 30000);
+    return () => { dead = true; ac.abort(); clearInterval(t); };
+  }, [paperSel]);
+  const paperFills = useMemo(() => (paperRaw && paperSel?.includes(`-${ui.symbol}-`) ? paperRaw.fills : []), [paperRaw, paperSel, ui.symbol]);
   const [ticks, setTicks] = useState<Map<string, Tick>>(new Map());
   const [ws, setWs] = useState<LiveStatus>(live.status);
   const [lag, setLag] = useState<number | null>(null);
@@ -111,6 +126,7 @@ export default function App() {
   const onBt = useCallback((i: number, b: Backtest | null) => setBts((x) => ({ ...x, [i]: b })), []);
   const onErr = useCallback((e: string) => setErr(e), []);
   const onActivate = useCallback((i: number) => setActive(i), []);
+  const toggleLog = useCallback(() => setUi((u) => ({ ...u, log: !u.log })), []);
 
   // keyboard: Ctrl+K palette, Alt+letter tools, Esc cursor
   useEffect(() => {
@@ -198,9 +214,6 @@ export default function App() {
           <button className={ui.candles === "real" ? "on" : ""} onClick={() => set({ candles: "real" })}>Normais</button>
           <button className={ui.candles === "ha" ? "on" : ""} onClick={() => set({ candles: "ha" })}>Heikin Ashi</button>
         </div>
-        <div className="seg" role="group" aria-label="Escala de preço" title="Escala de preço logarítmica (Alt+L)">
-          <button className={ui.log ? "on" : ""} aria-pressed={ui.log} onClick={() => set({ log: !ui.log })}>Log</button>
-        </div>
         <label className="stsel" title="Estratégia">
           <span>Estratégia</span>
           <select value={ui.strategy} onChange={(e) => set({ strategy: e.target.value })}>
@@ -236,9 +249,9 @@ export default function App() {
       <main className={`grid g${ui.layout}`}>
         {panes.map((i) => (
           <Pane key={i} idx={i} symbol={ui.symbol} tf={ui.tfs[i]} tfs={sym?.tfs ?? []} mode={ui.modes[i]} strategy={ui.strategy} fee={ui.fee}
-            active={i === ai && ui.layout > 1} multi={ui.layout > 1} ha={ui.candles === "ha"} log={ui.log} source={ui.source} spec={spec} focus={i === ai ? focus : null} showEq={ui.eq} details={ui.details} showBook={ui.book} showVp={ui.vp}
+            active={i === ai && ui.layout > 1} multi={ui.layout > 1} ha={ui.candles === "ha"} log={ui.log} source={ui.source} spec={spec} focus={i === ai ? focus : null} paper={paperFills}showEq={ui.eq} details={ui.details} showBook={ui.book} showVp={ui.vp}
             hasLiq={!!sym?.has_liq} tool={tool} bus={bus} onActivate={onActivate} onBt={onBt} onErr={onErr}
-            onTf={setTf} onMode={setMode} onTool={setTool} onBarClose={onBarClose} />
+            onTf={setTf} onMode={setMode} onLog={toggleLog} onTool={setTool} onBarClose={onBarClose} />
         ))}
       </main>
 
@@ -246,7 +259,8 @@ export default function App() {
         {ui.testerOpen && <div className="tdrag" onPointerDown={startDrag} title="Arraste para redimensionar" />}
         <Tester bt={bt} spec={spec} symbol={ui.symbol} tf={activeTf} fee={feeObj} source={ui.source} setSource={setSource}
           tab={ui.testerTab} setTab={setTesterTab} collapsed={!ui.testerOpen} setCollapsed={setTesterOpen}
-          capital={ui.capital} setCapital={setCapital} onFocusTrade={onFocusTrade} max={ui.testerMax} setMax={setTesterMax} />
+          capital={ui.capital} setCapital={setCapital} onFocusTrade={onFocusTrade} max={ui.testerMax} setMax={setTesterMax}
+          paperSel={paperSel} setPaperSel={setPaperSel} />
       </div>
 
       {ui.inspector && (
