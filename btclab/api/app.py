@@ -418,8 +418,8 @@ def heatmap_book(tf: str = "1h", start: Optional[str] = None, end: Optional[str]
 
 @app.get("/heatmap/liq")
 def heatmap_liq(symbol: str = "BTCUSDT", range: str = "1w", end: Optional[str] = None,
-                venues: str = "binance"):
-    """Coinglass-style liquidation map (modelo OI-delta, consumido ao toque). Ver btclab/liquidity/liq_map.py."""
+                venues: str = "binance", calibrated: bool = True, mode: Optional[str] = None):
+    """Coinglass-style liquidation map (modelo OI bruto, consumido ao toque; calibrated=true aplica o ajuste Gate). Ver btclab/liquidity/liq_map.py."""
     from btclab.liquidity import liq_map
     symbol = _sym(symbol)
     if range not in liq_map.RANGES:
@@ -433,7 +433,8 @@ def heatmap_liq(symbol: str = "BTCUSDT", range: str = "1w", end: Optional[str] =
             bucket = int(end_ts.timestamp())
         else:
             bucket = int(pd.Timestamp.now("UTC").floor("5min").timestamp())  # live: refresh every 5 min
-        return _liq_cached(symbol, range, bucket if end_ts is not None else None, bucket, vs, end_ts, res)
+        mode = mode or ("exposure" if calibrated else "raw")
+        return _liq_cached(symbol, range, bucket if end_ts is not None else None, bucket, vs, end_ts, res, mode)
     except (FileNotFoundError, ValueError, KeyError) as ex:
         raise HTTPException(400, str(ex))
 
@@ -441,12 +442,12 @@ def heatmap_liq(symbol: str = "BTCUSDT", range: str = "1w", end: Optional[str] =
 _LIQ_CACHE: dict = {}
 
 
-def _liq_cached(symbol, range_, end_key, bucket, vs, end_ts, res):
-    key = (symbol, range_, bucket, vs)
+def _liq_cached(symbol, range_, end_key, bucket, vs, end_ts, res, mode="exposure"):
+    key = (symbol, range_, bucket, vs, mode)
     hit = _LIQ_CACHE.get(key)
     if hit is None:
         from btclab.liquidity import liq_map
-        hit = liq_map.compute(symbol, range_, end_ts, vs)
+        hit = liq_map.compute(symbol, range_, end_ts, vs, mode=mode)
         for k in [k for k in _LIQ_CACHE if len(_LIQ_CACHE) > 24 and k != key][:8]:
             _LIQ_CACHE.pop(k, None)
         _LIQ_CACHE[key] = hit

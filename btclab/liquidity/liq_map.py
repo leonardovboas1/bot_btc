@@ -16,6 +16,9 @@ import numpy as np
 import pandas as pd
 import requests
 
+import json
+from pathlib import Path
+
 from btclab.data import loaders
 from .liq_model import DEFAULT_WEIGHTS
 
@@ -23,14 +26,30 @@ RANGES = {  # name: (window, resolution)
     "1d": ("1D", "5min"), "3d": ("3D", "5min"), "1w": ("7D", "15min"), "2w": ("14D", "15min"),
     "1m": ("30D", "1h"), "3m": ("90D", "1h"), "6m": ("180D", "1h"),
 }
-VENUES = ("binance", "bybit", "gate")
+VENUES = ("binance", "bybit", "gate", "okx")
 N_ROWS = 280
 MMR = 0.004
 HALF_LIFE_H = 24 * 30        # slow time-based decay of stale estimates
 MAX_EVENTS = 600
 FAPI = "https://fapi.binance.com"
 BYBIT = "https://api.bybit.com"
+OKX = "https://www.okx.com"
 TTL = 300.0
+MIN_WARM = pd.Timedelta("30D")   # warm-up = max(30 d, 2 x window)
+CALIB_PATH = Path(__file__).with_name("liq_calib.json")
+
+
+def load_calib() -> dict:
+    """Fitted parameters (research/calibrate_liq.py). Missing file -> legacy net-dOI behavior."""
+    try:
+        c = json.loads(CALIB_PATH.read_text(encoding="utf-8"))
+        c["weights"] = {float(k): float(v) for k, v in c["weights"].items()}
+        return c
+    except Exception:
+        return dict(kappa=0.0, half_life_h=HALF_LIFE_H, scale=1.0, weights=dict(DEFAULT_WEIGHTS))
+
+
+CALIB = load_calib()
 
 _rest_cache: dict = {}
 _rest_lock = threading.Lock()
@@ -150,9 +169,11 @@ def _binance_5m(symbol: str, t0, t1, now, notes: list):
 
 def _to_res(k5: pd.DataFrame, oi5: pd.Series, res: str):
     if not len(k5):
-        return pd.DataFrame(columns=["open", "high", "low", "close", "volume"]), pd.Series(dtype=float)
+        return pd.DataFrame(columns=["open", "high", "low", "close", "volume", "turn"]), pd.Series(dtype=float)
+    k5 = k5.assign(turn=k5["volume"] * k5["close"])   # taker-turnover proxy, USD per 5m bar
     bars = k5.resample(res, label="left", closed="left").agg(
-        {"open": "first", "high": "max", "low": "min", "close": "last", "volume": "sum"}).dropna(subset=["close"])
+        {"open": "first", "high": "max", "low": "min", "close": "last", "volume": "sum",
+         "turn": "sum"}).dropna(subset=["close"])
     lim = max(2, int(pd.Timedelta("12h") / pd.Timedelta(res)))
     if len(oi5):
         o = oi5.resample(res, label="left", closed="left").last().ffill(limit=lim).reindex(bars.index)
@@ -204,12 +225,45 @@ def _gate_oi(symbol: str) -> pd.Series:
     return (d["open_interest_usd"] / d["mark_price"].where(d["mark_price"] > 0)).rename("oi")
 
 
+def _okx_oi(symbol: str, t0, t1, pages: int = 12) -> pd.Series:
+    """OKX swap OI (coin units, oiCcy) hourly from the public rubik endpoint (~100 h/page, capped)."""
+    inst = symbol[:-4] + "-USDT-SWAP"
+    rows, end = [], _ms(t1)
+    for _ in range(pages):
+        d = _get(OKX + "/api/v5/rubik/stat/contracts/open-interest-history",
+                 dict(instId=inst, period="1H", end=end, limit=100))
+        lst = d.get("data") or []
+        if not lst:
+            break
+        rows += lst
+        end = int(lst[-1][0]) - 1
+        if end < _ms(t0) or len(lst) < 100:
+            break
+    if not rows:
+        raise ValueError("OKX sem OI")
+    s = pd.Series([float(x[2]) for x in rows], index=pd.to_datetime([int(x[0]) for x in rows], unit="ms", utc=True))
+    return s[~s.index.duplicated()].sort_index().rename("oi")
+
+
+def venue_turnover(turn_b, oi_v, oi_b, dt_s: float) -> pd.Series:
+    """Venue taker-turnover proxy = Binance turnover x (venue OI / Binance OI), ratio smoothed over ~1 day.
+    Used for venues without their own volume feed (gate, okx); the fitted kappa is defined on this scale."""
+    r = (oi_v / oi_b.where(oi_b > 0)).replace([np.inf, -np.inf], np.nan)
+    w = max(1, int(86400 / dt_s))
+    r = r.rolling(w, min_periods=1).mean().ffill().clip(0, 3).fillna(0.0)
+    return turn_b * r
+
+
 # ------------------------------------------------------------------ model
 def liq_columns(close, high, low, oi, dt_s: float, edges: tuple, start: int,
-                weights=None, mmr=MMR, long_share=0.5):
+                weights=None, mmr=MMR, long_share=0.5, turnover=None, kappa=0.0,
+                half_life_h=None, scale=1.0):
     """Causal state machine over bars. Returns (grid float32 [T-start, P] long+short USD,
     final long, final short, events [(bar_idx, side, usd, price)], bin centers).
-    edges=(ln lo, ln step, P): bin j covers ln p in [lo + j*step, lo + (j+1)*step)."""
+    edges=(ln lo, ln step, P): bin j covers ln p in [lo + j*step, lo + (j+1)*step).
+    Gross-opening estimate (optional, defaults reproduce the legacy net-dOI model):
+    new notional per bar = scale * (max(dOI,0)*close + kappa*turnover), turnover = taker USD volume per bar.
+    half_life_h overrides HALF_LIFE_H."""
     weights = weights or DEFAULT_WEIGHTS
     close, high, low, oi = (np.asarray(a, float) for a in (close, high, low, oi))
     T = len(close)
@@ -227,7 +281,8 @@ def liq_columns(close, high, low, oi, dt_s: float, edges: tuple, start: int,
         isr = np.nan_to_num(np.floor((np.log(np.maximum(ps, 1e-9)) - lo) / dl), nan=-1).astype(np.int64)
     li = np.nan_to_num(li, nan=0).astype(np.int64)
     hi = np.nan_to_num(hi, nan=-1).astype(np.int64)
-    base_decay = 0.5 ** (dt_s / 3600.0 / HALF_LIFE_H)
+    base_decay = 0.5 ** (dt_s / 3600.0 / (half_life_h or HALF_LIFE_H))
+    to = None if turnover is None or not kappa else np.nan_to_num(np.asarray(turnover, float))
     L = np.zeros(P)
     S = np.zeros(P)
     grid = np.zeros((max(T - start, 0), P), np.float32)
@@ -254,8 +309,13 @@ def liq_columns(close, high, low, oi, dt_s: float, edges: tuple, start: int,
                 events.append((t, "short", usd, float((seg * centers[:b]).sum() / usd)))
             S[:b] = 0.0
         if np.isfinite(oi[t]):
-            if np.isfinite(prev) and oi[t] > prev and np.isfinite(close[t]):
-                notional = (oi[t] - prev) * close[t]
+            notional = 0.0
+            if np.isfinite(prev) and np.isfinite(close[t]):
+                notional = max(oi[t] - prev, 0.0) * close[t]
+                if to is not None:
+                    notional += kappa * to[t]
+                notional *= scale
+            if notional > 0:
                 m = (il[t] >= 0) & (il[t] < P)
                 np.add.at(L, il[t][m], notional * long_share * ws[m])
                 m = (isr[t] >= 0) & (isr[t] < P)
@@ -274,7 +334,18 @@ def _encode(grid: np.ndarray):
     return q.tobytes(), scale
 
 
-def compute(symbol: str = "BTCUSDT", range_: str = "1w", end=None, venues=("binance",)) -> dict:
+MODES = ("exposure", "liquidated", "raw")
+
+
+def compute(symbol: str = "BTCUSDT", range_: str = "1w", end=None, venues=("binance",),
+            calibrated: bool = True, mode: str | None = None) -> dict:
+    """mode: "exposure" (default) = calibrated structure (gross openings, leverage mix, half-life)
+    without the Gate scale, i.e. notional positioned at each liquidation price; "liquidated" = also
+    scaled to the USD Gate actually liquidates; "raw" = original net-ΔOI model."""
+    if mode is None:
+        mode = "exposure" if calibrated else "raw"
+    if mode not in MODES:
+        raise ValueError(f"mode must be one of {MODES}")
     if range_ not in RANGES:
         raise ValueError(f"range must be one of {list(RANGES)}")
     venues = tuple(v for v in venues if v in VENUES) or ("binance",)
@@ -283,7 +354,7 @@ def compute(symbol: str = "BTCUSDT", range_: str = "1w", end=None, venues=("bina
     t1 = pd.Timestamp(end) if end is not None else now.ceil(res)
     t1 = t1.tz_localize("UTC") if t1.tzinfo is None else t1.tz_convert("UTC")
     wstart = t1 - pd.Timedelta(win)
-    warm = max(pd.Timedelta(win), pd.Timedelta("5D"))
+    warm = max(2 * pd.Timedelta(win), MIN_WARM)
     t0 = (wstart - warm).floor(res)
     notes: list = []
 
@@ -305,12 +376,22 @@ def compute(symbol: str = "BTCUSDT", range_: str = "1w", end=None, venues=("bina
     Lf = np.zeros(N_ROWS)
     Sf = np.zeros(N_ROWS)
     ev_all, used = [], []
+    if mode == "raw":
+        cal = dict(kappa=0.0, half_life_h=HALF_LIFE_H, scale=1.0, weights=DEFAULT_WEIGHTS)
+    elif mode == "exposure":
+        cal = {**CALIB, "scale": 1.0}
+    else:
+        cal = CALIB
     for v in venues:
         try:
+            tn = None
             if v == "binance":
                 b, o = bars, oi_b
-            elif v == "gate":
-                b, o = bars, _to_res(k5, _gate_oi(symbol), res)[1]
+                tn = bars["turn"]
+            elif v in ("gate", "okx"):
+                b = bars
+                o = _to_res(k5, _gate_oi(symbol) if v == "gate" else _okx_oi(symbol, t0, t1), res)[1]
+                tn = venue_turnover(bars["turn"], o, oi_b, dt_s)
             else:
                 kb, ob = _bybit(symbol, t0, t1, res, now, notes)
                 b, o = _to_res(kb, ob, res)
@@ -318,7 +399,11 @@ def compute(symbol: str = "BTCUSDT", range_: str = "1w", end=None, venues=("bina
                 for c in ("open", "high", "low", "close"):
                     b[c] = b[c].fillna(bars[c])
                 o = o.reindex(bars.index)
-            g, L, S, ev, centers = liq_columns(b["close"], b["high"], b["low"], o, dt_s, edges, start)
+                tn = b["turn"].reindex(bars.index)
+            g, L, S, ev, centers = liq_columns(
+                b["close"], b["high"], b["low"], o, dt_s, edges, start, weights=cal["weights"],
+                turnover=tn, kappa=cal["kappa"], half_life_h=cal["half_life_h"],
+                scale=cal.get("scale_by_venue", {}).get(v, cal["scale"]))
         except Exception as e:
             if v == "binance":
                 raise
@@ -348,6 +433,8 @@ def compute(symbol: str = "BTCUSDT", range_: str = "1w", end=None, venues=("bina
                     (("o", "open"), ("h", "high"), ("l", "low"), ("c", "close"), ("v", "volume"))},
         "active": active,
         "events": [{"t": ts[e[0] - start], "p": round(e[3], 2), "usd": round(e[2], 0), "side": e[1]} for e in ev_all],
+        "calibrated": mode != "raw",
+        "mode": mode,
         "note": "Modelado a partir do delta de OI; consumido ao toque; não é previsão.",
         "notes": notes,
     }
