@@ -4,6 +4,7 @@ import type { Bar } from "../types";
 import type { LayersPrimitive } from "../layers";
 import { getLiqMap, RANGES, type LiqMap } from "./api";
 import { DEFAULT_THR, LiqLayer, VIRIDIS, type Hit, type ScaleMode } from "./LiqHeatmap";
+import { HL_COINS, HlLayer, getHlLiq, getHlStops, hlCoin, type HlCoverage, type HlHit } from "./hl";
 import "./liq.css";
 
 /** Everything LiqMode needs from the host pane. See README.md. */
@@ -52,6 +53,32 @@ export default function LiqMode({ symbol, host }: { symbol: string; host: LiqHos
   const [tip, setTip] = useState<{ x: number; y: number; h: Hit } | null>(null);
   const hostRef = useRef(host);
   hostRef.current = host;
+  const coin = hlCoin(symbol), hlOk = HL_COINS.includes(coin);
+  const hlLiq = useRef(new HlLayer("hl-liq", "liq")).current;
+  const hlStp = useRef(new HlLayer("hl-stops", "stops")).current;
+  const [showHl, setShowHl] = useState(false);
+  const [showStops, setShowStops] = useState(false);
+  const [cov, setCov] = useState<HlCoverage | null>(null);
+  const [hlTip, setHlTip] = useState<{ x: number; y: number; h: HlHit } | null>(null);
+  const showRef = useRef({ showHl, showStops });
+  showRef.current = { showHl, showStops };
+
+  // exact on-chain layers: refetch every 60 s while a toggle is on
+  useEffect(() => {
+    const on = hlOk && (showHl || showStops);
+    const h = hostRef.current;
+    if (!on) { hlLiq.setData(null); hlStp.setData(null); h.prim.removeLayer("hl-liq"); h.prim.removeLayer("hl-stops"); setCov(null); return; }
+    const ac = new AbortController();
+    const load = () => {
+      if (showHl) getHlLiq(coin, ac.signal).then((d) => { hlLiq.setData(d); h.prim.setLayer(hlLiq); setCov(d.coverage ?? null); }).catch(() => {});
+      else { hlLiq.setData(null); h.prim.removeLayer("hl-liq"); }
+      if (showStops) getHlStops(coin, ac.signal).then((d) => { hlStp.setData(d); h.prim.setLayer(hlStp); }).catch(() => {});
+      else { hlStp.setData(null); h.prim.removeLayer("hl-stops"); }
+    };
+    load();
+    const id = setInterval(load, 60_000);
+    return () => { ac.abort(); clearInterval(id); };
+  }, [coin, hlOk, showHl, showStops, hlLiq, hlStp]);
 
   useEffect(() => {
     const ac = new AbortController();
@@ -80,15 +107,21 @@ export default function LiqMode({ symbol, host }: { symbol: string; host: LiqHos
       const price = candle.coordinateToPrice(p.point.y);
       const h = price == null ? null : layer.lookup(p.point.x, price);
       setTip(h ? { x: p.point.x, y: p.point.y, h } : null);
+      const sr = showRef.current;
+      const x = hlLiq.lookup(price ?? 0, (q) => candle.priceToCoordinate(q), p.point.y);
+      const hh = (sr.showHl ? x : null) ?? (sr.showStops ? hlStp.lookup(price ?? 0, (q) => candle.priceToCoordinate(q), p.point.y) : null);
+      setHlTip(hh ? { x: p.point.x, y: p.point.y, h: hh } : null);
     };
     chart.subscribeCrosshairMove(fn);
     return () => { try { chart.unsubscribeCrosshairMove(fn); } catch { /* chart disposed */ } };
-  }, [layer]);
+  }, [layer, hlLiq, hlStp]);
 
   useEffect(() => () => {
     const h = hostRef.current;
     try {
       h.prim.removeLayer("liq");
+      h.prim.removeLayer("hl-liq");
+      h.prim.removeLayer("hl-stops");
       h.chart.timeScale().applyOptions({ minBarSpacing: 0.5 });
     } catch { /* chart disposed */ }
     h.setCandles?.(null);
@@ -106,13 +139,31 @@ export default function LiqMode({ symbol, host }: { symbol: string; host: LiqHos
           Limiar <input type="range" min={0} max={0.95} step={0.01} value={thr} onChange={(e) => setThr(Number(e.target.value))} />
         </label>
         <label className="liq-thr"><input type="checkbox" checked={bybit} onChange={(e) => setBybit(e.target.checked)} /> Bybit</label>
+        <span className="liq-sep" />
+        <label className="liq-thr" title={hlOk ? "Níveis de liquidação exatos (posições on-chain da Hyperliquid) sobre o modelo" : "Sem dados Hyperliquid para este ativo"}>
+          <input type="checkbox" disabled={!hlOk} checked={showHl} onChange={(e) => setShowHl(e.target.checked)} /> Hyperliquid exato
+        </label>
+        <label className="liq-thr" title="Ordens stop/take-profit abertas na Hyperliquid">
+          <input type="checkbox" disabled={!hlOk} checked={showStops} onChange={(e) => setShowStops(e.target.checked)} /> Stops HL
+        </label>
+        {cov && showHl && (
+          <span className="liq-note hl-badge" title="Cobertura da amostra de carteiras vs. open interest total da Hyperliquid">
+            HL · {cov.addresses.toLocaleString("pt-BR")} carteiras · {cov.oi_share == null ? "?" : (cov.oi_share * 100).toFixed(1)}% do OI · idade {cov.median_age_s == null ? "?" : Math.max(1, Math.round(cov.median_age_s / 60))}m
+          </span>
+        )}
         {data && <Colorbar layer={layer} scale={data.scale} mode={mode} thr={thr} />}
         {busy && <span className="liq-note">carregando…</span>}
         {!busy && data && (data.T < 2 || !data.q.some((v) => v > 0)) && <span className="liq-note err">Sem liquidações estimadas nesta janela</span>}
         {err && <span className="liq-note err">{err}</span>}
       </div>
       {data && <div className="liq-foot">{data.note} Resolução {data.resolution}.</div>}
-      {tip && (
+      {hlTip && (
+        <div className="liq-tip" style={{ left: Math.min(hlTip.x + 14, 9999), top: hlTip.y - 44 }}>
+          <b>{hlTip.h.price.toLocaleString("pt-BR", { maximumFractionDigits: hlTip.h.price < 10 ? 4 : 0 })}</b> · {usd(hlTip.h.usd)}
+          <div>{hlTip.h.label} · {hlTip.h.n} {hlTip.h.n === 1 ? "posição" : "posições"} · idade {hlTip.h.age == null ? "?" : `${Math.max(1, Math.round(hlTip.h.age / 60))}m`}</div>
+        </div>
+      )}
+      {tip && !hlTip && (
         <div className="liq-tip" style={{ left: Math.min(tip.x + 14, 9999), top: tip.y + 14 }}>
           <b>{tip.h.price.toLocaleString("pt-BR", { maximumFractionDigits: 0 })}</b> · {usd(tip.h.usd)}
           <div>{tip.h.side === "long" ? "Liquidações de compradas" : "Liquidações de vendidas"} (est.){tip.h.future ? " · ativo" : ""}</div>

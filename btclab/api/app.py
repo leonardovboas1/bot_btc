@@ -493,3 +493,25 @@ def liquidations(symbol: str = "BTCUSDT", start: Optional[str] = None, end: Opti
         return observed.observed(symbol, t0, t1, vs)
     except (ValueError, TypeError) as ex:
         raise HTTPException(400, str(ex))
+
+
+def _hl_coin(coin: str):
+    from btclab.liquidity import hl_levels
+    c = hl_levels.coin_of(coin)
+    if c not in hl_levels.COINS:
+        raise HTTPException(400, f"coin deve ser um de {list(hl_levels.COINS)}")
+    return hl_levels, c
+
+
+@app.get("/hl/liqlevels")
+def hl_liqlevels(coin: str = "BTC", bins: int = 240):
+    """Niveis de liquidacao EXATOS (Hyperliquid, on-chain): notional por faixa de preco (long/short) + cobertura."""
+    m, c = _hl_coin(coin)
+    return _num(m.liq_levels(c, bins))
+
+
+@app.get("/hl/stops")
+def hl_stops(coin: str = "BTC", bins: int = 240):
+    """Ordens trigger (stop/TP) abertas na Hyperliquid, agregadas por preco."""
+    m, c = _hl_coin(coin)
+    return _num(m.stops(c, bins))
