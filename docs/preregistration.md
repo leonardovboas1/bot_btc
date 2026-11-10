@@ -181,3 +181,31 @@ The 5-minute archive has 601 missing bars in 152 runs (longest gap 10 h 30 min);
 
 ## Amendment 2 (2026-11-10, before any full-search result was seen)
 Daily (1d) bars cannot reach the plan's minimum of 100 in-sample / 30 per-OOS-fold trades in 40 months. For 1d only, the minimums are 40 in-sample trades and 8 per OOS fold. 1h and 4h keep 100 / 30. S3 Optuna tuning optimises in-sample Sharpe only (OOS folds never enter the objective). Recorded after a 50-config smoke run whose results were not used for any decision.
+
+## Amendment 3 (2026-11-10) — H7, multi-family intraday fusion with an ML gate
+
+*Disclosure.* Before this amendment, S1 (1h, 1d) and S2 (1h) single/pair-component summaries had been generated. H7's rules, features and grids below were written from the literature and from a third-party product description ("Chimera"), not from those results; no parameter is taken from them. H7 is a new trial family and every configuration below is added to the DSR `N`.
+
+### H7 — Five signal families fused by a meta-labeling gate, multi-coin, short holds
+
+*Rationale.* Each family alone is weak and well known; the hypothesis is that their *conjunction* at the moment of an event carries information a single rule misses, and that a secondary model can tell which events are worth paying fees for (H4's logic, at intraday scale and across coins). Universe BTC, ETH, SOL, XRP (USDT perpetuals, Binance).
+
+*Feature families (all causal, A1.4 rules apply, 1h bars, published-lag aware):*
+1. Order flow — taker buy/sell ratio z (24h, 7d), signed taker volume burst.
+2. Liquidation map — distance (ATR) and size of the nearest modeled long/short liquidation cluster above/below (OI-delta model of `btclab/liquidity/liq_model.py`, a model, not observed liquidations), cluster consumed in the last bar (yes/no).
+3. Derivatives positioning — ΔOI 1h/4h/24h z, funding z (30d), global and top-trader long/short ratio z.
+4. Spot–perp basis — (perp − spot)/spot z (7d), its 4h change.
+5. Session — hour-of-day and weekday (cyclical encoding), Asia/Europe/US session flag.
+Plus 4 context features: realized vol z, 24h return, ER(24), coin id (one-hot).
+
+*Primary events.* A bar is an event if any family crosses a fixed extreme: |taker z| > 2, nearest cluster consumed, |ΔOI 4h z| > 2, |basis z| > 2. Direction by fixed rule per trigger (flow/basis: with the move; consumed cluster or OI flush: fade). No event, no trade.
+
+*Label.* Triple barrier per event: TP 1.5 ATR(24, 1h), SL 1 ATR, vertical barrier h ∈ {2, 4, 6} h.
+
+*Gate.* Two registered variants, separate families in `N`: (a) L2 logistic regression; (b) gradient-boosted trees (max depth 3, ≤ 200 trees, learning rate 0.05, fixed). Pooled across the 4 coins, trained only on each WF fold's training window, purge = h + 24h, embargo 24h, scaling fitted on training data. Take if p > p_min; size ∝ min(1, (p − 0.5)/0.25), equal risk per coin, portfolio gross exposure ≤ 1.
+
+*Parameters (3).* h ∈ {2, 4, 6}; p_min ∈ {0.52, 0.55, 0.58, 0.60}; gate ∈ {logit, GBT} → 24 configurations, all counted.
+
+*Costs.* Taker fee both sides + slippage per `btclab/engine/costs.py` "realistic" preset + funding at settlement; reported also at 2× costs.
+
+*Falsification.* Rejected if any holds: (i) OOS Sharpe after costs does not beat the ungated primary in ≥ 4/6 folds; (ii) OOS precision of taken trades ≤ 53 %; (iii) the GBT gate does not beat the logistic gate OOS (then only the logistic variant may proceed); (iv) a shuffled-label placebo gate reaches ≥ 80 % of the real gate's OOS Sharpe gain; (v) Sharpe at 2× costs ≤ 0; (vi) one family carries > 60 % of permutation importance (treated as a leak or a single-signal strategy and re-evaluated as that). Results are reported per coin and for the portfolio; the portfolio is the registered claim. Same holdout cutoff for all coins; holdout judged once.
