@@ -4,6 +4,7 @@ import {
   type IChartApi, type ISeriesApi, type ISeriesMarkersPluginApi, type MouseEventParams, type Time, type UTCTimestamp,
 } from "lightweight-charts";
 import type { Backtest, Bar } from "./types";
+import { LayersPrimitive, type LayerData } from "./layers";
 
 type Tool = "none" | "hline" | "trend";
 const T = (n: number) => n as UTCTimestamp;
@@ -15,7 +16,7 @@ const opts = {
   autoSize: true,
 };
 
-export default function Charts({ bars, bt }: { bars: Bar[]; bt: Backtest | null }) {
+export default function Charts({ bars, bt, layers }: { bars: Bar[]; bt: Backtest | null; layers: LayerData }) {
   const mainEl = useRef<HTMLDivElement>(null);
   const eqEl = useRef<HTMLDivElement>(null);
   const main = useRef<IChartApi | null>(null);
@@ -25,6 +26,7 @@ export default function Charts({ bars, bt }: { bars: Bar[]; bt: Backtest | null 
   const eqS = useRef<ISeriesApi<"Line"> | null>(null);
   const bhS = useRef<ISeriesApi<"Line"> | null>(null);
   const markersApi = useRef<ISeriesMarkersPluginApi<Time> | null>(null);
+  const prim = useRef<LayersPrimitive | null>(null);
   const [tool, setTool] = useState<Tool>("none");
   const toolRef = useRef<Tool>("none");
   toolRef.current = tool;
@@ -33,6 +35,8 @@ export default function Charts({ bars, bt }: { bars: Bar[]; bt: Backtest | null 
   const [hold, setHold] = useState<{ left: number; width: number } | null>(null);
   const holdRef = useRef(0);
   holdRef.current = bt?.holdout_start ?? 0;
+  const barsRef = useRef<Bar[]>([]);
+  barsRef.current = bars;
 
   const updateOverlay = () => {
     const c = main.current;
@@ -58,18 +62,18 @@ export default function Charts({ bars, bt }: { bars: Bar[]; bt: Backtest | null 
     });
     vol.current = m.addSeries(HistogramSeries, { priceFormat: { type: "volume" }, priceScaleId: "vol" });
     m.priceScale("vol").applyOptions({ scaleMargins: { top: 0.8, bottom: 0 } });
+    prim.current = new LayersPrimitive();
+    candle.current.attachPrimitive(prim.current);
     markersApi.current = createSeriesMarkers<Time>(candle.current, []);
     eqS.current = e.addSeries(LineSeries, { color: "#4c8dff", lineWidth: 2, title: "Estratégia" });
     bhS.current = e.addSeries(LineSeries, { color: "#b0b7c6", lineWidth: 2, title: "Buy & hold" });
-    let busy = false;
-    const sync = (from: IChartApi, to: IChartApi) =>
-      from.timeScale().subscribeVisibleTimeRangeChange((r) => {
-        if (busy || !r) return;
-        busy = true;
-        try { to.timeScale().setVisibleRange(r); } catch { /* no data yet */ }
-        busy = false;
-      });
-    sync(m, e); sync(e, m);
+    // One-way sync (main -> equity) by logical range. Equity series are padded with
+    // whitespace to the same bar times as the candles, so logical indices match and
+    // there is no feedback loop (two-way time-range sync caused runaway zoom).
+    e.applyOptions({ handleScroll: false, handleScale: false });
+    m.timeScale().subscribeVisibleLogicalRangeChange((r) => {
+      if (r) e.timeScale().setVisibleLogicalRange(r);
+    });
     m.timeScale().subscribeVisibleTimeRangeChange(updateOverlay);
     m.subscribeClick((p: MouseEventParams<Time>) => {
       const cs = candle.current;
@@ -108,10 +112,22 @@ export default function Charts({ bars, bt }: { bars: Bar[]; bt: Backtest | null 
     const hm = bt.holdout_markers.map((m) => ({ ...m, color: "#6b7280", text: m.text === "EXIT" ? "" : "H " + m.text }));
     const all = [...bt.markers, ...hm].sort((a, b) => a.time - b.time).map((m) => ({ ...m, time: T(m.time) }));
     markersApi.current?.setMarkers(all);
-    eqS.current?.setData(bt.equity.map((p) => ({ time: T(p.time), value: p.value })));
-    bhS.current?.setData(bt.buy_hold.map((p) => ({ time: T(p.time), value: p.value })));
+    // Align equity to candle times: value where known, whitespace elsewhere.
+    const align = (pts: { time: number; value: number }[]) => {
+      const byT = new Map(pts.map((p) => [p.time, p.value]));
+      return barsRef.current.map((b) => {
+        const v = byT.get(b.time);
+        return v == null ? { time: T(b.time) } : { time: T(b.time), value: v };
+      });
+    };
+    eqS.current?.setData(align(bt.equity));
+    bhS.current?.setData(align(bt.buy_hold));
+    const r = main.current?.timeScale().getVisibleLogicalRange();
+    if (r) eq.current?.timeScale().setVisibleLogicalRange(r);
     updateOverlay();
-  }, [bt]);
+  }, [bt, bars]);
+
+  useEffect(() => { prim.current?.setData(layers); }, [layers]);
 
   const clear = () => {
     drawn.current.lines.forEach((l) => candle.current?.removePriceLine(l as never));

@@ -14,7 +14,10 @@ from pydantic import BaseModel
 
 from btclab.api.presets import PRESETS, get_preset
 from btclab.data import loaders
+from btclab.engine.costs import PRESETS as COST_PRESETS
 from btclab.engine.sim import EXIT_REASON_NAMES
+from btclab.liquidity import service as liq_service
+from btclab.liquidity._util import RAW as LIQ_RAW
 from btclab.indicators.registry import REGISTRY, compute
 from btclab.signals import run_spec
 from btclab.signals.dsl import SpecError
@@ -205,3 +208,111 @@ def indicator(name: str, params: str = Query("{}", description="JSON object"),
         ok = np.isfinite(a)
         series[k] = [{"time": int(x), "value": float(y)} for x, y in zip(t[ok], a[ok])]
     return {"name": name, "tf": tf, "series": series}
+
+
+# ------------------------------------------------------------------ fees
+@app.get("/fees")
+def fees():
+    return [m.to_dict() for m in COST_PRESETS.values()]
+
+
+# ------------------------------------------------------------------ liquidity layers
+MAX_COLS, MAX_ROWS = 400, 150
+_TF_SEC = {"1h": 3600, "4h": 14400, "1d": 86400}
+
+
+@lru_cache(maxsize=1)
+def _book_range() -> tuple[int, int]:
+    idx = pd.read_parquet(LIQ_RAW / "bookdepth_archive.parquet", columns=[]).index
+    return int(idx.min().timestamp()), int(idx.max().timestamp())
+
+
+def _groups(n: int, m: int) -> np.ndarray:
+    """Start offsets that split n items into <= m near-equal groups."""
+    k = min(n, m)
+    return np.unique(np.linspace(0, n, k, endpoint=False).astype(int))
+
+
+def _shrink(times, prices, grids: dict, cols: int, rows: int) -> dict:
+    """Mean over merged time columns, sum over merged price rows (notional per slice)."""
+    t = np.asarray([pd.Timestamp(x).timestamp() for x in times], dtype=float)
+    p = np.asarray(prices, dtype=float)
+    ci, ri = _groups(len(t), cols), _groups(len(p), rows)
+    cn = np.diff(np.append(ci, len(t)))
+    pn = np.diff(np.append(ri, len(p)))
+    out = {"times": [int(x) for x in t[ci]], "prices": [round(float(x), 2) for x in np.add.reduceat(p, ri) / pn]}
+    for k, g in grids.items():
+        a = np.asarray(g, dtype=float).reshape(len(t), len(p))
+        a = np.add.reduceat(a, ci, axis=0) / cn[:, None]
+        a = np.add.reduceat(a, ri, axis=1)
+        out[k] = np.round(a / 1e6, 3).tolist()  # USD millions
+    return out
+
+
+def _window(tf: str, start: Optional[str], end: Optional[str]) -> tuple[str, str]:
+    if tf not in _TF_SEC:
+        raise HTTPException(400, f"unsupported tf {tf!r}")
+    e = pd.Timestamp(end) if end else pd.Timestamp.now("UTC").tz_localize(None).floor("h")
+    s = pd.Timestamp(start) if start else e - pd.Timedelta(seconds=_TF_SEC[tf] * MAX_COLS)
+    if s >= e:
+        raise HTTPException(400, "start must be before end")
+    return str(s), str(e)
+
+
+def _limit(cols: int, rows: int) -> tuple[int, int]:
+    return max(1, min(cols, MAX_COLS)), max(1, min(rows, MAX_ROWS))
+
+
+@app.get("/heatmap/book")
+def heatmap_book(tf: str = "1h", start: Optional[str] = None, end: Optional[str] = None,
+                 rows: int = MAX_ROWS, cols: int = MAX_COLS):
+    s, e = _window(tf, start, end)
+    lo, hi = _book_range()
+    avail = {"available_from": lo, "available_to": hi}
+    if int(pd.Timestamp(e, tz="UTC").timestamp()) < lo or int(pd.Timestamp(s, tz="UTC").timestamp()) > hi:
+        return {"empty": True, **avail, "times": [], "prices": [], "bid": [], "ask": []}
+    try:
+        d = liq_service.depth_heatmap_payload(s, e, tf)
+    except (FileNotFoundError, ValueError, KeyError) as ex:
+        raise HTTPException(400, str(ex))
+    if not d["times"]:
+        return {"empty": True, **avail, "times": [], "prices": [], "bid": [], "ask": []}
+    cols, rows = _limit(cols, rows)
+    return {"empty": False, **avail, "unit": "USD milhões",
+            **_shrink(d["times"], d["prices"], {"bid": d["bid"], "ask": d["ask"]}, cols, rows)}
+
+
+@app.get("/heatmap/liq")
+def heatmap_liq(tf: str = "1h", start: Optional[str] = None, end: Optional[str] = None,
+                rows: int = MAX_ROWS, cols: int = MAX_COLS):
+    s, e = _window(tf, start, end)
+    try:
+        d = liq_service.liq_payload(s, e, tf)
+    except (FileNotFoundError, ValueError, KeyError) as ex:
+        raise HTTPException(400, str(ex))
+    if not d["times"]:
+        return {"empty": True, "times": [], "prices": [], "long": [], "short": [], "flush_times": []}
+    cols, rows = _limit(cols, rows)
+    out = _shrink(d["times"], d["prices"], {"long": d["long"], "short": d["short"]}, cols, rows)
+    out["flush_times"] = [int(pd.Timestamp(x).timestamp()) for x in d.get("flush_times", [])]
+    return {"empty": False, "unit": "USD milhões (estimado)", **out}
+
+
+@app.get("/volume_profile")
+def volume_profile(tf: str = "1h", start: Optional[str] = None, end: Optional[str] = None,
+                   rows: int = MAX_ROWS):
+    s, e = _window(tf, start, end)
+    try:
+        d = liq_service.volume_profile_payload(s, e, tf)
+    except (FileNotFoundError, ValueError, KeyError) as ex:
+        raise HTTPException(400, str(ex))
+    p = np.asarray(d["prices"], dtype=float)
+    v = np.asarray(d["volume"], dtype=float)
+    ri = _groups(len(p), max(1, min(rows, MAX_ROWS)))
+    n = np.diff(np.append(ri, len(p)))
+    out = {"prices": [round(float(x), 2) for x in np.add.reduceat(p, ri) / n],
+           "volume": [round(float(x), 2) for x in np.add.reduceat(v, ri)]}
+    for k in ("poc", "vah", "val"):
+        if k in d:
+            out[k] = d[k]
+    return _num(out)

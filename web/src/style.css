@@ -31,3 +31,6 @@ th{color:var(--mut);text-align:left;font-weight:500;padding:3px 4px}td{padding:4
 .pager{display:flex;align-items:center;justify-content:space-between;margin-top:auto;color:var(--mut)}
 .pager button{padding:3px 12px}
 .pos{color:var(--g)}.neg{color:var(--r)}
+.toggles{display:flex;gap:6px;align-self:flex-end}
+.toggles button{font-size:15px}
+.note{color:#e0b53a;font-size:14px;max-width:340px;line-height:1.2}
