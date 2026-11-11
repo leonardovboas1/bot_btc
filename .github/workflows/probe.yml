@@ -3,23 +3,16 @@ on: { push: { paths: [".github/workflows/probe.yml"] } }
 jobs:
   probe:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        url:
+          - "https://fapi.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=4h&limit=2"
+          - "https://data-api.binance.vision/api/v3/klines?symbol=BTCUSDT&interval=4h&limit=2"
+          - "https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/4h/BTCUSDT-4h-2026-11-09.zip"
+          - "https://api.bybit.com/v5/market/kline?category=linear&symbol=BTCUSDT&interval=240&limit=2"
+          - "https://www.okx.com/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=4H&limit=2"
+          - "https://api.gateio.ws/api/v4/futures/usdt/candlesticks?contract=BTC_USDT&interval=4h&limit=2"
     steps:
-      - name: binance-spot-vision
-        continue-on-error: true
-        run: test "$(curl -s -o /dev/null -w '%{http_code}' 'https://data-api.binance.vision/api/v3/klines?symbol=BTCUSDT&interval=4h&limit=2')" = 200
-      - name: binance-futures-archive
-        continue-on-error: true
-        run: test "$(curl -s -o /dev/null -w '%{http_code}' 'https://data.binance.vision/data/futures/um/daily/klines/BTCUSDT/4h/BTCUSDT-4h-2026-11-09.zip')" = 200
-      - name: bybit
-        continue-on-error: true
-        run: test "$(curl -s -o /dev/null -w '%{http_code}' 'https://api.bybit.com/v5/market/kline?category=linear&symbol=BTCUSDT&interval=240&limit=2')" = 200
-      - name: okx
-        continue-on-error: true
-        run: test "$(curl -s -o /dev/null -w '%{http_code}' 'https://www.okx.com/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=4H&limit=2')" = 200
-      - name: gate
-        continue-on-error: true
-        run: test "$(curl -s -o /dev/null -w '%{http_code}' 'https://api.gateio.ws/api/v4/futures/usdt/candlesticks?contract=BTC_USDT&interval=4h&limit=2')" = 200
-      - name: hyperliquid
-        continue-on-error: true
-        run: |
-          test "$(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{"type":"meta"}' https://api.hyperliquid.xyz/info)" = 200
+      - run: |
+          test "$(curl -s -o /dev/null -w '%{http_code}' '${{ matrix.url }}')" = 200
