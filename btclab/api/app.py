@@ -729,3 +729,16 @@ def paper_status():
                      "errors": errs[:20], "last_bars": json.loads(r["last_bars"])})
     finally:
         con.close()
+
+
+@app.post("/admin/clear_cache")
+def clear_cache():
+    """Drop every in-memory data cache (called by src.data.catchup after it refreshed the parquet files)."""
+    import sys
+    n = 0
+    for mod in [m for name, m in list(sys.modules.items()) if name.startswith("btclab") and m]:
+        for obj in list(vars(mod).values()):
+            if callable(getattr(obj, "cache_clear", None)) and getattr(obj, "__module__", "") == mod.__name__:
+                obj.cache_clear()
+                n += 1
+    return {"cleared": n}
