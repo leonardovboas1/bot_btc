@@ -1,17 +1,20 @@
-# Forward paper trading, 24/7 without the PC: runs one cycle of src/live/paper.py every ~30 min.
+# Forward paper trading, 24/7 without the PC: one cycle of src/live/paper.py every ~30 min.
+# GitHub cron alone proved unreliable (1 run in 9 h on 2026-11-11), so each job loops for ~5h45
+# (cycle, save ledger, sleep to next :07/:37) and then re-dispatches itself. The cron is only a
+# watchdog that restarts the chain if it breaks; the concurrency group keeps a single loop alive.
 # The ledger (paper.sqlite + strategies.json) lives on the `paper-data` branch as a single squashed
 # commit (force-pushed), so the repo does not grow. Binance futures is geo-blocked on GitHub runners,
 # hence PAPER_FEED=spot (Binance spot candles + OKX perp funding).
 name: paper-trading
 on:
-  schedule: [{ cron: "7,37 * * * *" }]
+  schedule: [{ cron: "17 */2 * * *" }]
   workflow_dispatch:
 concurrency: { group: paper, cancel-in-progress: false }
-permissions: { contents: write }
+permissions: { contents: write, actions: write }
 jobs:
   cycle:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 355
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -26,15 +29,28 @@ jobs:
           else
             echo "::error::branch paper-data missing (run deploy/move_paper_to_github.ps1 once)"; exit 1
           fi
-      - name: run one cycle
+      - name: cycle loop (~5h45), ledger saved after every cycle
         env: { PAPER_FEED: spot, OMP_NUM_THREADS: "1", NUMBA_NUM_THREADS: "1" }
-        run: python -m src.live.paper --once
-      - name: save ledger
         run: |
-          python - <<'PY'
+          save() {
+            python - <<'PY'
           import sqlite3; c = sqlite3.connect("data/paper/paper.sqlite"); c.execute("PRAGMA wal_checkpoint(TRUNCATE)"); c.execute("PRAGMA journal_mode=DELETE"); c.close()
           PY
-          d=$(mktemp -d); cp data/paper/paper.sqlite data/paper/strategies.json "$d"/
-          cd "$d" && git init -q -b paper-data && git add . \
-            && git -c user.name=paper-bot -c user.email=paper-bot@users.noreply.github.com commit -qm "ledger $(date -u +%FT%TZ)" \
-            && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" paper-data
+            d=$(mktemp -d); cp data/paper/paper.sqlite data/paper/strategies.json "$d"/
+            (cd "$d" && git init -q -b paper-data && git add .               && git -c user.name=paper-bot -c user.email=paper-bot@users.noreply.github.com commit -qm "ledger $(date -u +%FT%TZ)"               && git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" paper-data)               || echo "::warning::ledger push failed"
+            rm -rf "$d"
+          }
+          end=$(( $(date +%s) + 345*60 ))
+          while :; do
+            python -m src.live.paper --once || echo "::warning::cycle failed"
+            save
+            now=$(date +%s); m=$(( (now/60) % 60 ))
+            if [ $m -lt 7 ]; then w=$(( 7-m )); elif [ $m -lt 37 ]; then w=$(( 37-m )); else w=$(( 67-m )); fi
+            next=$(( now - now%60 + w*60 ))
+            [ $next -ge $end ] && break
+            sleep $(( next - now ))
+          done
+      - name: re-dispatch next loop
+        if: always()
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: gh workflow run paper.yml --ref "${{ github.ref_name }}"
