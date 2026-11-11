@@ -21,4 +21,5 @@ jobs:
         run: test "$(curl -s -o /dev/null -w '%{http_code}' 'https://api.gateio.ws/api/v4/futures/usdt/candlesticks?contract=BTC_USDT&interval=4h&limit=2')" = 200
       - name: hyperliquid
         continue-on-error: true
-        run: test "$(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{"type":"meta"}' https://api.hyperliquid.xyz/info)" = 200
+        run: |
+          test "$(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -d '{"type":"meta"}' https://api.hyperliquid.xyz/info)" = 200
