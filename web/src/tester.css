@@ -120,3 +120,8 @@
 .paper .paperst { display: flex; gap: 14px; align-items: center; margin-bottom: 8px; font: 400 12px var(--mono); flex-wrap: wrap; }
 .paper tr { cursor: pointer; }
 .paper tr.sel td { background: #121823; }
+.paper .seg { display: inline-flex; border: 1px solid var(--line2); border-radius: 4px; overflow: hidden; }
+.paper .seg button { background: transparent; border: 0; color: var(--t3); font: 400 12px var(--sans); padding: 3px 10px; cursor: pointer; }
+.paper .seg button + button { border-left: 1px solid var(--line2); }
+.paper .seg button.on { background: var(--bg2, #1c222d); color: var(--t1); }
+.paper .warn { color: #e0a84a; font-family: var(--sans); }

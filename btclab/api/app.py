@@ -533,6 +533,31 @@ def _paper_rows(con, sql, args=()):
     return [dict(r) for r in con.execute(sql, args).fetchall()]
 
 
+def _max_dd(xs):
+    peak, dd = None, 0.0
+    for x in xs:
+        if x is None or x <= 0:
+            continue
+        peak = x if peak is None else max(peak, x)
+        dd = max(dd, 1 - x / peak)
+    return dd
+
+
+def _paper_wins(con, sid):
+    """(winning, closed) round trips from the fills ledger, net of fees."""
+    rows = con.execute("SELECT trade_no,leg,position_side,qty,price,fee FROM fills WHERE strategy=? "
+                       "ORDER BY trade_no, rowid", (sid,)).fetchall()
+    trades: dict = {}
+    for no, leg, side, qty, px, fee in rows:
+        t = trades.setdefault(no, {"side": side, "in": None, "out": None, "fee": 0.0, "qty": qty})
+        t["fee"] += fee or 0.0
+        t["in" if leg == "entry" else "out"] = px
+    closed = [t for t in trades.values() if t["in"] is not None and t["out"] is not None]
+    sgn = lambda t: 1 if str(t["side"]).lower() in ("long", "1", "buy") else -1
+    wins = sum(1 for t in closed if sgn(t) * (t["out"] - t["in"]) * abs(t["qty"] or 0) - t["fee"] > 0)
+    return wins, len(closed)
+
+
 @app.get("/paper/strategies")
 def paper_strategies():
     con = _paper_db()
@@ -551,10 +576,12 @@ def paper_strategies():
             n_tr = con.execute("SELECT COUNT(*) FROM fills WHERE strategy=? AND leg='exit'", (sid,)).fetchone()[0]
             ent = con.execute("SELECT COUNT(*) FROM fills WHERE strategy=? AND leg='entry'", (sid,)).fetchone()[0]
             e0, e1 = (eq[0], eq[-1]) if eq else (None, None)
-            ret = bh = None
+            ret = bh = mdd = bh_mdd = None
             if e0:
                 ret = e1["equity"] / e0["equity"] - 1
                 bh = e1["price"] / e0["price"] - 1
+                mdd, bh_mdd = _max_dd([r["equity"] for r in eq]), _max_dd([r["price"] for r in eq])
+            wins, closed = _paper_wins(con, sid)
             spec = json.loads(s["spec"])
             out.append({
                 "id": sid, "name": spec.get("name"), "symbol": s["symbol"], "tf": s["tf"],
@@ -566,7 +593,9 @@ def paper_strategies():
                 "n_trades": n_tr, "n_entries": ent,
                 "equity": e1["equity"] if e1 else None, "equity_start": e0["equity"] if e0 else None,
                 "price": e1["price"] if e1 else None,
-                "return": ret, "bh_return": bh,
+                "return": ret, "bh_return": bh, "mdd": mdd, "bh_mdd": bh_mdd,
+                "wins": wins, "closed": closed,
+                "days": ((e1["bar_time"] - e0["bar_time"]) / 86400.0) if e0 else 0.0,
                 "last_signal_time": sig["bar_time"] if sig else None,
                 "last_signal_close_time": sig["bar_close_time"] if sig else None,
                 "last_signal": ({"long": sig["long_sig"], "short": sig["short_sig"],

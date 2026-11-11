@@ -9,6 +9,7 @@ export interface PaperStrategy {
   id: string; name: string; symbol: string; tf: string; source: "real" | "ha"; start_ts: number; first_bar: number | null;
   position: "LONG" | "SHORT" | "FLAT"; qty: number; entry_px: number; unrealized: number; n_trades: number; n_entries: number;
   equity: number | null; equity_start: number | null; price: number | null; return: number | null; bh_return: number | null;
+  mdd: number | null; bh_mdd: number | null; wins: number; closed: number; days: number;
   last_signal_time: number | null; last_signal_close_time: number | null;
   last_signal: { long: number; short: number; exit_long: number; exit_short: number } | null;
 }
