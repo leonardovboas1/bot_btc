@@ -1,0 +1,15 @@
+name: probe-exchange-access
+on: { push: { paths: [".github/workflows/probe.yml"] } }
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          for u in "https://fapi.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=4h&limit=2" \
+                   "https://data-api.binance.vision/api/v3/klines?symbol=BTCUSDT&interval=4h&limit=2" \
+                   "https://api.bybit.com/v5/market/kline?category=linear&symbol=BTCUSDT&interval=240&limit=2" \
+                   "https://www.okx.com/api/v5/market/candles?instId=BTC-USDT-SWAP&bar=4H&limit=2" \
+                   "https://api.gateio.ws/api/v4/futures/usdt/candlesticks?contract=BTC_USDT&interval=4h&limit=2"; do
+            echo "$(curl -s -o /dev/null -w '%{http_code}' "$u") $u"
+          done
+      - run: test "$(curl -s -o /dev/null -w '%{http_code}' 'https://fapi.binance.com/fapi/v1/klines?symbol=BTCUSDT&interval=4h&limit=2')" = 200
