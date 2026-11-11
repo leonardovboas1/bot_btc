@@ -46,6 +46,12 @@ DB_PATH = PAPER_DIR / "paper.sqlite"
 CONFIG_PATH = PAPER_DIR / "strategies.json"
 INIT_EQUITY = 10000.0
 FAPI = "https://fapi.binance.com"
+SPOT = "https://data-api.binance.vision"      # reachable from US hosts (GitHub runners), unlike fapi
+OKX = "https://www.okx.com"
+# PAPER_FEED=perp (default): Binance USDT-perp candles + funding.
+# PAPER_FEED=spot: Binance spot candles (same exchange, basis is a few bp) + OKX perp funding, for hosts
+# where fapi is geo-blocked. Fills/costs/funding logic is unchanged.
+FEED = __import__("os").environ.get("PAPER_FEED", "perp").lower()
 CYCLE_SECONDS = 60
 STOP_REASONS = (1, 2, 3)      # exits that fill intrabar, after the funding charge of their bar
 DEFAULT_CONFIG = {"strategies": [
@@ -273,13 +279,40 @@ class Market:
         self.fund: dict = {}
         self.server_ms = 0
 
-    def get(self, path, **params):
-        r = self.s.get(FAPI + path, params=params, timeout=15)
+    def get(self, path, base=None, **params):
+        r = self.s.get((base or (SPOT if FEED == "spot" else FAPI)) + path, params=params, timeout=15)
         r.raise_for_status()
         return r.json()
 
     def sync_time(self):
-        self.server_ms = int(self.get("/fapi/v1/time")["serverTime"])
+        path = "/api/v3/time" if FEED == "spot" else "/fapi/v1/time"
+        self.server_ms = int(self.get(path)["serverTime"])
+
+    def _klines(self, symbol, tf, start):
+        if FEED == "spot":
+            return self.get("/api/v3/klines", symbol=symbol, interval=tf, startTime=start, limit=1000), 1000
+        return self.get("/fapi/v1/klines", symbol=symbol, interval=tf, startTime=start, limit=1500), 1500
+
+    def _funding(self, symbol, fstart):
+        """[(time_ms, rate)] for funding events at/after fstart."""
+        if FEED != "spot":
+            rows = self.get("/fapi/v1/fundingRate", symbol=symbol, startTime=fstart, limit=1000)
+            return [(int(x["fundingTime"]), float(x["fundingRate"])) for x in rows]
+        inst = symbol.replace("USDT", "") + "-USDT-SWAP"
+        fstart = max(fstart, self.server_ms - 85 * 86400_000)    # OKX keeps ~3 months; only post-start funding matters
+        out, after = [], None
+        for _ in range(30):                                        # newest first, paginate backwards
+            kw = {"instId": inst, "limit": 100}
+            if after:
+                kw["after"] = after
+            d = self.get("/api/v5/public/funding-rate-history", base=OKX, **kw).get("data", [])
+            if not d:
+                break
+            out += [(int(x["fundingTime"]), float(x["realizedRate"] or x["fundingRate"])) for x in d]
+            after = d[-1]["fundingTime"]
+            if int(after) <= fstart:
+                break
+        return sorted((t, r) for t, r in out if t >= fstart)
 
     @staticmethod
     def _rows(rows) -> pd.DataFrame:
@@ -293,6 +326,8 @@ class Market:
 
     def _init(self, symbol, tf):
         try:
+            if FEED == "spot":
+                raise FileNotFoundError("spot feed: REST history only")
             df = loaders.load_ohlcv("perp", tf, allow_holdout=True, symbol=symbol)
             ev = loaders.load_funding(None, allow_holdout=True, symbol=symbol)
         except FileNotFoundError:
@@ -310,12 +345,12 @@ class Market:
         start = int(df.index[-1].timestamp() * 1000) + step_ms if len(df) else self.server_ms - 1500 * step_ms
         new = []
         while True:                                                 # tail, paginated
-            rows = self.get("/fapi/v1/klines", symbol=symbol, interval=tf, startTime=start, limit=1500)
+            rows, lim = self._klines(symbol, tf, start)
             if not rows:
                 break
             new += rows
             nxt = int(rows[-1][0]) + step_ms
-            if len(rows) < 1500 or nxt > self.server_ms:
+            if len(rows) < lim or nxt > self.server_ms:
                 break
             start = nxt
         forming, closed_rows = None, []
@@ -336,11 +371,11 @@ class Market:
                 raise RuntimeError(f"gap in {symbol} {tf} history before {bad}")
         ev = self.fund[symbol]                                      # funding events since the last known
         fstart = int(ev.index[-1].timestamp() * 1000) + 1 if len(ev) else int(df.index[0].timestamp() * 1000)
-        rows = self.get("/fapi/v1/fundingRate", symbol=symbol, startTime=fstart, limit=1000)
+        rows = self._funding(symbol, fstart)
         if rows:
-            add = pd.Series([float(x["fundingRate"]) for x in rows],
-                            index=pd.to_datetime([int(x["fundingTime"]) for x in rows], unit="ms", utc=True).floor("s"))
-            ev = pd.concat([ev, add[~add.index.isin(ev.index)]]).sort_index()
+            add = pd.Series([r for _, r in rows],
+                            index=pd.to_datetime([t for t, _ in rows], unit="ms", utc=True).floor("s"))
+            ev = add.sort_index() if not len(ev) else pd.concat([ev, add[~add.index.isin(ev.index)]]).sort_index()
             self.fund[symbol] = ev
         out = df.copy()
         out["funding"] = align_funding(out.index, ev, tf)

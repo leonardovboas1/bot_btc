@@ -518,10 +518,37 @@ def hl_stops(coin: str = "BTC", bins: int = 240):
 
 
 # ------------------------------------------------------------------ forward paper trading
+_PAPER_REMOTE = "https://raw.githubusercontent.com/leonardovboas1/bot_btc/paper-data/paper.sqlite"
+_paper_pull = {"t": 0.0}
+
+
+def _paper_sync(p):
+    """When the ledger is hosted by the GitHub workflow (marker data/paper/REMOTE), refresh the
+    local copy at most every 5 min. Failures keep the last copy."""
+    import time as _t
+    if not (p.parent / "REMOTE").exists() or _t.time() - _paper_pull["t"] < 300:
+        return
+    _paper_pull["t"] = _t.time()
+    try:
+        import requests
+        r = requests.get(_PAPER_REMOTE, timeout=20)
+        r.raise_for_status()
+        if r.content[:16] != b"SQLite format 3\x00":
+            return
+        tmp = p.with_suffix(".new")
+        tmp.write_bytes(r.content)
+        for x in (p.with_name(p.name + "-wal"), p.with_name(p.name + "-shm")):
+            x.unlink(missing_ok=True)
+        tmp.replace(p)
+    except Exception:  # noqa: BLE001
+        pass
+
+
 def _paper_db():
     import sqlite3
     from pathlib import Path
     p = Path(loaders.ROOT) / "data" / "paper" / "paper.sqlite"
+    _paper_sync(p)
     if not p.exists():
         return None
     con = sqlite3.connect(f"file:{p.as_posix()}?mode=ro", uri=True, timeout=10)
@@ -696,7 +723,7 @@ def paper_status():
         for e in con.execute("SELECT ts,errors FROM runs WHERE errors != '[]' ORDER BY ts DESC LIMIT 20"):
             errs += [{"time": e["ts"], "error": m} for m in json.loads(e["errors"])]
         lag = _t.time() - r["ts"]
-        return _num({"running": lag < 180, "last_run": r["ts"], "last_run_iso": r["started_at"],
+        return _num({"running": lag < (5400 if (__import__("pathlib").Path(loaders.ROOT) / "data" / "paper" / "REMOTE").exists() else 180), "last_run": r["ts"], "last_run_iso": r["started_at"],
                      "lag_s": lag, "duration_s": r["duration_s"], "n_strategies": r["n_strategies"],
                      "n_new_rows": r["n_new_rows"], "current_errors": json.loads(r["errors"]),
                      "errors": errs[:20], "last_bars": json.loads(r["last_bars"])})
