@@ -1,0 +1,112 @@
+{
+  "strategies": [
+    {
+      "preset": "brayvb_v2",
+      "symbol": "BTCUSDT",
+      "tf": "1d",
+      "source": "real"
+    },
+    {
+      "preset": "brayvb_v2",
+      "symbol": "BTCUSDT",
+      "tf": "1d",
+      "source": "ha"
+    },
+    {
+      "preset": "brayvb_v2",
+      "symbol": "BTCUSDT",
+      "tf": "4h",
+      "source": "real"
+    },
+    {
+      "preset": "brayvb_v2",
+      "symbol": "BTCUSDT",
+      "tf": "4h",
+      "source": "ha"
+    },
+    {
+      "preset": "brayvb_v2",
+      "symbol": "SOLUSDT",
+      "tf": "4h",
+      "source": "ha"
+    },
+    {
+      "preset": "brayvb_v2",
+      "symbol": "SOLUSDT",
+      "tf": "4h",
+      "source": "real"
+    },
+    {
+      "preset": "ls_ema_hull_1d_ha",
+      "symbol": "BTCUSDT",
+      "tf": "1d",
+      "source": "ha"
+    },
+    {
+      "preset": "ls_ema_hull_1d_ha",
+      "symbol": "ETHUSDT",
+      "tf": "1d",
+      "source": "ha"
+    },
+    {
+      "preset": "ls_ema_hull_1d_ha",
+      "symbol": "SOLUSDT",
+      "tf": "1d",
+      "source": "ha"
+    },
+    {
+      "preset": "ls_ema_gc_1d",
+      "symbol": "BTCUSDT",
+      "tf": "1d",
+      "source": "real"
+    },
+    {
+      "preset": "ls_ema_gc_1d",
+      "symbol": "ETHUSDT",
+      "tf": "1d",
+      "source": "real"
+    },
+    {
+      "preset": "ls_ema_gc_1d",
+      "symbol": "SOLUSDT",
+      "tf": "1d",
+      "source": "real"
+    },
+    {
+      "preset": "ls_st_ssl_4h_ha",
+      "symbol": "BTCUSDT",
+      "tf": "4h",
+      "source": "ha"
+    },
+    {
+      "preset": "ls_st_ssl_4h_ha",
+      "symbol": "ETHUSDT",
+      "tf": "4h",
+      "source": "ha"
+    },
+    {
+      "preset": "ls_st_ssl_4h_ha",
+      "symbol": "SOLUSDT",
+      "tf": "4h",
+      "source": "ha"
+    },
+    {
+      "preset": "ls_adx_gc_1d",
+      "symbol": "BTCUSDT",
+      "tf": "1d",
+      "source": "real"
+    },
+    {
+      "preset": "ls_adx_gc_1d",
+      "symbol": "ETHUSDT",
+      "tf": "1d",
+      "source": "real"
+    },
+    {
+      "preset": "ls_adx_gc_1d",
+      "symbol": "SOLUSDT",
+      "tf": "1d",
+      "source": "real"
+    }
+  ]
+}
